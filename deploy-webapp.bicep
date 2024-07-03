@@ -5,6 +5,10 @@ param webAppName string = 'nanotome-bookmark'
 @description('Azure resource deployjment location.')
 param location string = resourceGroup().location // Bicep function returning the resource group location
 
+param sku string = 'F1'
+
+param language string = '.net'
+
 param linuxFxVersion string = 'DOTNETCORE:8.0'
 
 param repositoryUrl string = 'https://github.com/gnerkus/bookmark'
@@ -16,37 +20,36 @@ param textToReplaceSubtitleWith string = 'Bookmarking app for studying OSS'
 param repositoryBranch string = 'master'
 
 var webSiteName = '${webAppName}-api'
-var appServicePlanName = toLower('AppServicePlan-${webAppName}')
+var appServicePlanName = 'AppServicePlan-${webAppName}'
 
 // App Service Plan Creation
-resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+resource asp 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: appServicePlanName
   location: location
   sku: {
-    name: 'F1'
-  }
-  kind: 'linux'
-  properties: {
-    reserved: false
+    name: sku
   }
 }
 
 // Web App Creation
-resource appService 'Microsoft.Web/sites@2020-06-01' = {
+resource webApp 'Microsoft.Web/sites@2022-03-01' = {
   name: webSiteName
   location: location
+  identity: { type: 'SystemAssigned' }
   properties: {
-    serverFarmId: appServicePlan.id
+    serverFarmId: asp.id
     httpsOnly: true
     siteConfig: {
-      linuxFxVersion: linuxFxVersion
+      minTlsVersion: '1.2'
+      scmMinTlsVersion: '1.2'
+      ftpsState: 'FtpsOnly'
     }
   }
 }
 
 // Source Control Integration
-resource srcControls 'Microsoft.Web/sites/sourcecontrols@2021-01-01' = {
-  parent: appService
+resource gitsource 'Microsoft.Web/sites/sourcecontrols@2022-03-01' = {
+  parent: webApp
   name: 'web'
   properties: {
     repoUrl: repositoryUrl
