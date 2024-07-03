@@ -7,14 +7,7 @@ param location string = resourceGroup().location // Bicep function returning the
 
 param sku string = 'F1'
 
-param language string = '.net'
-
-param linuxFxVersion string = 'DOTNETCORE:8.0'
-
 param repositoryUrl string = 'https://github.com/gnerkus/bookmark'
-
-@description('The text to replace the default subtitle with.')
-param textToReplaceSubtitleWith string = 'Bookmarking app for studying OSS'
 
 @description('Branch of the repository for deployment.')
 param repositoryBranch string = 'master'
