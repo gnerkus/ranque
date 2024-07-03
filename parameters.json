@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "textToReplaceSubtitleWith": {
-      "value": "This site was released to Azure using a Bicep file. Biceps are better than ARM templates!"
+      "value": "Bookmarking app for studying OSS"
     }
   }
 }
