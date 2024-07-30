@@ -35,7 +35,7 @@ steps:
 
   - task: AzureWebApp@1
     inputs:
-      azureSubscription: 'Azure subscription 1(473c608d-a59c-4592-b297-1b7d8f921471)'
+      azureSubscription: 'Azure-streak'
       appType: 'webApp'
       appName: 'nanotome-bookmark-api'
       deployToSlotOrASE: true
