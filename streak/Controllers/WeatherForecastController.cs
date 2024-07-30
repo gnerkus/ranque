@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace bookmark.Controllers
+namespace streak.Controllers
 {
     [ApiController]
     [Route("[controller]")]

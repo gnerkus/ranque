@@ -1,4 +1,4 @@
-namespace bookmark
+namespace streak
 {
     public class WeatherForecast
     {

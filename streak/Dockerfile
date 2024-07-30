@@ -9,17 +9,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["bookmark/bookmark.csproj", "bookmark/"]
-RUN dotnet restore "./bookmark/bookmark.csproj"
+COPY ["streak/streak.csproj", "streak/"]
+RUN dotnet restore "./streak/streak.csproj"
 COPY . .
-WORKDIR "/src/bookmark"
-RUN dotnet build "./bookmark.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/streak"
+RUN dotnet build "./streak.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./bookmark.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./streak.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "bookmark.dll"]
+ENTRYPOINT ["dotnet", "streak.dll"]
