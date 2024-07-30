@@ -39,7 +39,7 @@ steps:
       appType: 'webApp'
       appName: 'nanotome-bookmark-api'
       deployToSlotOrASE: true
-      resourceGroupName: 'rpg-bookmark-dev'
+      resourceGroupName: 'rg-bookmark-dev'
       slotName: 'production'
       package: '$(System.DefaultWorkingDirectory)/**/*.zip'
       deploymentMethod: 'auto'
