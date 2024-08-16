@@ -1,7 +1,12 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using streak.Extensions;
 using streak.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureCors();
+builder.Services.ConfigureIISIntegration();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -18,11 +23,21 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.All
+});
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

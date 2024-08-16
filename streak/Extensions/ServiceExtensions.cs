@@ -14,5 +14,15 @@
                         .AllowAnyHeader());
             });
         }
+
+        public static void ConfigureIISIntegration(this IServiceCollection services)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+
+            services.Configure<IISOptions>(options =>
+            {
+                
+            });
+        }
     }
 }
