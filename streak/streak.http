@@ -1,4 +1,6 @@
-GET https://localhost:5001/api/worklog
+### Get all worklogs
+
+GET {{ host }}/api/worklog
 Accept: application/json
 
 ###
