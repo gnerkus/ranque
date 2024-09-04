@@ -1,6 +1,4 @@
-@bookmark_HostAddress = http://localhost:5266
-
-GET {{bookmark_HostAddress}}/weatherforecast/
+GET https://localhost:5001/api/worklog
 Accept: application/json
 
 ###

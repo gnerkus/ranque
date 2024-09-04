@@ -1,3 +1,4 @@
+using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using streak.Models;
@@ -9,16 +10,20 @@ namespace streak.Controllers
     public class WorklogController : ControllerBase
     {
         private readonly WorklogContext _context;
+        private readonly ILoggerManager _logger;
 
-        public WorklogController(WorklogContext context)
+        public WorklogController(WorklogContext context, ILoggerManager logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Worklog
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WorklogItem>>> GetWorklogItems()
         {
+            _logger.LogInfo("Info");
+            
             return await _context.WorklogItems.ToListAsync();
         }
 
