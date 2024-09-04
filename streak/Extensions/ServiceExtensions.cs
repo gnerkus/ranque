@@ -1,4 +1,7 @@
-﻿namespace streak.Extensions
+﻿using Contracts;
+using LoggerService;
+
+namespace streak.Extensions
 {
     public static class ServiceExtensions
     {
@@ -23,6 +26,13 @@
             {
                 
             });
+        }
+
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            ArgumentNullException.ThrowIfNull(services);
+
+            services.AddSingleton<ILoggerManager, LoggerManager>();
         }
     }
 }
