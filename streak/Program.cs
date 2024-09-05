@@ -10,6 +10,7 @@ LogManager.Setup()
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
+builder.Services.ConfigureRepositoryManager();
 
 // Add services to the container.
 builder.Services.AddControllers();
