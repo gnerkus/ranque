@@ -14,7 +14,10 @@ namespace streak.ContextFactory
                 .Build();
 
             var builder = new DbContextOptionsBuilder<RepositoryContext>()
-                .UseSqlServer(configuration.GetConnectionString("sqlConnection"));
+                .UseSqlServer(
+                    configuration.GetConnectionString("sqlConnection"),
+                    b => b.MigrationsAssembly("streak")
+                    );
 
             return new RepositoryContext(builder.Options);
         }

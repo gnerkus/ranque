@@ -7,6 +7,7 @@
     <UserSecretsId>1da184fc-f221-42ac-af87-385ada8a3705</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <RootNamespace>streak</RootNamespace>
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
