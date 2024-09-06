@@ -11,6 +11,8 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureSqlContext(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -23,13 +25,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
     app.UseDeveloperExceptionPage();
-}
 else
-{
     app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

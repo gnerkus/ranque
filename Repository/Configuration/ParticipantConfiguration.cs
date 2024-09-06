@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Configuration
 {
-    public class ParticipantConfiguration: IEntityTypeConfiguration<Participant>
+    public class ParticipantConfiguration : IEntityTypeConfiguration<Participant>
     {
         public void Configure(EntityTypeBuilder<Participant> builder)
         {

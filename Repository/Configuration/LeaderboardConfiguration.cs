@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Configuration
 {
-    public class LeaderboardConfiguration: IEntityTypeConfiguration<Leaderboard>
+    public class LeaderboardConfiguration : IEntityTypeConfiguration<Leaderboard>
     {
         public void Configure(EntityTypeBuilder<Leaderboard> builder)
         {

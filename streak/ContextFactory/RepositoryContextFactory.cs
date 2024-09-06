@@ -17,7 +17,7 @@ namespace streak.ContextFactory
                 .UseSqlServer(
                     configuration.GetConnectionString("sqlConnection"),
                     b => b.MigrationsAssembly("streak")
-                    );
+                );
 
             return new RepositoryContext(builder.Options);
         }

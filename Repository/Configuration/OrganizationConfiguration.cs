@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Configuration
 {
-    public class OrganizationConfiguration: IEntityTypeConfiguration<Organization>
+    public class OrganizationConfiguration : IEntityTypeConfiguration<Organization>
     {
         public void Configure(EntityTypeBuilder<Organization> builder)
         {
