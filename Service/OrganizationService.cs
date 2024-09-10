@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Shared;
 
 namespace Service
 {
@@ -14,12 +15,14 @@ namespace Service
             _repository = repository;
         }
 
-        public IEnumerable<Organization> GetAllOrganizations(bool trackChanges)
+        public IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges)
         {
             try
             {
                 var orgs = _repository.Organization.GetAllOrganizations(trackChanges);
-                return orgs;
+                var orgsDto = orgs.Select(c => new OrganizationDto(c.Id, c.Name ?? "", string
+                    .Join(' ', c.Address, c.Country))).ToList();
+                return orgsDto;
             }
             catch (Exception ex)
             {

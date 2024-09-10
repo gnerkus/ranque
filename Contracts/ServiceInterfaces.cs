@@ -1,10 +1,11 @@
 ﻿using Entities;
+using Shared;
 
 namespace Contracts
 {
     public interface IOrganizationService
     {
-        IEnumerable<Organization> GetAllOrganizations(bool trackChanges);
+        IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges);
     }
 
     public interface ILeaderboardService
