@@ -5,7 +5,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrganizationsController: ControllerBase
+    public class OrganizationsController : ControllerBase
     {
         private readonly IServiceManager _service;
 
@@ -17,15 +17,8 @@ namespace Presentation.Controllers
         [HttpGet]
         public IActionResult GetOrganizations()
         {
-            try
-            {
-                var orgs = _service.OrganizationService.GetAllOrganizations(trackChanges: false);
-                return Ok(orgs);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            var orgs = _service.OrganizationService.GetAllOrganizations(false);
+            return Ok(orgs);
         }
     }
 }
