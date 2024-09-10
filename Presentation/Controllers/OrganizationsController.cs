@@ -10,7 +10,7 @@ namespace Presentation.Controllers
         private readonly IServiceManager _service;
 
         public OrganizationsController(IServiceManager service)
-        {
+        {  
             _service = service;
         }
 
