@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
 
 namespace Service
 {
@@ -6,11 +7,13 @@ namespace Service
     {
         private readonly ILoggerManager _logger;
         private readonly IRepositoryManager _repository;
+        private readonly IMapper _mapper;
 
-        public LeaderboardService(IRepositoryManager repository, ILoggerManager logger)
+        public LeaderboardService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
             _logger = logger;
             _repository = repository;
+            _mapper = mapper;
         }
     }
 }

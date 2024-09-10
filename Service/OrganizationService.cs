@@ -1,5 +1,5 @@
-﻿using Contracts;
-using Entities;
+﻿using AutoMapper;
+using Contracts;
 using Shared;
 
 namespace Service
@@ -8,11 +8,14 @@ namespace Service
     {
         private readonly ILoggerManager _logger;
         private readonly IRepositoryManager _repository;
+        private readonly IMapper _mapper;
 
-        public OrganizationService(IRepositoryManager repository, ILoggerManager logger)
+        public OrganizationService(IRepositoryManager repository, ILoggerManager logger, IMapper
+         mapper)
         {
             _logger = logger;
             _repository = repository;
+            _mapper = mapper;
         }
 
         public IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges)
@@ -20,8 +23,7 @@ namespace Service
             try
             {
                 var orgs = _repository.Organization.GetAllOrganizations(trackChanges);
-                var orgsDto = orgs.Select(c => new OrganizationDto(c.Id, c.Name ?? "", string
-                    .Join(' ', c.Address, c.Country))).ToList();
+                var orgsDto = _mapper.Map<IEnumerable<OrganizationDto>>(orgs);
                 return orgsDto;
             }
             catch (Exception ex)
