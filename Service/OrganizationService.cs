@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Entities;
 
 namespace Service
 {
@@ -11,6 +12,20 @@ namespace Service
         {
             _logger = logger;
             _repository = repository;
+        }
+
+        public IEnumerable<Organization> GetAllOrganizations(bool trackChanges)
+        {
+            try
+            {
+                var orgs = _repository.Organization.GetAllOrganizations(trackChanges);
+                return orgs;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetAllOrganizations)} service method {ex}");
+                throw;
+            }
         }
     }
 }

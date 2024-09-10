@@ -1,7 +1,10 @@
-﻿namespace Contracts
+﻿using Entities;
+
+namespace Contracts
 {
     public interface IOrganizationRepository
     {
+        IEnumerable<Organization> GetAllOrganizations(bool trackChanges);
     }
 
     public interface ILeaderboardRepository

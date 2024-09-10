@@ -9,5 +9,12 @@ namespace Repository
             repositoryContext)
         {
         }
+
+        public IEnumerable<Organization> GetAllOrganizations(bool trackChanges)
+        {
+            return FindAll(trackChanges)
+                .OrderBy(c => c.Name)
+                .ToList();
+        }
     }
 }

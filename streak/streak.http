@@ -1,6 +1,6 @@
 ### Get all worklogs
 
-GET {{ host }}/api/worklog
+GET {{ host }}/api/organizations
 Accept: application/json
 
 ###
