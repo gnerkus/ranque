@@ -20,5 +20,12 @@ namespace Presentation.Controllers
             var orgs = _service.OrganizationService.GetAllOrganizations(false);
             return Ok(orgs);
         }
+
+        [HttpGet("{id:guid}")]
+        public IActionResult GetOrganization(Guid id)
+        {
+            var org = _service.OrganizationService.GetOrganization(id, false);
+            return Ok(org);
+        }
     }
 }

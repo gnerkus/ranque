@@ -24,5 +24,17 @@ namespace Service
             var orgsDto = _mapper.Map<IEnumerable<OrganizationDto>>(orgs);
             return orgsDto;
         }
+
+        public OrganizationDto GetOrganization(Guid orgId, bool trackChanges)
+        {
+            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            if (org == null)
+            {
+                
+            }
+
+            var orgDto = _mapper.Map<OrganizationDto>(org);
+            return orgDto;
+        }
     }
 }

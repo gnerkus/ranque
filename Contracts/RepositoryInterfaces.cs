@@ -5,6 +5,7 @@ namespace Contracts
     public interface IOrganizationRepository
     {
         IEnumerable<Organization> GetAllOrganizations(bool trackChanges);
+        Organization? GetOrganization(Guid orgId, bool trackChanges);
     }
 
     public interface ILeaderboardRepository
