@@ -21,6 +21,15 @@ namespace Presentation.Controllers
                 false);
             return Ok(participants);
         }
+        
+        [HttpGet("{id:guid}")]
+        public IActionResult GetParticipantForCompany(Guid orgId, Guid id)
+        {
+            var participant = _service.ParticipantService.GetParticipant(orgId, id,
+                trackChanges: false);
+            return Ok(participant);
+        }
+
 
     }
 }

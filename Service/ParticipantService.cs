@@ -31,5 +31,18 @@ namespace Service
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
             return participantDtos;
         }
+
+        public ParticipantDto GetParticipant(Guid orgId, Guid pcptId, bool trackChanges)
+        {
+            var organization = _repository.Organization.GetOrganization(orgId, trackChanges);
+            if (organization is null)
+                throw new OrgNotFoundException(orgId);
+            var participantDb = _repository.Participant.GetParticipant(orgId, pcptId, 
+            trackChanges);
+            if (participantDb is null)
+                throw new ParticipantNotFoundException(pcptId);
+            var participant = _mapper.Map<ParticipantDto>(participantDb);
+            return participant;
+        }
     }
 }

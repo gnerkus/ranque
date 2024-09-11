@@ -12,3 +12,7 @@ Accept: application/json
 
 GET {{ host }}/api/organizations/{{ org_01_Id}}/participants
 Accept: application/json
+
+### Participants | Get participant
+GET {{host}}/api/organizations/{{org_01_Id}}Id}}/participants/{{participant_01_Id}}
+Accept: application/json
