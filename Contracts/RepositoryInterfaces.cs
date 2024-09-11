@@ -14,5 +14,6 @@ namespace Contracts
 
     public interface IParticipantRepository
     {
+        IEnumerable<Participant> GetParticipants(Guid orgId, bool trackChanges);
     }
 }

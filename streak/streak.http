@@ -3,8 +3,12 @@
 GET {{ host }}/api/organizations
 Accept: application/json
 
-### Organization | 404: not found
+### Organization | Get organization | not found
 
 GET {{ host }}/api/Organizations/{{badOrgId}}
 Accept: application/json
 
+### Participants | Get all participants
+
+GET {{ host }}/api/organizations/{{ org_01_Id}}/participants
+Accept: application/json

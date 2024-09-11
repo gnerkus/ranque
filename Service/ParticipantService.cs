@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities.Exceptions;
+using Shared;
 
 namespace Service
 {
@@ -15,6 +17,19 @@ namespace Service
             _logger = logger;
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public IEnumerable<ParticipantDto> GetParticipants(Guid orgId, bool trackChanges)
+        {
+            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            if (org is null)
+            {
+                throw new OrgNotFoundException(orgId);
+            }
+
+            var participants = _repository.Participant.GetParticipants(orgId, trackChanges);
+            var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
+            return participantDtos;
         }
     }
 }

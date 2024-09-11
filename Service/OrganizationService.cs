@@ -30,7 +30,7 @@ namespace Service
         {
             var org = _repository.Organization.GetOrganization(orgId, trackChanges);
             if (org == null)
-                throw new CompanyNotFoundException(orgId);
+                throw new OrgNotFoundException(orgId);
                 
             var orgDto = _mapper.Map<OrganizationDto>(org);
             return orgDto;

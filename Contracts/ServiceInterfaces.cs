@@ -15,5 +15,6 @@ namespace Contracts
 
     public interface IParticipantService
     {
+        IEnumerable<ParticipantDto> GetParticipants(Guid orgId, bool trackChanges);
     }
 }
