@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities.Exceptions;
 using Shared;
 
 namespace Service
@@ -29,10 +30,8 @@ namespace Service
         {
             var org = _repository.Organization.GetOrganization(orgId, trackChanges);
             if (org == null)
-            {
+                throw new CompanyNotFoundException(orgId);
                 
-            }
-
             var orgDto = _mapper.Map<OrganizationDto>(org);
             return orgDto;
         }

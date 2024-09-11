@@ -1,5 +1,5 @@
-﻿using System.Net;
-using Contracts;
+﻿using Contracts;
+using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -17,17 +17,23 @@ namespace streak
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
             CancellationToken cancellationToken)
         {
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             httpContext.Response.ContentType = "application/json";
 
-            var contextFeature = httpContext.Features.Get<IExceptionHandlerFeature>();
-            if (contextFeature == null) return true;
-            _logger.LogError($"Something went wrong: {contextFeature.Error}");
+            var exceptionHandlerFeature = httpContext.Features.Get<IExceptionHandlerFeature>();
+
+            if (exceptionHandlerFeature == null) return true;
+            httpContext.Response.StatusCode = exceptionHandlerFeature.Error switch
+            {
+                NotFoundException => StatusCodes.Status404NotFound,
+                _ => StatusCodes.Status500InternalServerError
+            };
+            
+            _logger.LogError($"Something went wrong: {exceptionHandlerFeature.Error}");
 
             await httpContext.Response.WriteAsync(new ErrorDetails
             {
                 StatusCode = httpContext.Response.StatusCode,
-                Message = "Internal Server Error."
+                Message = exceptionHandlerFeature.Error.Message
             }.ToString(), cancellationToken);
 
             return true;

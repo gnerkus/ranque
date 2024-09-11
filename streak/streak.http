@@ -1,6 +1,10 @@
-### Get all worklogs
+### Organization | Get all organizations
 
 GET {{ host }}/api/organizations
 Accept: application/json
 
-###
+### Organization | 404: not found
+
+GET {{ host }}/api/Organizations/{{badOrgId}}
+Accept: application/json
+
