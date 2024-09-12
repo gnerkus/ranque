@@ -1,16 +1,16 @@
 ### Organization | Get all organizations
 
-GET {{ host }}/api/organizations
+GET {{ host }}/api/orgs
 Accept: application/json
 
 ### Organization | Get organization | 404: NOT FOUND
 
-GET {{ host }}/api/Organizations/{{badOrgId}}
+GET {{ host }}/api/orgs/{{badOrgId}}
 Accept: application/json
 
 ### Organization | Create organization
 
-POST {{host}}/api/Organizations
+POST {{host}}/api/orgs
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ### Organization | Create organization with participants
 
-POST {{host}}/api/Organizations
+POST {{host}}/api/orgs
 Content-Type: application/json
 
 {
@@ -44,21 +44,21 @@ Content-Type: application/json
 
 ### Organization | Create organization | 400: BAD REQUEST
 
-POST {{host}}/api/Organizations
+POST {{host}}/api/orgs
 Content-Type: application/json
 
 ### Participants | Get all participants
 
-GET {{ host }}/api/organizations/{{ org_01_Id}}/participants
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/json
 
 ### Participants | Get participant
-GET {{host}}/api/organizations/{{org_01_Id}}Id}}/participants/{{participant_01_Id}}
+GET {{host}}/api/orgs/{{org_01_Id}}Id}}/participants/{{participant_01_Id}}
 Accept: application/json
 
 ### Participants | Create participant
 
-POST {{host}}/api/organizations/{{org_01_Id}}/participants
+POST {{host}}/api/orgs/{{org_01_Id}}/participants
 Content-Type: application/json
 
 {

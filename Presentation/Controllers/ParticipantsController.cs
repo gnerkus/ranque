@@ -4,7 +4,7 @@ using Shared;
 
 namespace Presentation.Controllers
 {
-    [Route("api/organizations/{orgId}/participants")]
+    [Route("api/orgs/{orgId}/participants")]
     [ApiController]
     public class ParticipantsController: ControllerBase
     {
