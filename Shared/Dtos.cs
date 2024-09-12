@@ -1,5 +1,11 @@
 ﻿namespace Shared;
 
-public record OrganizationDto(Guid Id, string Name, string FullAddress);
+// [Serializable]
+public record OrganizationDto
+{
+    public Guid Id { get; init; }
+    public string? Name { get; init; }
+    public string? FullAddress { get; init; }
+}
 
 public record ParticipantDto(Guid Id, string Name, int Age, string Position);
