@@ -3,10 +3,26 @@
 GET {{ host }}/api/organizations
 Accept: application/json
 
-### Organization | Get organization | not found
+### Organization | Get organization | 404: NOT FOUND
 
 GET {{ host }}/api/Organizations/{{badOrgId}}
 Accept: application/json
+
+### Organization | Create organization
+
+POST {{host}}/api/Organizations
+Content-Type: application/json
+
+{
+  "name": "Nanotome GmbH",
+  "address": "1 Strasse Strasse, 12345 Berlin",
+  "country": "Germany"
+}
+
+### Organization | Create organization | 400: BAD REQUEST
+
+POST {{host}}/api/Organizations
+Content-Type: application/json
 
 ### Participants | Get all participants
 
