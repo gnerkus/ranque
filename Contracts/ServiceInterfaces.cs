@@ -1,5 +1,4 @@
-﻿using Entities;
-using Shared;
+﻿using Shared;
 
 namespace Contracts
 {
@@ -7,6 +6,7 @@ namespace Contracts
     {
         IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges);
         OrganizationDto GetOrganization(Guid orgId, bool trackChanges);
+        OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
     }
 
     public interface ILeaderboardService

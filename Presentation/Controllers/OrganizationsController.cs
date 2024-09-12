@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace Presentation.Controllers
 {
@@ -21,11 +22,23 @@ namespace Presentation.Controllers
             return Ok(orgs);
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}", Name = "OrgById")]
         public IActionResult GetOrganization(Guid id)
         {
             var org = _service.OrganizationService.GetOrganization(id, false);
             return Ok(org);
+        }
+        
+        [HttpPost]
+        public IActionResult CreateOrganization([FromBody] OrgForCreationDto orgDto)
+        {
+            if (orgDto is null)
+            {
+                return BadRequest("Organization creation request body is null");
+            }
+            
+            var org = _service.OrganizationService.CreateOrganization(orgDto);
+            return CreatedAtRoute("OrgById", new { id = org.Id}, org);
         }
     }
 }

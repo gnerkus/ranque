@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities;
 using Entities.Exceptions;
 using Shared;
 
@@ -34,6 +35,16 @@ namespace Service
                 
             var orgDto = _mapper.Map<OrganizationDto>(org);
             return orgDto;
+        }
+
+        public OrganizationDto CreateOrganization(OrgForCreationDto orgDto)
+        {
+            var org = _mapper.Map<Organization>(orgDto);
+            
+            _repository.Organization.CreateOrganization(org);
+            _repository.Save();
+
+            return _mapper.Map<OrganizationDto>(org);
         }
     }
 }

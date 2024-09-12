@@ -22,5 +22,10 @@ namespace Repository
             return FindByCondition(c => c.Id.Equals(orgId), trackChanges)
                 .SingleOrDefault();
         }
+
+        public void CreateOrganization(Organization org)
+        {
+            Create(org);
+        }
     }
 }

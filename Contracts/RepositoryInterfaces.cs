@@ -6,6 +6,7 @@ namespace Contracts
     {
         IEnumerable<Organization> GetAllOrganizations(bool trackChanges);
         Organization? GetOrganization(Guid orgId, bool trackChanges);
+        void CreateOrganization(Organization org);
     }
 
     public interface ILeaderboardRepository
