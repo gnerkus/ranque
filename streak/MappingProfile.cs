@@ -17,6 +17,7 @@ namespace streak
 
             // dto -> entity
             CreateMap<OrgForCreationDto, Organization>();
+            CreateMap<ParticipantForCreationDto, Participant>();
         }
     }
 }

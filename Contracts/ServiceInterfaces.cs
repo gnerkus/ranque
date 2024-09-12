@@ -18,5 +18,7 @@ namespace Contracts
         IEnumerable<ParticipantDto> GetParticipants(Guid orgId, bool trackChanges);
         ParticipantDto GetParticipant(Guid orgId, Guid pcptId, bool trackChanges);
 
+        ParticipantDto CreateParticipantForOrg(Guid orgId, ParticipantForCreationDto
+            participantForCreationDto, bool trackChanges);
     }
 }

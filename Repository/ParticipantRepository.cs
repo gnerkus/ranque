@@ -22,5 +22,11 @@ namespace Repository
             trackChanges)
                 .SingleOrDefault();
         }
+
+        public void CreateParticipant(Guid orgId, Participant participant)
+        {
+            participant.OrganizationId = orgId;
+            Create(participant);
+        }
     }
 }
