@@ -19,6 +19,29 @@ Content-Type: application/json
   "country": "Germany"
 }
 
+### Organization | Create organization with participants
+
+POST {{host}}/api/Organizations
+Content-Type: application/json
+
+{
+  "name": "Unternehmen GmbH",
+  "address": "100 Strasse Strasse, 12345 Berlin",
+  "country": "Germany",
+  "employees": [
+    {
+      "name": "Joan Dane",
+      "age": 25,
+      "position": "Manager"
+    },
+    {
+      "name": "John Miths",
+      "age": 32,
+      "position": "Administrative"
+    }
+  ]
+}
+
 ### Organization | Create organization | 400: BAD REQUEST
 
 POST {{host}}/api/Organizations
@@ -32,3 +55,14 @@ Accept: application/json
 ### Participants | Get participant
 GET {{host}}/api/organizations/{{org_01_Id}}Id}}/participants/{{participant_01_Id}}
 Accept: application/json
+
+### Participants | Create participant
+
+POST {{host}}/api/organizations/{{org_01_Id}}/participants
+Content-Type: application/json
+
+{
+  "name": "Hanako Taro",
+  "age": 20,
+  "position": "Software Developer"
+}

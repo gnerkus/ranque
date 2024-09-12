@@ -8,7 +8,8 @@ public record OrganizationDto
     public string? FullAddress { get; init; }
 }
 
-public record OrgForCreationDto(string Name, string Address, string Country);
+public record OrgForCreationDto(string Name, string Address, string Country, 
+IEnumerable<ParticipantForCreationDto> Participants);
 
 public record ParticipantDto(Guid Id, string Name, int Age, string Position);
 
