@@ -46,5 +46,21 @@ namespace Service
 
             return _mapper.Map<OrganizationDto>(org);
         }
+
+        public IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        {
+            if (ids is null)
+            {
+                throw new IdParametersBadRequestException();
+            }
+
+            var dbOrgs = _repository.Organization.GetByIds(ids, trackChanges);
+            if (ids.Count() != dbOrgs.Count())
+            {
+                throw new CollectionByIdsBadRequestException();
+            }
+
+            return _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
+        }
     }
 }

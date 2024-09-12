@@ -28,6 +28,13 @@ namespace Presentation.Controllers
             var org = _service.OrganizationService.GetOrganization(id, false);
             return Ok(org);
         }
+
+        [HttpGet("collection/{{ids}}", Name = "OrgCollection")]
+        public IActionResult GetOrgCollection(IEnumerable<Guid> ids)
+        {
+            var orgs = _service.OrganizationService.GetByIds(ids, false);
+            return Ok(orgs);
+        }
         
         [HttpPost]
         public IActionResult CreateOrganization([FromBody] OrgForCreationDto orgDto)

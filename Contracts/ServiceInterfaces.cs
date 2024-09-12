@@ -7,6 +7,8 @@ namespace Contracts
         IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges);
         OrganizationDto GetOrganization(Guid orgId, bool trackChanges);
         OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
+
+        IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
     }
 
     public interface ILeaderboardService
