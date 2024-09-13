@@ -47,6 +47,16 @@ namespace Service
             return _mapper.Map<OrganizationDto>(org);
         }
 
+        public void UpdateOrganization(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool trackChanges)
+        {
+            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            if (org == null)
+                throw new OrgNotFoundException(orgId);
+
+            _mapper.Map(orgForUpdateDto, org);
+            _repository.Save();
+        }
+
         public void DeleteOrganization(Guid orgId, bool trackChanges)
         {
             var org = _repository.Organization.GetOrganization(orgId, trackChanges);

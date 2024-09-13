@@ -57,6 +57,16 @@ namespace Presentation.Controllers
             return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
         }
 
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto orgDto)
+        {
+            if (orgDto is null) return BadRequest("Organization update request body is null");
+
+            _service.OrganizationService.UpdateOrganization(orgId, orgDto, true);
+
+            return NoContent();
+        }
+
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteOrg(Guid id)
         {
