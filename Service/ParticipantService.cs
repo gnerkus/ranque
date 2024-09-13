@@ -87,5 +87,29 @@ namespace Service
             _mapper.Map(participantForUpdateDto, participant);
             _repository.Save();
         }
+
+        public (ParticipantForUpdateDto participantToPatch, Participant participant)
+            GetParticipantForPatch(
+                Guid orgId, Guid participantId, bool orgTrackChanges, bool participantTrackChanges)
+        {
+            var organization = _repository.Organization.GetOrganization(orgId, orgTrackChanges);
+            if (organization is null)
+                throw new OrgNotFoundException(orgId);
+
+            var participant =
+                _repository.Participant.GetParticipant(orgId, participantId,
+                    participantTrackChanges);
+            if (participant is null) throw new ParticipantNotFoundException(participantId);
+
+            var participantToPatch = _mapper.Map<ParticipantForUpdateDto>(participant);
+            return (participantToPatch, participant);
+        }
+
+        public void SaveChangesForPatch(ParticipantForUpdateDto participantToPatch,
+            Participant participant)
+        {
+            _mapper.Map(participantToPatch, participant);
+            _repository.Save();
+        }
     }
 }

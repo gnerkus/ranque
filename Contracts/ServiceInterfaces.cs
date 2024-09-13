@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Entities;
+using Shared;
 
 namespace Contracts
 {
@@ -34,5 +35,13 @@ namespace Contracts
 
         void UpdateParticipantForOrg(Guid orgId, Guid participantId, ParticipantForUpdateDto
             participantForUpdateDto, bool orgTrackChanges, bool pcptTrackChanges);
+
+        (ParticipantForUpdateDto participantToPatch, Participant participant)
+            GetParticipantForPatch(
+                Guid orgId, Guid participantId, bool orgTrackChanges, bool participantTrackChanges
+            );
+
+        void SaveChangesForPatch(ParticipantForUpdateDto participantToPatch,
+            Participant participant);
     }
 }

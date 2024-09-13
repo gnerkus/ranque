@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -54,6 +55,22 @@ namespace Presentation.Controllers
 
             return NoContent();
         }
+
+        [HttpPatch("{id:guid}")]
+        public IActionResult PartiallyUpdateEmployeeForCompany(Guid orgId, Guid id,
+            [FromBody] JsonPatchDocument<ParticipantForUpdateDto> patchDoc)
+        {
+            if (patchDoc is null)
+                return BadRequest("patchDoc object sent from client is null.");
+            var result = _service.ParticipantService.GetParticipantForPatch(orgId, id,
+                false,
+                true);
+            patchDoc.ApplyTo(result.participantToPatch);
+            _service.ParticipantService.SaveChangesForPatch(result.participantToPatch,
+                result.participant);
+            return NoContent();
+        }
+
 
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteParticipantForOrg(Guid orgId, Guid id)
