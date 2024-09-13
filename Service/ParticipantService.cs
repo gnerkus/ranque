@@ -66,28 +66,23 @@ namespace Service
 
             var participant =
                 _repository.Participant.GetParticipant(orgId, participantId, trackChanges);
-            if (participant is null)
-            {
-                throw new ParticipantNotFoundException(participantId);
-            }
-            
+            if (participant is null) throw new ParticipantNotFoundException(participantId);
+
             _repository.Participant.DeleteParticipant(participant);
             _repository.Save();
         }
 
         public void UpdateParticipantForOrg(Guid orgId, Guid participantId,
-            ParticipantForUpdateDto participantForUpdateDto, bool orgTrackChanges, bool pcptTrackChanges)
+            ParticipantForUpdateDto participantForUpdateDto, bool orgTrackChanges,
+            bool pcptTrackChanges)
         {
             var organization = _repository.Organization.GetOrganization(orgId, orgTrackChanges);
             if (organization is null)
                 throw new OrgNotFoundException(orgId);
-            
+
             var participant =
                 _repository.Participant.GetParticipant(orgId, participantId, pcptTrackChanges);
-            if (participant is null)
-            {
-                throw new ParticipantNotFoundException(participantId);
-            }
+            if (participant is null) throw new ParticipantNotFoundException(participantId);
 
             _mapper.Map(participantForUpdateDto, participant);
             _repository.Save();

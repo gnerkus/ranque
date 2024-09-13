@@ -9,9 +9,9 @@ namespace Contracts
         OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
 
         void UpdateOrganization(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool trackChanges);
-        
+
         void DeleteOrganization(Guid orgId, bool trackChanges);
-        
+
         IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
 
         (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection

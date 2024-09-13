@@ -23,7 +23,7 @@ namespace streak
             // org
             CreateMap<OrgForCreationDto, Organization>();
             CreateMap<OrgForUpdateDto, Organization>();
-            
+
             // participant
             CreateMap<ParticipantForCreationDto, Participant>();
             CreateMap<ParticipantForUpdateDto, Participant>();
