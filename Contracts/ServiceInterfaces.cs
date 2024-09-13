@@ -25,5 +25,7 @@ namespace Contracts
 
         ParticipantDto CreateParticipantForOrg(Guid orgId, ParticipantForCreationDto
             participantForCreationDto, bool trackChanges);
+
+        void DeleteParticipantForOrg(Guid orgId, Guid participantId, bool trackChanges);
     }
 }

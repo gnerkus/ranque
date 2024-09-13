@@ -42,5 +42,12 @@ namespace Presentation.Controllers
             return CreatedAtRoute("GetParticipantForOrg", new { orgId, id = participant.Id },
                 participant);
         }
+
+        [HttpDelete("{id:guid}")]
+        public IActionResult DeleteParticipantForOrg(Guid orgId, Guid id)
+        {
+            _service.ParticipantService.DeleteParticipantForOrg(orgId, id, false);
+            return NoContent();
+        }
     }
 }

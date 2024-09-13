@@ -29,5 +29,10 @@ namespace Repository
             participant.OrganizationId = orgId;
             Create(participant);
         }
+
+        public void DeleteParticipant(Participant participant)
+        {
+            Delete(participant);
+        }
     }
 }

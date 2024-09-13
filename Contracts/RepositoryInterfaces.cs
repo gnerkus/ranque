@@ -20,5 +20,7 @@ namespace Contracts
         IEnumerable<Participant> GetParticipants(Guid orgId, bool trackChanges);
         Participant? GetParticipant(Guid orgId, Guid participantId, bool trackChanges);
         void CreateParticipant(Guid orgId, Participant participant);
+
+        void DeleteParticipant(Participant participant);
     }
 }

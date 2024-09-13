@@ -57,5 +57,22 @@ namespace Service
 
             return _mapper.Map<ParticipantDto>(participant);
         }
+
+        public void DeleteParticipantForOrg(Guid orgId, Guid participantId, bool trackChanges)
+        {
+            var organization = _repository.Organization.GetOrganization(orgId, trackChanges);
+            if (organization is null)
+                throw new OrgNotFoundException(orgId);
+
+            var participant =
+                _repository.Participant.GetParticipant(orgId, participantId, trackChanges);
+            if (participant is null)
+            {
+                throw new ParticipantNotFoundException(participantId);
+            }
+            
+            _repository.Participant.DeleteParticipant(participant);
+            _repository.Save();
+        }
     }
 }

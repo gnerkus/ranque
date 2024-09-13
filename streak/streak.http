@@ -1,4 +1,4 @@
-### Organization | Get all organizations
+### Organization | Get all organizations | 200
 
 GET {{ host }}/api/orgs
 Accept: application/json
@@ -8,7 +8,7 @@ Accept: application/json
 GET {{ host }}/api/orgs/{{badOrgId}}
 Accept: application/json
 
-### Organization | Create organization
+### Organization | Create organization | 201
 
 POST {{host}}/api/orgs
 Content-Type: application/json
@@ -19,7 +19,7 @@ Content-Type: application/json
   "country": "Germany"
 }
 
-### Organization | Create organization with participants
+### Organization | Create organization with participants | 201
 
 POST {{host}}/api/orgs
 Content-Type: application/json
@@ -47,16 +47,17 @@ Content-Type: application/json
 POST {{host}}/api/orgs
 Content-Type: application/json
 
-### Participants | Get all participants
+### Participants | Get all participants | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/json
 
-### Participants | Get participant
-GET {{host}}/api/orgs/{{org_01_Id}}Id}}/participants/{{participant_01_Id}}
+### Participants | Get participant | 200
+
+GET {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
 Accept: application/json
 
-### Participants | Create participant
+### Participants | Create participant | 201
 
 POST {{host}}/api/orgs/{{org_01_Id}}/participants
 Content-Type: application/json
@@ -66,3 +67,9 @@ Content-Type: application/json
   "age": 20,
   "position": "Software Developer"
 }
+
+### Participants | Delete participant | 204
+
+DELETE {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
+Accept: application/json
+
