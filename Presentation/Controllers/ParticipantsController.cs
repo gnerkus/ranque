@@ -71,7 +71,13 @@ namespace Presentation.Controllers
             var result = _service.ParticipantService.GetParticipantForPatch(orgId, id,
                 false,
                 true);
-            patchDoc.ApplyTo(result.participantToPatch);
+            patchDoc.ApplyTo(result.participantToPatch, ModelState);
+
+            TryValidateModel(result.participantToPatch);
+            
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            
             _service.ParticipantService.SaveChangesForPatch(result.participantToPatch,
                 result.participant);
             return NoContent();

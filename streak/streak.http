@@ -86,9 +86,8 @@ Content-Type: application/json-patch+json
 
 [
   {
-    "op": "replace",
-    "path": "/age",
-    "value": 20
+    "op": "remove",
+    "path": "/ageeeeee"
   }
 ]
 
