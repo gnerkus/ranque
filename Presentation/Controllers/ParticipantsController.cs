@@ -53,6 +53,9 @@ namespace Presentation.Controllers
         {
             if (participantForUpdateDto is null) return BadRequest("Participant body is null");
 
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            
             _service.ParticipantService.UpdateParticipantForOrg(orgId, participantId,
                 participantForUpdateDto, false, true);
 
