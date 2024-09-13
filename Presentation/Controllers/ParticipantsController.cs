@@ -43,6 +43,21 @@ namespace Presentation.Controllers
                 participant);
         }
 
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateParticipantForOrg(Guid orgId, Guid participantId, [FromBody] 
+        ParticipantForUpdateDto participantForUpdateDto)
+        {
+            if (participantForUpdateDto is null)
+            {
+                return BadRequest("Participant body is null");
+            }
+            
+            _service.ParticipantService.UpdateParticipantForOrg(orgId, participantId, 
+            participantForUpdateDto, false, true);
+
+            return NoContent();
+        }
+
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteParticipantForOrg(Guid orgId, Guid id)
         {

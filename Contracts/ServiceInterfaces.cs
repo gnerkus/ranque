@@ -29,5 +29,8 @@ namespace Contracts
             participantForCreationDto, bool trackChanges);
 
         void DeleteParticipantForOrg(Guid orgId, Guid participantId, bool trackChanges);
+
+        void UpdateParticipantForOrg(Guid orgId, Guid participantId, ParticipantForUpdateDto
+            participantForUpdateDto, bool orgTrackChanges, bool pcptTrackChanges);
     }
 }

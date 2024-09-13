@@ -14,4 +14,6 @@
     public record ParticipantDto(Guid Id, string Name, int Age, string Position);
 
     public record ParticipantForCreationDto(string Name, int Age, string Position);
+
+    public record ParticipantForUpdateDto(string Name, int Age, string Position);
 }
