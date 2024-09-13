@@ -62,5 +62,25 @@ namespace Service
 
             return _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
         }
+
+        public (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection(IEnumerable<OrgForCreationDto> orgCollection)
+        {
+            if (orgCollection is null)
+            {
+                throw new OrgCollectionBadRequest();
+            }
+
+            var dbOrgs = _mapper.Map<IEnumerable<Organization>>(orgCollection);
+            foreach (var org in dbOrgs)
+            {
+                _repository.Organization.CreateOrganization(org);
+            }
+            
+            _repository.Save();
+            var orgsDtos = _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
+            var organizationDtos = orgsDtos.ToList();
+            var ids = string.Join(",", organizationDtos.Select(c => c.Id));
+            return (orgs: organizationDtos, ids: ids);
+        }
     }
 }

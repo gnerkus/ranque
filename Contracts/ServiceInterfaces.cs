@@ -9,6 +9,9 @@ namespace Contracts
         OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
 
         IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+
+        (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection
+            (IEnumerable<OrgForCreationDto> orgCollection);
     }
 
     public interface ILeaderboardService

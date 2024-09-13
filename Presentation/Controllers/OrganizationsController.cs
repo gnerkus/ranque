@@ -47,5 +47,14 @@ namespace Presentation.Controllers
             var org = _service.OrganizationService.CreateOrganization(orgDto);
             return CreatedAtRoute("OrgById", new { id = org.Id}, org);
         }
+
+        [HttpPost("collection")]
+        public IActionResult CreateCompanyCollection([FromBody] IEnumerable<OrgForCreationDto>
+            orgCollection)
+        {
+            var result = _service.OrganizationService.CreateOrgCollection(orgCollection);
+
+            return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
+        }
     }
 }

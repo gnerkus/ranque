@@ -14,4 +14,11 @@
         {
         }
     }
+
+    public sealed class OrgCollectionBadRequest: BadRequestException
+    {
+        public OrgCollectionBadRequest() : base("Company collection sent from a client is null.")
+        {
+        }
+    }
 }
