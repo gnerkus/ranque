@@ -68,6 +68,19 @@ Content-Type: application/json
   "position": "Software Developer"
 }
 
+### Participants | Update participant | 204
+
+PATCH {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/age",
+    "value": 20
+  }
+]
+
 ### Participants | Delete participant | 204
 
 DELETE {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
