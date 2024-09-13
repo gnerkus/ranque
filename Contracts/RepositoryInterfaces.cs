@@ -8,6 +8,8 @@ namespace Contracts
         Organization? GetOrganization(Guid orgId, bool trackChanges);
         void CreateOrganization(Organization org);
 
+        void DeleteOrganization(Organization org);
+
         IEnumerable<Organization> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
     }
 

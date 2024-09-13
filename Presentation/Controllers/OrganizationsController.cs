@@ -56,5 +56,12 @@ namespace Presentation.Controllers
 
             return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
         }
+
+        [HttpDelete("{id:guid}")]
+        public IActionResult DeleteOrg(Guid id)
+        {
+            _service.OrganizationService.DeleteOrganization(id, false);
+            return NoContent();
+        }
     }
 }

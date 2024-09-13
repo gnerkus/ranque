@@ -28,6 +28,11 @@ namespace Repository
             Create(org);
         }
 
+        public void DeleteOrganization(Organization org)
+        {
+            Delete(org);
+        }
+
         public IEnumerable<Organization> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
         {
             return FindByCondition(x => ids.Contains(x.Id), trackChanges)

@@ -8,6 +8,8 @@ namespace Contracts
         OrganizationDto GetOrganization(Guid orgId, bool trackChanges);
         OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
 
+        void DeleteOrganization(Guid orgId, bool trackChanges);
+        
         IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
 
         (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection

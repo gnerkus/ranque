@@ -47,6 +47,16 @@ namespace Service
             return _mapper.Map<OrganizationDto>(org);
         }
 
+        public void DeleteOrganization(Guid orgId, bool trackChanges)
+        {
+            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            if (org == null)
+                throw new OrgNotFoundException(orgId);
+
+            _repository.Organization.DeleteOrganization(org);
+            _repository.Save();
+        }
+
         public IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
         {
             if (ids is null) throw new IdParametersBadRequestException();
