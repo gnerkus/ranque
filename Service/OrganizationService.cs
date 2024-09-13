@@ -32,7 +32,7 @@ namespace Service
             var org = _repository.Organization.GetOrganization(orgId, trackChanges);
             if (org == null)
                 throw new OrgNotFoundException(orgId);
-                
+
             var orgDto = _mapper.Map<OrganizationDto>(org);
             return orgDto;
         }
@@ -40,7 +40,7 @@ namespace Service
         public OrganizationDto CreateOrganization(OrgForCreationDto orgDto)
         {
             var org = _mapper.Map<Organization>(orgDto);
-            
+
             _repository.Organization.CreateOrganization(org);
             _repository.Save();
 
@@ -49,38 +49,27 @@ namespace Service
 
         public IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
         {
-            if (ids is null)
-            {
-                throw new IdParametersBadRequestException();
-            }
+            if (ids is null) throw new IdParametersBadRequestException();
 
             var dbOrgs = _repository.Organization.GetByIds(ids, trackChanges);
-            if (ids.Count() != dbOrgs.Count())
-            {
-                throw new CollectionByIdsBadRequestException();
-            }
+            if (ids.Count() != dbOrgs.Count()) throw new CollectionByIdsBadRequestException();
 
             return _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
         }
 
-        public (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection(IEnumerable<OrgForCreationDto> orgCollection)
+        public (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection(
+            IEnumerable<OrgForCreationDto> orgCollection)
         {
-            if (orgCollection is null)
-            {
-                throw new OrgCollectionBadRequest();
-            }
+            if (orgCollection is null) throw new OrgCollectionBadRequest();
 
             var dbOrgs = _mapper.Map<IEnumerable<Organization>>(orgCollection);
-            foreach (var org in dbOrgs)
-            {
-                _repository.Organization.CreateOrganization(org);
-            }
-            
+            foreach (var org in dbOrgs) _repository.Organization.CreateOrganization(org);
+
             _repository.Save();
             var orgsDtos = _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
             var organizationDtos = orgsDtos.ToList();
             var ids = string.Join(",", organizationDtos.Select(c => c.Id));
-            return (orgs: organizationDtos, ids: ids);
+            return (orgs: organizationDtos, ids);
         }
     }
 }

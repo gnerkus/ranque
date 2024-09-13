@@ -18,8 +18,9 @@ namespace Repository
 
         public Participant? GetParticipant(Guid orgId, Guid participantId, bool trackChanges)
         {
-            return FindByCondition(c => c.OrganizationId.Equals(orgId) && c.Id.Equals(participantId), 
-            trackChanges)
+            return FindByCondition(
+                    c => c.OrganizationId.Equals(orgId) && c.Id.Equals(participantId),
+                    trackChanges)
                 .SingleOrDefault();
         }
 

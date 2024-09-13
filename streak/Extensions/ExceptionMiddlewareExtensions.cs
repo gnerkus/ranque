@@ -7,8 +7,8 @@ namespace streak.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager 
-        logger)
+        public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager
+            logger)
         {
             app.UseExceptionHandler(
                 appBuilder =>
@@ -24,10 +24,10 @@ namespace streak.Extensions
                             {
                                 logger.LogError($"Something went wrong: {contextFeature.Error}");
 
-                                await context.Response.WriteAsync(new ErrorDetails()
+                                await context.Response.WriteAsync(new ErrorDetails
                                 {
                                     StatusCode = context.Response.StatusCode,
-                                    Message = "Internal Server Error.",
+                                    Message = "Internal Server Error."
                                 }.ToString());
                             }
                         });

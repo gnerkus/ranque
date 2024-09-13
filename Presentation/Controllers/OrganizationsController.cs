@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ModelBinders;
 using Shared;
 
 namespace Presentation.Controllers
@@ -11,7 +12,7 @@ namespace Presentation.Controllers
         private readonly IServiceManager _service;
 
         public OrganizationsController(IServiceManager service)
-        {  
+        {
             _service = service;
         }
 
@@ -30,22 +31,21 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("collection/{{ids}}", Name = "OrgCollection")]
-        public IActionResult GetOrgCollection(IEnumerable<Guid> ids)
+        public IActionResult GetOrgCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))
+            ]
+            IEnumerable<Guid> ids)
         {
             var orgs = _service.OrganizationService.GetByIds(ids, false);
             return Ok(orgs);
         }
-        
+
         [HttpPost]
         public IActionResult CreateOrganization([FromBody] OrgForCreationDto orgDto)
         {
-            if (orgDto is null)
-            {
-                return BadRequest("Organization creation request body is null");
-            }
-            
+            if (orgDto is null) return BadRequest("Organization creation request body is null");
+
             var org = _service.OrganizationService.CreateOrganization(orgDto);
-            return CreatedAtRoute("OrgById", new { id = org.Id}, org);
+            return CreatedAtRoute("OrgById", new { id = org.Id }, org);
         }
 
         [HttpPost("collection")]

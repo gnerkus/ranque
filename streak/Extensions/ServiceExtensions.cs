@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using Contracts;
+﻿using Contracts;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
 using Repository;
@@ -48,7 +47,10 @@ namespace streak.Extensions
             services.AddScoped<IServiceManager, ServiceManager>();
         }
 
-        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) =>
-            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
+        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder)
+        {
+            return builder.AddMvcOptions(config =>
+                config.OutputFormatters.Add(new CsvOutputFormatter()));
+        }
     }
 }

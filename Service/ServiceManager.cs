@@ -9,8 +9,8 @@ namespace Service
         private readonly Lazy<IOrganizationService> _orgService;
         private readonly Lazy<IParticipantService> _participantService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager 
-        loggerManager, IMapper mapper)
+        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
+            loggerManager, IMapper mapper)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));
