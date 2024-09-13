@@ -37,6 +37,9 @@ namespace Presentation.Controllers
         {
             if (pcptDto is null) return BadRequest("Participant creation request body is null");
 
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+                
             var participant = _service.ParticipantService.CreateParticipantForOrg(orgId,
                 pcptDto, false);
 
@@ -57,7 +60,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch("{id:guid}")]
-        public IActionResult PartiallyUpdateEmployeeForCompany(Guid orgId, Guid id,
+        public IActionResult PartiallyUpdateParticipantForCompany(Guid orgId, Guid id,
             [FromBody] JsonPatchDocument<ParticipantForUpdateDto> patchDoc)
         {
             if (patchDoc is null)

@@ -68,6 +68,17 @@ Content-Type: application/json
   "position": "Software Developer"
 }
 
+### Participants | Create participant | 422: UNPROCESSABLE ENTITY
+
+POST {{host}}/api/orgs/{{org_01_Id}}/participants
+Content-Type: application/json
+
+{
+  "name": null,
+  "age": 20,
+  "position": null
+}
+
 ### Participants | Update participant | 204
 
 PATCH {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
