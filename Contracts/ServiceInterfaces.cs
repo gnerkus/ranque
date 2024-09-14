@@ -7,15 +7,16 @@ namespace Contracts
     {
         Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(bool trackChanges);
         Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges);
-        OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
+        Task<OrganizationDto> CreateOrganizationAsync(OrgForCreationDto orgDto);
 
-        void UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool trackChanges);
+        Task UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool 
+        trackChanges);
 
-        void DeleteOrganizationAsync(Guid orgId, bool trackChanges);
+        Task DeleteOrganizationAsync(Guid orgId, bool trackChanges);
 
         Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
 
-        (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection
+        Task<(IEnumerable<OrganizationDto> orgs, string ids)> CreateOrgCollectionAsync
             (IEnumerable<OrgForCreationDto> orgCollection);
     }
 

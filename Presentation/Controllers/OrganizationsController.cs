@@ -17,60 +17,63 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetOrganizations()
+        public async Task<IActionResult> GetOrganizations()
         {
-            var orgs = _service.OrganizationService.GetAllOrganizations(false);
+            var orgs = await _service.OrganizationService.GetAllOrganizationsAsync(false);
             return Ok(orgs);
         }
 
         [HttpGet("{id:guid}", Name = "OrgById")]
-        public IActionResult GetOrganization(Guid id)
+        public async Task<IActionResult> GetOrganization(Guid id)
         {
-            var org = _service.OrganizationService.GetOrganization(id, false);
+            var org = await _service.OrganizationService.GetOrganizationAsync(id, false);
             return Ok(org);
         }
 
         [HttpGet("collection/{{ids}}", Name = "OrgCollection")]
-        public IActionResult GetOrgCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))
+        public async Task<IActionResult> GetOrgCollection([ModelBinder(BinderType = typeof
+        (ArrayModelBinder))
             ]
             IEnumerable<Guid> ids)
         {
-            var orgs = _service.OrganizationService.GetByIds(ids, false);
+            var orgs = await _service.OrganizationService.GetByIdsAsync(ids, false);
             return Ok(orgs);
         }
 
         [HttpPost]
-        public IActionResult CreateOrganization([FromBody] OrgForCreationDto orgDto)
+        public async Task<IActionResult> CreateOrganization([FromBody] OrgForCreationDto orgDto)
         {
             if (orgDto is null) return BadRequest("Organization creation request body is null");
 
-            var org = _service.OrganizationService.CreateOrganization(orgDto);
+            var org = await _service.OrganizationService.CreateOrganizationAsync(orgDto);
             return CreatedAtRoute("OrgById", new { id = org.Id }, org);
         }
 
         [HttpPost("collection")]
-        public IActionResult CreateCompanyCollection([FromBody] IEnumerable<OrgForCreationDto>
+        public async Task<IActionResult> CreateCompanyCollection([FromBody] 
+        IEnumerable<OrgForCreationDto>
             orgCollection)
         {
-            var result = _service.OrganizationService.CreateOrgCollection(orgCollection);
+            var result = await _service.OrganizationService.CreateOrgCollectionAsync(orgCollection);
 
             return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
         }
 
         [HttpPut("{id:guid}")]
-        public IActionResult UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto orgDto)
+        public async Task<IActionResult> UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto 
+        orgDto)
         {
             if (orgDto is null) return BadRequest("Organization update request body is null");
 
-            _service.OrganizationService.UpdateOrganization(orgId, orgDto, true);
+            await _service.OrganizationService.UpdateOrganizationAsync(orgId, orgDto, true);
 
             return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
-        public IActionResult DeleteOrg(Guid id)
+        public async Task<IActionResult> DeleteOrg(Guid id)
         {
-            _service.OrganizationService.DeleteOrganization(id, false);
+            await _service.OrganizationService.DeleteOrganizationAsync(id, false);
             return NoContent();
         }
     }

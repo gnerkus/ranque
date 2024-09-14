@@ -5,6 +5,6 @@
         IOrganizationRepository Organization { get; }
         ILeaderboardRepository Leaderboard { get; }
         IParticipantRepository Participant { get; }
-        void Save();
+        Task SaveAsync();
     }
 }

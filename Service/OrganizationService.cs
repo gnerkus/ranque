@@ -37,17 +37,17 @@ namespace Service
             return orgDto;
         }
 
-        public OrganizationDto CreateOrganization(OrgForCreationDto orgDto)
+        public async Task<OrganizationDto> CreateOrganizationAsync(OrgForCreationDto orgDto)
         {
             var org = _mapper.Map<Organization>(orgDto);
 
             _repository.Organization.CreateOrganization(org);
-            _repository.Save();
+            await _repository.SaveAsync();
 
             return _mapper.Map<OrganizationDto>(org);
         }
 
-        public async void UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto,
+        public async Task UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto,
             bool trackChanges)
         {
             var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
@@ -55,17 +55,17 @@ namespace Service
                 throw new OrgNotFoundException(orgId);
 
             _mapper.Map(orgForUpdateDto, org);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
-        public async void DeleteOrganizationAsync(Guid orgId, bool trackChanges)
+        public async Task DeleteOrganizationAsync(Guid orgId, bool trackChanges)
         {
             var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
             if (org == null)
                 throw new OrgNotFoundException(orgId);
 
             _repository.Organization.DeleteOrganization(org);
-            _repository.Save();
+            await _repository.SaveAsync();
         }
 
         public async Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool 
@@ -73,13 +73,14 @@ namespace Service
         {
             if (ids is null) throw new IdParametersBadRequestException();
 
-            var dbOrgs = await _repository.Organization.GetByIdsAsync(ids, trackChanges);
-            if (ids.Count() != dbOrgs.Count()) throw new CollectionByIdsBadRequestException();
+            var enumerable = ids.ToList();
+            var dbOrgs = await _repository.Organization.GetByIdsAsync(enumerable, trackChanges);
+            if (enumerable.Count != dbOrgs.Count()) throw new CollectionByIdsBadRequestException();
 
             return _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
         }
 
-        public (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection(
+        public async Task<(IEnumerable<OrganizationDto> orgs, string ids)> CreateOrgCollectionAsync(
             IEnumerable<OrgForCreationDto> orgCollection)
         {
             if (orgCollection is null) throw new OrgCollectionBadRequest();
@@ -87,7 +88,7 @@ namespace Service
             var dbOrgs = _mapper.Map<IEnumerable<Organization>>(orgCollection);
             foreach (var org in dbOrgs) _repository.Organization.CreateOrganization(org);
 
-            _repository.Save();
+            await _repository.SaveAsync();
             var orgsDtos = _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
             var organizationDtos = orgsDtos.ToList();
             var ids = string.Join(",", organizationDtos.Select(c => c.Id));

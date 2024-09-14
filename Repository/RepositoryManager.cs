@@ -24,9 +24,9 @@ namespace Repository
         public ILeaderboardRepository Leaderboard => _leaderboardRepository.Value;
         public IParticipantRepository Participant => _participantRepository.Value;
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _repositoryContext.SaveChanges();
+            await _repositoryContext.SaveChangesAsync();
         }
     }
 }
