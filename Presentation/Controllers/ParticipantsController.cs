@@ -17,22 +17,22 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetParticipantsForOrganization(Guid orgId)
+        public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId)
         {
-            var participants = _service.ParticipantService.GetParticipants(orgId, false);
+            var participants = await _service.ParticipantService.GetParticipantsAsync(orgId, false);
             return Ok(participants);
         }
 
         [HttpGet("{id:guid}", Name = "GetParticipantForOrg")]
-        public IActionResult GetParticipantForOrganization(Guid orgId, Guid id)
+        public async Task<IActionResult> GetParticipantForOrganization(Guid orgId, Guid id)
         {
-            var participant = _service.ParticipantService.GetParticipant(orgId, id,
+            var participant = await _service.ParticipantService.GetParticipantAsync(orgId, id,
                 false);
             return Ok(participant);
         }
 
         [HttpPost]
-        public IActionResult CreateParticipantForOrg(Guid orgId,
+        public async Task<IActionResult> CreateParticipantForOrg(Guid orgId,
             [FromBody] ParticipantForCreationDto pcptDto)
         {
             if (pcptDto is null) return BadRequest("Participant creation request body is null");
@@ -40,7 +40,7 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
                 
-            var participant = _service.ParticipantService.CreateParticipantForOrg(orgId,
+            var participant = await _service.ParticipantService.CreateParticipantForOrgAsync(orgId,
                 pcptDto, false);
 
             return CreatedAtRoute("GetParticipantForOrg", new { orgId, id = participant.Id },
@@ -48,7 +48,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public IActionResult UpdateParticipantForOrg(Guid orgId, Guid participantId,
+        public async Task<IActionResult> UpdateParticipantForOrg(Guid orgId, Guid participantId,
             [FromBody] ParticipantForUpdateDto participantForUpdateDto)
         {
             if (participantForUpdateDto is null) return BadRequest("Participant body is null");
@@ -56,19 +56,19 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
             
-            _service.ParticipantService.UpdateParticipantForOrg(orgId, participantId,
+            await _service.ParticipantService.UpdateParticipantForOrgAsync(orgId, participantId,
                 participantForUpdateDto, false, true);
 
             return NoContent();
         }
 
         [HttpPatch("{id:guid}")]
-        public IActionResult PartiallyUpdateParticipantForCompany(Guid orgId, Guid id,
+        public async Task<IActionResult> PartiallyUpdateParticipantForCompany(Guid orgId, Guid id,
             [FromBody] JsonPatchDocument<ParticipantForUpdateDto> patchDoc)
         {
             if (patchDoc is null)
                 return BadRequest("patchDoc object sent from client is null.");
-            var result = _service.ParticipantService.GetParticipantForPatch(orgId, id,
+            var result = await _service.ParticipantService.GetParticipantForPatchAsync(orgId, id,
                 false,
                 true);
             patchDoc.ApplyTo(result.participantToPatch, ModelState);
@@ -78,16 +78,16 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
             
-            _service.ParticipantService.SaveChangesForPatch(result.participantToPatch,
+            await _service.ParticipantService.SaveChangesForPatchAsync(result.participantToPatch,
                 result.participant);
             return NoContent();
         }
 
 
         [HttpDelete("{id:guid}")]
-        public IActionResult DeleteParticipantForOrg(Guid orgId, Guid id)
+        public async Task<IActionResult> DeleteParticipantForOrg(Guid orgId, Guid id)
         {
-            _service.ParticipantService.DeleteParticipantForOrg(orgId, id, false);
+            await _service.ParticipantService.DeleteParticipantForOrgAsync(orgId, id, false);
             return NoContent();
         }
     }

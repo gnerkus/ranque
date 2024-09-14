@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -9,19 +10,21 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Participant> GetParticipants(Guid orgId, bool trackChanges)
+        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, bool 
+        trackChanges)
         {
-            return FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
+            return await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
                 .OrderBy(c => c.Name)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Participant? GetParticipant(Guid orgId, Guid participantId, bool trackChanges)
+        public async Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool 
+        trackChanges)
         {
-            return FindByCondition(
+            return await FindByCondition(
                     c => c.OrganizationId.Equals(orgId) && c.Id.Equals(participantId),
                     trackChanges)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
         }
 
         public void CreateParticipant(Guid orgId, Participant participant)

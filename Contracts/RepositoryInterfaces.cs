@@ -19,8 +19,8 @@ namespace Contracts
 
     public interface IParticipantRepository
     {
-        IEnumerable<Participant> GetParticipants(Guid orgId, bool trackChanges);
-        Participant? GetParticipant(Guid orgId, Guid participantId, bool trackChanges);
+        Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, bool trackChanges);
+        Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool trackChanges);
         void CreateParticipant(Guid orgId, Participant participant);
 
         void DeleteParticipant(Participant participant);

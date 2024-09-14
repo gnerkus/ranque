@@ -26,23 +26,23 @@ namespace Contracts
 
     public interface IParticipantService
     {
-        IEnumerable<ParticipantDto> GetParticipants(Guid orgId, bool trackChanges);
-        ParticipantDto GetParticipant(Guid orgId, Guid pcptId, bool trackChanges);
+        Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid orgId, bool trackChanges);
+        Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool trackChanges);
 
-        ParticipantDto CreateParticipantForOrg(Guid orgId, ParticipantForCreationDto
+        Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId, ParticipantForCreationDto
             participantForCreationDto, bool trackChanges);
 
-        void DeleteParticipantForOrg(Guid orgId, Guid participantId, bool trackChanges);
+        Task DeleteParticipantForOrgAsync(Guid orgId, Guid participantId, bool trackChanges);
 
-        void UpdateParticipantForOrg(Guid orgId, Guid participantId, ParticipantForUpdateDto
+        Task UpdateParticipantForOrgAsync(Guid orgId, Guid participantId, ParticipantForUpdateDto
             participantForUpdateDto, bool orgTrackChanges, bool pcptTrackChanges);
 
-        (ParticipantForUpdateDto participantToPatch, Participant participant)
-            GetParticipantForPatch(
+        Task<(ParticipantForUpdateDto participantToPatch, Participant participant)>
+            GetParticipantForPatchAsync(
                 Guid orgId, Guid participantId, bool orgTrackChanges, bool participantTrackChanges
             );
 
-        void SaveChangesForPatch(ParticipantForUpdateDto participantToPatch,
+        Task SaveChangesForPatchAsync(ParticipantForUpdateDto participantToPatch,
             Participant participant);
     }
 }
