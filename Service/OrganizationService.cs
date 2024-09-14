@@ -20,16 +20,16 @@ namespace Service
             _mapper = mapper;
         }
 
-        public IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges)
+        public async Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(bool trackChanges)
         {
-            var orgs = _repository.Organization.GetAllOrganizations(trackChanges);
+            var orgs = await _repository.Organization.GetAllOrganizationsAsync(trackChanges);
             var orgsDto = _mapper.Map<IEnumerable<OrganizationDto>>(orgs);
             return orgsDto;
         }
 
-        public OrganizationDto GetOrganization(Guid orgId, bool trackChanges)
+        public async Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges)
         {
-            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
             if (org == null)
                 throw new OrgNotFoundException(orgId);
 
@@ -47,10 +47,10 @@ namespace Service
             return _mapper.Map<OrganizationDto>(org);
         }
 
-        public void UpdateOrganization(Guid orgId, OrgForUpdateDto orgForUpdateDto,
+        public async void UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto,
             bool trackChanges)
         {
-            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
             if (org == null)
                 throw new OrgNotFoundException(orgId);
 
@@ -58,9 +58,9 @@ namespace Service
             _repository.Save();
         }
 
-        public void DeleteOrganization(Guid orgId, bool trackChanges)
+        public async void DeleteOrganizationAsync(Guid orgId, bool trackChanges)
         {
-            var org = _repository.Organization.GetOrganization(orgId, trackChanges);
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
             if (org == null)
                 throw new OrgNotFoundException(orgId);
 
@@ -68,11 +68,12 @@ namespace Service
             _repository.Save();
         }
 
-        public IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool 
+        trackChanges)
         {
             if (ids is null) throw new IdParametersBadRequestException();
 
-            var dbOrgs = _repository.Organization.GetByIds(ids, trackChanges);
+            var dbOrgs = await _repository.Organization.GetByIdsAsync(ids, trackChanges);
             if (ids.Count() != dbOrgs.Count()) throw new CollectionByIdsBadRequestException();
 
             return _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);

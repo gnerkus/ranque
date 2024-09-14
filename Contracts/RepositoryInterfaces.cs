@@ -4,13 +4,13 @@ namespace Contracts
 {
     public interface IOrganizationRepository
     {
-        IEnumerable<Organization> GetAllOrganizations(bool trackChanges);
-        Organization? GetOrganization(Guid orgId, bool trackChanges);
+        Task<IEnumerable<Organization>> GetAllOrganizationsAsync(bool trackChanges);
+        Task<Organization?> GetOrganizationAsync(Guid orgId, bool trackChanges);
         void CreateOrganization(Organization org);
 
         void DeleteOrganization(Organization org);
 
-        IEnumerable<Organization> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        Task<IEnumerable<Organization>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
     }
 
     public interface ILeaderboardRepository

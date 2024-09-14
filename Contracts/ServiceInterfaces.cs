@@ -5,15 +5,15 @@ namespace Contracts
 {
     public interface IOrganizationService
     {
-        IEnumerable<OrganizationDto> GetAllOrganizations(bool trackChanges);
-        OrganizationDto GetOrganization(Guid orgId, bool trackChanges);
+        Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(bool trackChanges);
+        Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges);
         OrganizationDto CreateOrganization(OrgForCreationDto orgDto);
 
-        void UpdateOrganization(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool trackChanges);
+        void UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool trackChanges);
 
-        void DeleteOrganization(Guid orgId, bool trackChanges);
+        void DeleteOrganizationAsync(Guid orgId, bool trackChanges);
 
-        IEnumerable<OrganizationDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
 
         (IEnumerable<OrganizationDto> orgs, string ids) CreateOrgCollection
             (IEnumerable<OrgForCreationDto> orgCollection);

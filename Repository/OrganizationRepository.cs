@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -10,17 +11,17 @@ namespace Repository
         {
         }
 
-        public IEnumerable<Organization> GetAllOrganizations(bool trackChanges)
+        public async Task<IEnumerable<Organization>> GetAllOrganizationsAsync(bool trackChanges)
         {
-            return FindAll(trackChanges)
+            return await FindAll(trackChanges)
                 .OrderBy(c => c.Name)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Organization? GetOrganization(Guid orgId, bool trackChanges)
+        public async Task<Organization?> GetOrganizationAsync(Guid orgId, bool trackChanges)
         {
-            return FindByCondition(c => c.Id.Equals(orgId), trackChanges)
-                .SingleOrDefault();
+            return await FindByCondition(c => c.Id.Equals(orgId), trackChanges)
+                .SingleOrDefaultAsync();
         }
 
         public void CreateOrganization(Organization org)
@@ -33,10 +34,11 @@ namespace Repository
             Delete(org);
         }
 
-        public IEnumerable<Organization> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<IEnumerable<Organization>> GetByIdsAsync(IEnumerable<Guid> ids, bool 
+        trackChanges)
         {
-            return FindByCondition(x => ids.Contains(x.Id), trackChanges)
-                .ToList();
+            return await FindByCondition(x => ids.Contains(x.Id), trackChanges)
+                .ToListAsync();
         }
     }
 }
