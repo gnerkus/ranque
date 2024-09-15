@@ -12,6 +12,23 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
+        private async Task IsOrgExist(Guid orgId, bool trackChanges)
+        {
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
+            if (org is null) throw new OrgNotFoundException(orgId);
+        }
+
+        private async Task<Participant> IsParticipantExist(Guid orgId, Guid participantId,
+            bool trackChanges)
+        {
+            var participantDb = await _repository.Participant.GetParticipantAsync(orgId, participantId,
+                trackChanges);
+            if (participantDb is null)
+                throw new ParticipantNotFoundException(participantId);
+
+            return participantDb;
+        }
+        
         public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
             mapper)
         {
@@ -23,8 +40,7 @@ namespace Service
         public async Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid orgId, bool 
         trackChanges)
         {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
-            if (org is null) throw new OrgNotFoundException(orgId);
+            await IsOrgExist(orgId, trackChanges);
 
             var participants = await _repository.Participant.GetParticipantsAsync(orgId, 
             trackChanges);
@@ -35,14 +51,9 @@ namespace Service
         public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool 
         trackChanges)
         {
-            var organization = await _repository.Organization.GetOrganizationAsync(orgId, 
-            trackChanges);
-            if (organization is null)
-                throw new OrgNotFoundException(orgId);
-            var participantDb = await _repository.Participant.GetParticipantAsync(orgId, pcptId,
-                trackChanges);
-            if (participantDb is null)
-                throw new ParticipantNotFoundException(pcptId);
+            await IsOrgExist(orgId, trackChanges);
+            var participantDb = await IsParticipantExist(orgId, pcptId, trackChanges);
+
             var participant = _mapper.Map<ParticipantDto>(participantDb);
             return participant;
         }
@@ -50,10 +61,7 @@ namespace Service
         public async Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId,
             ParticipantForCreationDto participantForCreationDto, bool trackChanges)
         {
-            var organization = await _repository.Organization.GetOrganizationAsync(orgId, 
-            trackChanges);
-            if (organization is null)
-                throw new OrgNotFoundException(orgId);
+            await IsOrgExist(orgId, trackChanges);
 
             var participant = _mapper.Map<Participant>(participantForCreationDto);
 
@@ -66,17 +74,11 @@ namespace Service
         public async Task DeleteParticipantForOrgAsync(Guid orgId, Guid participantId, bool 
         trackChanges)
         {
-            var organization = await _repository.Organization.GetOrganizationAsync(orgId, 
-            trackChanges);
-            if (organization is null)
-                throw new OrgNotFoundException(orgId);
+            await IsOrgExist(orgId, trackChanges);
 
-            var participant =
-                await _repository.Participant.GetParticipantAsync(orgId, participantId, 
-                trackChanges);
-            if (participant is null) throw new ParticipantNotFoundException(participantId);
+            var participantDb = await IsParticipantExist(orgId, participantId, trackChanges);
 
-            _repository.Participant.DeleteParticipant(participant);
+            _repository.Participant.DeleteParticipant(participantDb);
             await _repository.SaveAsync();
         }
 
@@ -84,17 +86,11 @@ namespace Service
             ParticipantForUpdateDto participantForUpdateDto, bool orgTrackChanges,
             bool pcptTrackChanges)
         {
-            var organization = await _repository.Organization.GetOrganizationAsync(orgId, 
-            orgTrackChanges);
-            if (organization is null)
-                throw new OrgNotFoundException(orgId);
+            await IsOrgExist(orgId, orgTrackChanges);
 
-            var participant =
-                await _repository.Participant.GetParticipantAsync(orgId, participantId, 
-                pcptTrackChanges);
-            if (participant is null) throw new ParticipantNotFoundException(participantId);
+            var participantDb = await IsParticipantExist(orgId, participantId, pcptTrackChanges);
 
-            _mapper.Map(participantForUpdateDto, participant);
+            _mapper.Map(participantForUpdateDto, participantDb);
             await _repository.SaveAsync();
         }
 
@@ -102,18 +98,12 @@ namespace Service
             GetParticipantForPatchAsync(
                 Guid orgId, Guid participantId, bool orgTrackChanges, bool participantTrackChanges)
         {
-            var organization = await _repository.Organization.GetOrganizationAsync(orgId, 
-            orgTrackChanges);
-            if (organization is null)
-                throw new OrgNotFoundException(orgId);
+            await IsOrgExist(orgId, orgTrackChanges);
 
-            var participant =
-                await _repository.Participant.GetParticipantAsync(orgId, participantId,
-                    participantTrackChanges);
-            if (participant is null) throw new ParticipantNotFoundException(participantId);
+            var participantDb = await IsParticipantExist(orgId, participantId, participantTrackChanges);
 
-            var participantToPatch = _mapper.Map<ParticipantForUpdateDto>(participant);
-            return (participantToPatch, participant);
+            var participantToPatch = _mapper.Map<ParticipantForUpdateDto>(participantDb);
+            return (participantToPatch, participantDb);
         }
 
         public async Task SaveChangesForPatchAsync(ParticipantForUpdateDto participantToPatch,

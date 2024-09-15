@@ -12,6 +12,15 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
+        private async Task<Organization> IsOrgExist(Guid orgId, bool trackChanges)
+        {
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
+            if (org == null)
+                throw new OrgNotFoundException(orgId);
+
+            return org;
+        }
+
         public OrganizationService(IRepositoryManager repository, ILoggerManager logger, IMapper
             mapper)
         {
@@ -29,9 +38,7 @@ namespace Service
 
         public async Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges)
         {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
-            if (org == null)
-                throw new OrgNotFoundException(orgId);
+            var org = await IsOrgExist(orgId, trackChanges);
 
             var orgDto = _mapper.Map<OrganizationDto>(org);
             return orgDto;
@@ -50,9 +57,7 @@ namespace Service
         public async Task UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto,
             bool trackChanges)
         {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
-            if (org == null)
-                throw new OrgNotFoundException(orgId);
+            var org = await IsOrgExist(orgId, trackChanges);
 
             _mapper.Map(orgForUpdateDto, org);
             await _repository.SaveAsync();
@@ -60,9 +65,7 @@ namespace Service
 
         public async Task DeleteOrganizationAsync(Guid orgId, bool trackChanges)
         {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
-            if (org == null)
-                throw new OrgNotFoundException(orgId);
+            var org = await IsOrgExist(orgId, trackChanges);
 
             _repository.Organization.DeleteOrganization(org);
             await _repository.SaveAsync();
