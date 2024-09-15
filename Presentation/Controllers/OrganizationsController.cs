@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ActionFilters;
 using Presentation.ModelBinders;
 using Shared;
 
@@ -41,10 +42,9 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateOrganization([FromBody] OrgForCreationDto orgDto)
         {
-            if (orgDto is null) return BadRequest("Organization creation request body is null");
-
             var org = await _service.OrganizationService.CreateOrganizationAsync(orgDto);
             return CreatedAtRoute("OrgById", new { id = org.Id }, org);
         }
@@ -60,11 +60,10 @@ namespace Presentation.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto 
         orgDto)
         {
-            if (orgDto is null) return BadRequest("Organization update request body is null");
-
             await _service.OrganizationService.UpdateOrganizationAsync(orgId, orgDto, true);
 
             return NoContent();
