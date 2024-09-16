@@ -1,8 +1,8 @@
-﻿using Contracts;
+﻿using System.Text.Json;
+using Contracts;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Presentation.Controllers
 {
@@ -18,14 +18,15 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId, [FromQuery] 
-        ParticipantParameters parameters)
+        public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId,
+            [FromQuery] ParticipantParameters parameters)
         {
-            var pagedResult = await _service.ParticipantService.GetParticipantsAsync(orgId, parameters, 
-            false);
-            
+            var pagedResult = await _service.ParticipantService.GetParticipantsAsync(orgId,
+                parameters,
+                false);
+
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
-            
+
             return Ok(pagedResult.participants);
         }
 
@@ -45,7 +46,7 @@ namespace Presentation.Controllers
 
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
-                
+
             var participant = await _service.ParticipantService.CreateParticipantForOrgAsync(orgId,
                 pcptDto, false);
 
@@ -61,7 +62,7 @@ namespace Presentation.Controllers
 
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
-            
+
             await _service.ParticipantService.UpdateParticipantForOrgAsync(orgId, participantId,
                 participantForUpdateDto, false, true);
 
@@ -80,10 +81,10 @@ namespace Presentation.Controllers
             patchDoc.ApplyTo(result.participantToPatch, ModelState);
 
             TryValidateModel(result.participantToPatch);
-            
+
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
-            
+
             await _service.ParticipantService.SaveChangesForPatchAsync(result.participantToPatch,
                 result.participant);
             return NoContent();

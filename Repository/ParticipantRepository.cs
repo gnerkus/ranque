@@ -11,10 +11,12 @@ namespace Repository
         {
         }
 
-        public async Task<PagedList<Participant>> GetParticipantsAsync(Guid orgId, 
-        ParticipantParameters parameters, bool trackChanges)
+        public async Task<PagedList<Participant>> GetParticipantsAsync(Guid orgId,
+            ParticipantParameters parameters, bool trackChanges)
         {
-            var items = await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
+            var items = await FindByCondition(c => c.OrganizationId.Equals(orgId) && c.Age >=
+                        parameters.MinAge && c.Age <= parameters.MaxAge,
+                    trackChanges)
                 .OrderBy(c => c.Name)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
@@ -27,8 +29,8 @@ namespace Repository
                 parameters.PageSize);
         }
 
-        public async Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool 
-        trackChanges)
+        public async Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool
+            trackChanges)
         {
             return await FindByCondition(
                     c => c.OrganizationId.Equals(orgId) && c.Id.Equals(participantId),

@@ -33,7 +33,7 @@ namespace Presentation.Controllers
 
         [HttpGet("collection/{{ids}}", Name = "OrgCollection")]
         public async Task<IActionResult> GetOrgCollection([ModelBinder(BinderType = typeof
-        (ArrayModelBinder))
+                (ArrayModelBinder))
             ]
             IEnumerable<Guid> ids)
         {
@@ -50,19 +50,20 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("collection")]
-        public async Task<IActionResult> CreateCompanyCollection([FromBody] 
-        IEnumerable<OrgForCreationDto>
-            orgCollection)
+        public async Task<IActionResult> CreateCompanyCollection([FromBody]
+            IEnumerable<OrgForCreationDto>
+                orgCollection)
         {
-            var result = await _service.OrganizationService.CreateOrgCollectionAsync(orgCollection);
+            var result =
+                await _service.OrganizationService.CreateOrgCollectionAsync(orgCollection);
 
             return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
         }
 
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto 
-        orgDto)
+        public async Task<IActionResult> UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto
+            orgDto)
         {
             await _service.OrganizationService.UpdateOrganizationAsync(orgId, orgDto, true);
 

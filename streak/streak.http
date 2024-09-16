@@ -52,6 +52,11 @@ Content-Type: application/json
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/json
 
+### Participants | Get all participants - Paged | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?pageNumber=2&pageSize=1
+Accept: application/json
+
 ### Participants | Get participant | 200
 
 GET {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}

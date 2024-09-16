@@ -12,15 +12,6 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        private async Task<Organization> IsOrgExist(Guid orgId, bool trackChanges)
-        {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
-            if (org == null)
-                throw new OrgNotFoundException(orgId);
-
-            return org;
-        }
-
         public OrganizationService(IRepositoryManager repository, ILoggerManager logger, IMapper
             mapper)
         {
@@ -71,8 +62,8 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool 
-        trackChanges)
+        public async Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool
+            trackChanges)
         {
             if (ids is null) throw new IdParametersBadRequestException();
 
@@ -83,8 +74,9 @@ namespace Service
             return _mapper.Map<IEnumerable<OrganizationDto>>(dbOrgs);
         }
 
-        public async Task<(IEnumerable<OrganizationDto> orgs, string ids)> CreateOrgCollectionAsync(
-            IEnumerable<OrgForCreationDto> orgCollection)
+        public async Task<(IEnumerable<OrganizationDto> orgs, string ids)>
+            CreateOrgCollectionAsync(
+                IEnumerable<OrgForCreationDto> orgCollection)
         {
             if (orgCollection is null) throw new OrgCollectionBadRequest();
 
@@ -96,6 +88,15 @@ namespace Service
             var organizationDtos = orgsDtos.ToList();
             var ids = string.Join(",", organizationDtos.Select(c => c.Id));
             return (orgs: organizationDtos, ids);
+        }
+
+        private async Task<Organization> IsOrgExist(Guid orgId, bool trackChanges)
+        {
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
+            if (org == null)
+                throw new OrgNotFoundException(orgId);
+
+            return org;
         }
     }
 }

@@ -12,23 +12,6 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        private async Task IsOrgExist(Guid orgId, bool trackChanges)
-        {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
-            if (org is null) throw new OrgNotFoundException(orgId);
-        }
-
-        private async Task<Participant> IsParticipantExist(Guid orgId, Guid participantId,
-            bool trackChanges)
-        {
-            var participantDb = await _repository.Participant.GetParticipantAsync(orgId, participantId,
-                trackChanges);
-            if (participantDb is null)
-                throw new ParticipantNotFoundException(participantId);
-
-            return participantDb;
-        }
-        
         public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
             mapper)
         {
@@ -37,19 +20,23 @@ namespace Service
             _mapper = mapper;
         }
 
-        public async Task<(IEnumerable<ParticipantDto> participants, MetaData metaData)> 
-        GetParticipantsAsync(Guid orgId, 
-        ParticipantParameters parameters, bool trackChanges)
+        public async Task<(IEnumerable<ParticipantDto> participants, MetaData metaData)>
+            GetParticipantsAsync(Guid orgId,
+                ParticipantParameters parameters, bool trackChanges)
         {
+            if (!parameters.ValidAgeRange) throw new MaxAgeBadRequestException();
+
             await IsOrgExist(orgId, trackChanges);
 
-            var participants = await _repository.Participant.GetParticipantsAsync(orgId, parameters, trackChanges);
+            var participants =
+                await _repository.Participant.GetParticipantsAsync(orgId, parameters,
+                    trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
             return (participants: participantDtos, metaData: participants.MetaData);
         }
 
-        public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool 
-        trackChanges)
+        public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool
+            trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
             var participantDb = await IsParticipantExist(orgId, pcptId, trackChanges);
@@ -71,8 +58,8 @@ namespace Service
             return _mapper.Map<ParticipantDto>(participant);
         }
 
-        public async Task DeleteParticipantForOrgAsync(Guid orgId, Guid participantId, bool 
-        trackChanges)
+        public async Task DeleteParticipantForOrgAsync(Guid orgId, Guid participantId, bool
+            trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
 
@@ -100,7 +87,8 @@ namespace Service
         {
             await IsOrgExist(orgId, orgTrackChanges);
 
-            var participantDb = await IsParticipantExist(orgId, participantId, participantTrackChanges);
+            var participantDb =
+                await IsParticipantExist(orgId, participantId, participantTrackChanges);
 
             var participantToPatch = _mapper.Map<ParticipantForUpdateDto>(participantDb);
             return (participantToPatch, participantDb);
@@ -111,6 +99,24 @@ namespace Service
         {
             _mapper.Map(participantToPatch, participant);
             await _repository.SaveAsync();
+        }
+
+        private async Task IsOrgExist(Guid orgId, bool trackChanges)
+        {
+            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
+            if (org is null) throw new OrgNotFoundException(orgId);
+        }
+
+        private async Task<Participant> IsParticipantExist(Guid orgId, Guid participantId,
+            bool trackChanges)
+        {
+            var participantDb = await _repository.Participant.GetParticipantAsync(orgId,
+                participantId,
+                trackChanges);
+            if (participantDb is null)
+                throw new ParticipantNotFoundException(participantId);
+
+            return participantDb;
         }
     }
 }

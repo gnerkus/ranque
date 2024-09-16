@@ -3,13 +3,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Presentation.ActionFilters
 {
-    public class ValidationFilterAttribute: IActionFilter
+    public class ValidationFilterAttribute : IActionFilter
     {
-        public ValidationFilterAttribute()
-        {
-            
-        }
-        
         public void OnActionExecuting(ActionExecutingContext context)
         {
             var action = context.RouteData.Values["action"];
@@ -25,9 +20,7 @@ namespace Presentation.ActionFilters
             }
 
             if (!context.ModelState.IsValid)
-            {
                 context.Result = new UnprocessableEntityObjectResult(context.ModelState);
-            }
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

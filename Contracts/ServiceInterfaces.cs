@@ -9,8 +9,8 @@ namespace Contracts
         Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges);
         Task<OrganizationDto> CreateOrganizationAsync(OrgForCreationDto orgDto);
 
-        Task UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool 
-        trackChanges);
+        Task UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool
+            trackChanges);
 
         Task DeleteOrganizationAsync(Guid orgId, bool trackChanges);
 
@@ -27,10 +27,11 @@ namespace Contracts
     public interface IParticipantService
     {
         Task<(IEnumerable<ParticipantDto> participants, MetaData metaData)> GetParticipantsAsync
-        (Guid orgId, 
-        ParticipantParameters
-         parameters, bool 
-        trackChanges);
+        (Guid orgId,
+            ParticipantParameters
+                parameters, bool
+                trackChanges);
+
         Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool trackChanges);
 
         Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId, ParticipantForCreationDto

@@ -17,7 +17,7 @@ namespace streak.Extensions
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .WithExposedHeaders("X-Pagination")
-                    );
+                );
             });
         }
 
