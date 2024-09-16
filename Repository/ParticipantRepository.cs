@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared;
 
 namespace Repository
 {
@@ -10,11 +11,13 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, bool 
-        trackChanges)
+        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, 
+        ParticipantParameters parameters, bool trackChanges)
         {
             return await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
                 .OrderBy(c => c.Name)
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
                 .ToListAsync();
         }
 

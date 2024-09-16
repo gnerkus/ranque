@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Shared;
 
 namespace Contracts
 {
@@ -19,7 +20,8 @@ namespace Contracts
 
     public interface IParticipantRepository
     {
-        Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, bool trackChanges);
+        Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, ParticipantParameters parameters, bool 
+        trackChanges);
         Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool trackChanges);
         void CreateParticipant(Guid orgId, Participant participant);
 

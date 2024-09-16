@@ -17,9 +17,11 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId)
+        public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId, [FromQuery] 
+        ParticipantParameters parameters)
         {
-            var participants = await _service.ParticipantService.GetParticipantsAsync(orgId, false);
+            var participants = await _service.ParticipantService.GetParticipantsAsync(orgId, parameters, 
+            false);
             return Ok(participants);
         }
 
