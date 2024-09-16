@@ -26,7 +26,9 @@ namespace Contracts
 
     public interface IParticipantService
     {
-        Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid orgId, ParticipantParameters
+        Task<(IEnumerable<ParticipantDto> participants, MetaData metaData)> GetParticipantsAsync
+        (Guid orgId, 
+        ParticipantParameters
          parameters, bool 
         trackChanges);
         Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool trackChanges);

@@ -11,14 +11,14 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid orgId, 
+        public async Task<PagedList<Participant>> GetParticipantsAsync(Guid orgId, 
         ParticipantParameters parameters, bool trackChanges)
         {
-            return await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
+            var items = await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
                 .OrderBy(c => c.Name)
-                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                .Take(parameters.PageSize)
                 .ToListAsync();
+            
+            return PagedList<Participant>.ToPagedList(items, parameters.PageNumber, parameters.PageSize);
         }
 
         public async Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool 

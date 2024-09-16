@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Presentation.Controllers
 {
@@ -20,9 +21,12 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId, [FromQuery] 
         ParticipantParameters parameters)
         {
-            var participants = await _service.ParticipantService.GetParticipantsAsync(orgId, parameters, 
+            var pagedResult = await _service.ParticipantService.GetParticipantsAsync(orgId, parameters, 
             false);
-            return Ok(participants);
+            
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            
+            return Ok(pagedResult.participants);
         }
 
         [HttpGet("{id:guid}", Name = "GetParticipantForOrg")]

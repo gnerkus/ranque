@@ -37,14 +37,15 @@ namespace Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid orgId, 
+        public async Task<(IEnumerable<ParticipantDto> participants, MetaData metaData)> 
+        GetParticipantsAsync(Guid orgId, 
         ParticipantParameters parameters, bool trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
 
             var participants = await _repository.Participant.GetParticipantsAsync(orgId, parameters, trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
-            return participantDtos;
+            return (participants: participantDtos, metaData: participants.MetaData);
         }
 
         public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool 
