@@ -12,10 +12,15 @@
             get => _pageSize;
             set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
         }
+        public string? OrderBy { get; set; }
     }
 
     public class ParticipantParameters : RequestParameters
     {
+        public ParticipantParameters()
+        {
+            OrderBy = "name";
+        }
         public uint MinAge { get; set; }
         public uint MaxAge { get; set; } = int.MaxValue;
 

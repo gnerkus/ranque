@@ -18,7 +18,7 @@ namespace Repository
             var items = await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
                 .FilterParticipants(parameters.MinAge, parameters.MaxAge)
                 .Search(parameters.SearchTerm)
-                .OrderBy(c => c.Name)
+                .Sort(parameters.OrderBy)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .ToListAsync();
