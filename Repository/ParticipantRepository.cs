@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared;
 
 namespace Repository
@@ -14,9 +15,9 @@ namespace Repository
         public async Task<PagedList<Participant>> GetParticipantsAsync(Guid orgId,
             ParticipantParameters parameters, bool trackChanges)
         {
-            var items = await FindByCondition(c => c.OrganizationId.Equals(orgId) && c.Age >=
-                        parameters.MinAge && c.Age <= parameters.MaxAge,
-                    trackChanges)
+            var items = await FindByCondition(c => c.OrganizationId.Equals(orgId), trackChanges)
+                .FilterParticipants(parameters.MinAge, parameters.MaxAge)
+                .Search(parameters.SearchTerm)
                 .OrderBy(c => c.Name)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
