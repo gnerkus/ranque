@@ -25,40 +25,9 @@ namespace Repository.Extensions
                 return participants.OrderBy(e => e.Name);
             }
 
-            var orderParams = orderByQueryString.Trim().Split(',');
-            var propertyInfos =
-                typeof(Participant).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var orderQuery = OrderQueryBuilder.CreateOrderByQuery<Participant>(orderByQueryString);
 
-            var orderQueryBuilder = new StringBuilder();
-
-            foreach (var param in orderParams)
-            {
-                if (string.IsNullOrWhiteSpace(param))
-                {
-                    continue;
-                }
-
-                var propFromQueryName = param.Split(" ")[0];
-                var objProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals
-                    (propFromQueryName, StringComparison.InvariantCultureIgnoreCase));
-
-                if (objProperty == null)
-                {
-                    continue;
-                }
-
-                var direction = param.EndsWith(" desc") ? "descending" : "ascending";
-                orderQueryBuilder.Append($"{objProperty.Name} {direction},");
-            }
-
-            var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
-
-            if (string.IsNullOrWhiteSpace(orderQuery))
-            {
-                return participants.OrderBy(e => e.Name);
-            }
-
-            return participants.OrderBy(orderQuery);
+            return string.IsNullOrWhiteSpace(orderQuery) ? participants.OrderBy(e => e.Name) : participants.OrderBy(orderQuery);
         }
     }
 }
