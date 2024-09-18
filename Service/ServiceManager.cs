@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using Shared;
 
 namespace Service
 {
@@ -10,12 +11,12 @@ namespace Service
         private readonly Lazy<IParticipantService> _participantService;
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
-            loggerManager, IMapper mapper)
+            loggerManager, IMapper mapper, IDataShaper<ParticipantDto> dataShaper)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));
             _participantService = new Lazy<IParticipantService>(() => new ParticipantService
-                (repositoryManager, loggerManager, mapper));
+                (repositoryManager, loggerManager, mapper, dataShaper));
             _leaderboardService = new Lazy<ILeaderboardService>(() => new LeaderboardService
                 (repositoryManager, loggerManager, mapper));
         }

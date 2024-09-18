@@ -67,6 +67,11 @@ Accept: application/json
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?orderBy=name,age desc
 Accept: application/json
 
+### Participants | Get all participants - Selected Fields | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?fields=name
+Accept: application/json
+
 ### Participants | Get participant | 200
 
 GET {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}

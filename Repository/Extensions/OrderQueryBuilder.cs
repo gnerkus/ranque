@@ -15,19 +15,13 @@ namespace Repository.Extensions
 
             foreach (var param in orderParams)
             {
-                if (string.IsNullOrWhiteSpace(param))
-                {
-                    continue;
-                }
+                if (string.IsNullOrWhiteSpace(param)) continue;
 
                 var propFromQueryName = param.Split(" ")[0];
                 var objProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals
                     (propFromQueryName, StringComparison.InvariantCultureIgnoreCase));
 
-                if (objProperty == null)
-                {
-                    continue;
-                }
+                if (objProperty == null) continue;
 
                 var direction = param.EndsWith(" desc") ? "descending" : "ascending";
                 orderQueryBuilder.Append($"{objProperty.Name} {direction},");

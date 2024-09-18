@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Dynamic;
+using AutoMapper;
 using Contracts;
 using Entities;
 using Entities.Exceptions;
@@ -8,19 +9,21 @@ namespace Service
 {
     internal sealed class ParticipantService : IParticipantService
     {
+        private readonly IDataShaper<ParticipantDto> _dataShaper;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
         public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
-            mapper)
+            mapper, IDataShaper<ParticipantDto> dataShaper)
         {
             _logger = logger;
             _repository = repository;
             _mapper = mapper;
+            _dataShaper = dataShaper;
         }
 
-        public async Task<(IEnumerable<ParticipantDto> participants, MetaData metaData)>
+        public async Task<(IEnumerable<ExpandoObject> participants, MetaData metaData)>
             GetParticipantsAsync(Guid orgId,
                 ParticipantParameters parameters, bool trackChanges)
         {
@@ -32,7 +35,8 @@ namespace Service
                 await _repository.Participant.GetParticipantsAsync(orgId, parameters,
                     trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
-            return (participants: participantDtos, metaData: participants.MetaData);
+            var shapedData = _dataShaper.ShapeData(participantDtos, parameters.Fields);
+            return (participants: shapedData, metaData: participants.MetaData);
         }
 
         public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool

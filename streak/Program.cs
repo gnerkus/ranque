@@ -1,3 +1,4 @@
+using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -5,6 +6,8 @@ using Microsoft.Extensions.Options;
 using NLog;
 using Presentation;
 using Presentation.ActionFilters;
+using Service.DataShaping;
+using Shared;
 using streak;
 using streak.Extensions;
 
@@ -28,6 +31,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
 
 // Add services to the container.
 builder.Services.AddControllers(config =>
