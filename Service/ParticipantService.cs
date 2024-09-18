@@ -36,7 +36,8 @@ namespace Service
                     trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
             var shapedData = _dataShaper.ShapeData(participantDtos, parameters.Fields);
-            return (participants: shapedData, metaData: participants.MetaData);
+            var shapedDataEntities = shapedData.Select(e => e.Entity);
+            return (participants: shapedDataEntities, metaData: participants.MetaData);
         }
 
         public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool
