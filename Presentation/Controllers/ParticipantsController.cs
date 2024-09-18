@@ -2,6 +2,7 @@
 using Contracts;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.ActionFilters;
 using Shared;
 
 namespace Presentation.Controllers
@@ -18,6 +19,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId,
             [FromQuery] ParticipantParameters parameters)
         {

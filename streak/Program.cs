@@ -32,6 +32,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
+builder.Services.AddCustomMediaTypes();
+builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 
 // Add services to the container.
 builder.Services.AddControllers(config =>
