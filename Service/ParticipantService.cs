@@ -1,8 +1,8 @@
-﻿using System.Dynamic;
-using AutoMapper;
+﻿using AutoMapper;
 using Contracts;
 using Entities;
 using Entities.Exceptions;
+using Entities.Models;
 using Shared;
 
 namespace Service
@@ -23,7 +23,7 @@ namespace Service
             _dataShaper = dataShaper;
         }
 
-        public async Task<(IEnumerable<ExpandoObject> participants, MetaData metaData)>
+        public async Task<(IEnumerable<Entity> participants, MetaData metaData)>
             GetParticipantsAsync(Guid orgId,
                 ParticipantParameters parameters, bool trackChanges)
         {

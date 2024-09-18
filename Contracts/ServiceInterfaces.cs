@@ -1,5 +1,5 @@
-﻿using System.Dynamic;
-using Entities;
+﻿using Entities;
+using Entities.Models;
 using Shared;
 
 namespace Contracts
@@ -27,7 +27,7 @@ namespace Contracts
 
     public interface IParticipantService
     {
-        Task<(IEnumerable<ExpandoObject> participants, MetaData metaData)> GetParticipantsAsync
+        Task<(IEnumerable<Entity> participants, MetaData metaData)> GetParticipantsAsync
         (Guid orgId,
             ParticipantParameters
                 parameters, bool
