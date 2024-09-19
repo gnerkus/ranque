@@ -36,7 +36,7 @@ namespace streak.Utility
                 shapedParticipants[index].Add("Links", participantLinks);
             }
             var participantCollection = new LinkCollectionWrapper<Entity>(shapedParticipants);
-            var linkedParticipants = CreateLinksForParticipant(httpContext, participantCollection);
+            var linkedParticipants = CreateLinksForParticipants(httpContext, participantCollection);
             return new LinkResponse { HasLinks = true, LinkedEntities = linkedParticipants };
         }
 
@@ -90,7 +90,7 @@ namespace streak.Utility
             return links;
         }
         
-        private LinkCollectionWrapper<Entity> CreateLinksForParticipant(HttpContext httpContext,
+        private LinkCollectionWrapper<Entity> CreateLinksForParticipants(HttpContext httpContext,
          LinkCollectionWrapper<Entity> participantsWrapper)
         {
             participantsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,

@@ -77,6 +77,11 @@ Accept: application/json
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?fields=name
 Accept: application/xml
 
+### Participants | Get all participants - HATEOAS | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
+Accept: application/vnd.nanotome.hateoas+json
+
 ### Participants | Get participant | 200
 
 GET {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
