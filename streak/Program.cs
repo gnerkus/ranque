@@ -32,9 +32,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
-builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
-builder.Services.AddCustomMediaTypes();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
 builder.Services.AddScoped<IParticipantLinks, ParticipantLinks>();
 
 // Add services to the container.
@@ -57,6 +56,8 @@ builder.Services.AddControllers(config =>
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(AssemblyReference).Assembly);
+
+builder.Services.AddCustomMediaTypes();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
