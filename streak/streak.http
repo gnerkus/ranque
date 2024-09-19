@@ -1,3 +1,8 @@
+### Root
+
+GET {{host}}/api
+Accept: application/vnd.nanotome.apiroot+json
+
 ### Organization | Get all organizations | 200
 
 GET {{ host }}/api/orgs

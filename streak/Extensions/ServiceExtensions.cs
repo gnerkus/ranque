@@ -68,6 +68,8 @@ namespace streak.Extensions
                 {
                     systemTextJsonOutputFormatter.SupportedMediaTypes
                         .Add("application/vnd.nanotome.hateoas+json");
+                    systemTextJsonOutputFormatter.SupportedMediaTypes
+                        .Add("application/vnd.nanotome.apiroot+json");
                 }
                 var xmlOutputFormatter = config.OutputFormatters
                     .OfType<XmlDataContractSerializerOutputFormatter>()?
@@ -76,6 +78,8 @@ namespace streak.Extensions
                 {
                     xmlOutputFormatter.SupportedMediaTypes
                         .Add("application/vnd.nanotome.hateoas+xml");
+                    xmlOutputFormatter.SupportedMediaTypes
+                        .Add("application/vnd.nanotome.apiroot+xml");
                 }
             });
         }

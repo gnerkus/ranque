@@ -17,7 +17,7 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetOrganizations")]
         public async Task<IActionResult> GetOrganizations()
         {
             var orgs = await _service.OrganizationService.GetAllOrganizationsAsync(false);
@@ -41,7 +41,7 @@ namespace Presentation.Controllers
             return Ok(orgs);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateOrganization")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateOrganization([FromBody] OrgForCreationDto orgDto)
         {
