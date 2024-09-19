@@ -76,5 +76,13 @@ namespace Presentation.Controllers
             await _service.OrganizationService.DeleteOrganizationAsync(id, false);
             return NoContent();
         }
+
+        [HttpOptions]
+        public IActionResult GetOrgOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, DELETE");
+
+            return Ok();
+        }
     }
 }
