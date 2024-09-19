@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using Asp.Versioning;
+using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
 using Presentation.ModelBinders;
@@ -6,6 +7,7 @@ using Shared;
 
 namespace Presentation.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("api/orgs")]
     [ApiController]
     public class OrganizationsController : ControllerBase

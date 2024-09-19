@@ -12,6 +12,7 @@
         <ProjectReference Include="..\Contracts\Contracts.csproj" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="8.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.7" />
     </ItemGroup>

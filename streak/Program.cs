@@ -58,6 +58,7 @@ builder.Services.AddControllers(config =>
     .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
 builder.Services.AddCustomMediaTypes();
+builder.Services.ConfigureVersioning();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
