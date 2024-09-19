@@ -20,7 +20,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId,
             [FromQuery] ParticipantParameters parameters)
         {
