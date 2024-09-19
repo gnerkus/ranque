@@ -27,9 +27,9 @@ namespace Contracts
 
     public interface IParticipantService
     {
-        Task<(IEnumerable<Entity> participants, MetaData metaData)> GetParticipantsAsync
+        Task<(LinkResponse linkResponse, MetaData metaData)> GetParticipantsAsync
         (Guid orgId,
-            ParticipantParameters
+            LinkParameters
                 parameters, bool
                 trackChanges);
 

@@ -9,35 +9,37 @@ namespace Service
 {
     internal sealed class ParticipantService : IParticipantService
     {
-        private readonly IDataShaper<ParticipantDto> _dataShaper;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
+        private readonly IParticipantLinks _participantLinks;
 
         public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
-            mapper, IDataShaper<ParticipantDto> dataShaper)
+            mapper, IParticipantLinks participantLinks)
         {
             _logger = logger;
             _repository = repository;
             _mapper = mapper;
-            _dataShaper = dataShaper;
+            _participantLinks = participantLinks;
         }
 
-        public async Task<(IEnumerable<Entity> participants, MetaData metaData)>
+        public async Task<(LinkResponse linkResponse, MetaData metaData)>
             GetParticipantsAsync(Guid orgId,
-                ParticipantParameters parameters, bool trackChanges)
+                LinkParameters parameters, bool trackChanges)
         {
-            if (!parameters.ValidAgeRange) throw new MaxAgeBadRequestException();
+            if (!parameters.ParticipantParameters.ValidAgeRange) throw new 
+            MaxAgeBadRequestException();
 
             await IsOrgExist(orgId, trackChanges);
 
             var participants =
-                await _repository.Participant.GetParticipantsAsync(orgId, parameters,
+                await _repository.Participant.GetParticipantsAsync(orgId, parameters.ParticipantParameters,
                     trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
-            var shapedData = _dataShaper.ShapeData(participantDtos, parameters.Fields);
-            var shapedDataEntities = shapedData.Select(e => e.Entity);
-            return (participants: shapedDataEntities, metaData: participants.MetaData);
+            var links = _participantLinks.TryGenerateLinks(participantDtos, parameters
+                .ParticipantParameters.Fields, orgId, parameters.Context);
+            
+            return (linkResponse: links, metaData: participants.MetaData);
         }
 
         public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool

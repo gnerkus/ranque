@@ -1,4 +1,7 @@
-﻿namespace Entities.Models
+﻿using Microsoft.AspNetCore.Http;
+using Shared;
+
+namespace Entities.Models
 {
     public class Link
     {
@@ -52,4 +55,6 @@
             ShapedEntities = new List<Entity>();
         }
     }
+
+    public record LinkParameters(ParticipantParameters ParticipantParameters, HttpContext Context);
 }

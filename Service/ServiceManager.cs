@@ -11,12 +11,12 @@ namespace Service
         private readonly Lazy<IParticipantService> _participantService;
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
-            loggerManager, IMapper mapper, IDataShaper<ParticipantDto> dataShaper)
+            loggerManager, IMapper mapper, IParticipantLinks participantLinks)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));
             _participantService = new Lazy<IParticipantService>(() => new ParticipantService
-                (repositoryManager, loggerManager, mapper, dataShaper));
+                (repositoryManager, loggerManager, mapper, participantLinks));
             _leaderboardService = new Lazy<ILeaderboardService>(() => new LeaderboardService
                 (repositoryManager, loggerManager, mapper));
         }

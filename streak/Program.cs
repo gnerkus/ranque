@@ -10,6 +10,7 @@ using Service.DataShaping;
 using Shared;
 using streak;
 using streak.Extensions;
+using streak.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
 builder.Services.AddCustomMediaTypes();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+builder.Services.AddScoped<IParticipantLinks, ParticipantLinks>();
 
 // Add services to the container.
 builder.Services.AddControllers(config =>

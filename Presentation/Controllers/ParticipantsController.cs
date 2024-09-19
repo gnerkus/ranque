@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Contracts;
+using Entities.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
@@ -23,13 +24,16 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId,
             [FromQuery] ParticipantParameters parameters)
         {
+            var linkParams = new LinkParameters(parameters, HttpContext);
+            
             var pagedResult = await _service.ParticipantService.GetParticipantsAsync(orgId,
-                parameters,
+                linkParams,
                 false);
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
 
-            return Ok(pagedResult.participants);
+            return pagedResult.linkResponse.HasLinks ? Ok(pagedResult.linkResponse
+            .LinkedEntities) : Ok(pagedResult.linkResponse.ShapedEntities);
         }
 
         [HttpGet("{id:guid}", Name = "GetParticipantForOrg")]
@@ -72,7 +76,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch("{id:guid}")]
-        public async Task<IActionResult> PartiallyUpdateParticipantForCompany(Guid orgId, Guid id,
+        public async Task<IActionResult> PartiallyUpdateParticipantForOrg(Guid orgId, Guid id,
             [FromBody] JsonPatchDocument<ParticipantForUpdateDto> patchDoc)
         {
             if (patchDoc is null)
