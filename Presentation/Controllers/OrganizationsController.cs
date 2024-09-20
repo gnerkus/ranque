@@ -2,6 +2,7 @@
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.RateLimiting;
 using Presentation.ActionFilters;
 using Presentation.ModelBinders;
 using Shared;
@@ -22,6 +23,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet(Name = "GetOrganizations")]
+        [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
             var orgs = await _service.OrganizationService.GetAllOrganizationsAsync(false);

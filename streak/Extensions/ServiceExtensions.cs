@@ -122,6 +122,16 @@ namespace streak.Extensions
                         })
                 );
 
+                opt.AddPolicy("SpecificPolicy", _ =>
+                    RateLimitPartition.GetFixedWindowLimiter("SpecificLimiter", partition =>
+                        new FixedWindowRateLimiterOptions
+                        {
+                            AutoReplenishment = true,
+                            PermitLimit = 3,
+                            Window = TimeSpan.FromSeconds(10)
+                        })
+                );
+
                 opt.OnRejected = async (context, token) =>
                 {
                     context.HttpContext.Response.StatusCode = 429;
