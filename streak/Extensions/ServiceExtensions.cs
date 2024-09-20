@@ -96,7 +96,10 @@ namespace streak.Extensions
             }).AddMvc();
         }
 
-        public static void ConfigureResponseCaching(this IServiceCollection services) =>
-            services.AddResponseCaching();
+        public static void ConfigureOutputCaching(this IServiceCollection services) =>
+            services.AddOutputCache(opt =>
+            {
+                opt.AddPolicy("120s", p => p.Expire(TimeSpan.FromSeconds(120)));
+            });
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Presentation.ActionFilters;
 using Presentation.ModelBinders;
 using Shared;
@@ -10,7 +11,7 @@ namespace Presentation.Controllers
     [ApiVersion("1.0")]
     [Route("api/orgs")]
     [ApiController]
-    [ResponseCache(CacheProfileName = "120s")]
+    [OutputCache(PolicyName = "120s")]
     public class OrganizationsController : ControllerBase
     {
         private readonly IServiceManager _service;
@@ -28,10 +29,10 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id:guid}", Name = "OrgById")]
-        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetOrganization(Guid id)
         {
             var org = await _service.OrganizationService.GetOrganizationAsync(id, false);
+
             return Ok(org);
         }
 

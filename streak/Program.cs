@@ -52,7 +52,6 @@ builder.Services.AddControllers(config =>
                 .OfType<NewtonsoftJsonPatchInputFormatter>()
                 .First()
         );
-        config.CacheProfiles.Add("120s", new CacheProfile { Duration = 120});
     })
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
@@ -60,7 +59,7 @@ builder.Services.AddControllers(config =>
 
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();
-builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureOutputCaching();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -81,7 +80,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
-app.UseResponseCaching();
+app.UseOutputCache();
 
 app.UseAuthorization();
 
