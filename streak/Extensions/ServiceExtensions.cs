@@ -116,7 +116,8 @@ namespace streak.Extensions
                         {
                             AutoReplenishment = true,
                             PermitLimit = 5,
-                            QueueLimit = 0,
+                            QueueLimit = 2,
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                             Window = TimeSpan.FromMinutes(1)
                         })
                 );
