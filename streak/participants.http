@@ -1,61 +1,13 @@
-### Root
-
-GET {{host}}/api
-Accept: application/vnd.nanotome.apiroot+json
-
-### Organization | Get all organizations | 200
-
-GET {{ host }}/api/orgs
-Accept: application/json
-
-### Organization | Get organization | 404: NOT FOUND
-
-GET {{ host }}/api/orgs/{{badOrgId}}
-Accept: application/json
-
-### Organization | Create organization | 201
-
-POST {{host}}/api/orgs
-Content-Type: application/json
-
-{
-  "name": "Nanotome GmbH",
-  "address": "1 Strasse Strasse, 12345 Berlin",
-  "country": "Germany"
-}
-
-### Organization | Create organization with participants | 201
-
-POST {{host}}/api/orgs
-Content-Type: application/json
-
-{
-  "name": "Unternehmen GmbH",
-  "address": "100 Strasse Strasse, 12345 Berlin",
-  "country": "Germany",
-  "employees": [
-    {
-      "name": "Joan Dane",
-      "age": 25,
-      "position": "Manager"
-    },
-    {
-      "name": "John Miths",
-      "age": 32,
-      "position": "Administrative"
-    }
-  ]
-}
-
-### Organization | Create organization | 400: BAD REQUEST
-
-POST {{host}}/api/orgs
-Content-Type: application/json
-
 ### Participants | Get all participants | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/json
+
+### Participants | Get all participants - Cached | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
+Accept: application/json
+Cache-Control: max-age=604800
 
 ### Participants | Get all participants - Paged | 200
 

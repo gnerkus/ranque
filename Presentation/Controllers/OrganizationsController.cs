@@ -27,6 +27,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id:guid}", Name = "OrgById")]
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetOrganization(Guid id)
         {
             var org = await _service.OrganizationService.GetOrganizationAsync(id, false);
