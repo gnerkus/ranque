@@ -10,6 +10,7 @@ namespace Presentation.Controllers
     [ApiVersion("1.0")]
     [Route("api/orgs")]
     [ApiController]
+    [ResponseCache(CacheProfileName = "120s")]
     public class OrganizationsController : ControllerBase
     {
         private readonly IServiceManager _service;
