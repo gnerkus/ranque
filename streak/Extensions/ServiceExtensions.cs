@@ -1,4 +1,5 @@
-﻿using Asp.Versioning;
+﻿using System.Threading.RateLimiting;
+using Asp.Versioning;
 using Contracts;
 using LoggerService;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,7 @@ namespace streak.Extensions
                     systemTextJsonOutputFormatter.SupportedMediaTypes
                         .Add("application/vnd.nanotome.apiroot+json");
                 }
+
                 var xmlOutputFormatter = config.OutputFormatters
                     .OfType<XmlDataContractSerializerOutputFormatter>()?
                     .FirstOrDefault();
@@ -96,10 +98,29 @@ namespace streak.Extensions
             }).AddMvc();
         }
 
-        public static void ConfigureOutputCaching(this IServiceCollection services) =>
+        public static void ConfigureOutputCaching(this IServiceCollection services)
+        {
             services.AddOutputCache(opt =>
             {
                 opt.AddPolicy("120s", p => p.Expire(TimeSpan.FromSeconds(120)));
             });
+        }
+
+        public static void ConfigureRateLimitingOptions(this IServiceCollection services)
+        {
+            services.AddRateLimiter(opt =>
+            {
+                opt.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(_ =>
+                    RateLimitPartition.GetFixedWindowLimiter("GlobalLimiter", partition => new
+                        FixedWindowRateLimiterOptions
+                        {
+                            AutoReplenishment = true,
+                            PermitLimit = 5,
+                            QueueLimit = 0,
+                            Window = TimeSpan.FromMinutes(1)
+                        })
+                );
+            });
+        }
     }
 }
