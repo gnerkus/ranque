@@ -1,7 +1,9 @@
 ﻿using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Contracts;
+using Entities.Models;
 using LoggerService;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +106,22 @@ namespace streak.Extensions
             {
                 opt.AddPolicy("120s", p => p.Expire(TimeSpan.FromSeconds(120)));
             });
+        }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentity<User, IdentityRole>(o =>
+                {
+                    o.Password.RequireDigit = true;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 10;
+                    o.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<RepositoryContext>()
+                .AddDefaultTokenProviders();
+
         }
 
         public static void ConfigureRateLimitingOptions(this IServiceCollection services)
