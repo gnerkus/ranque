@@ -16,6 +16,7 @@ namespace Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
             modelBuilder.ApplyConfiguration(new LeaderboardConfiguration());
             modelBuilder.ApplyConfiguration(new ParticipantConfiguration());
