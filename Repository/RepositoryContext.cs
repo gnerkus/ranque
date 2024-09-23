@@ -20,6 +20,7 @@ namespace Repository
             modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
             modelBuilder.ApplyConfiguration(new LeaderboardConfiguration());
             modelBuilder.ApplyConfiguration(new ParticipantConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
     }
 }
