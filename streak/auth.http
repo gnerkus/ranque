@@ -1,4 +1,4 @@
-﻿### Auth | Register user | 201
+﻿### Auth | Register user - existing user | 409
 
 POST {{host}}/api/auth
 Content-Type: application/json
@@ -13,4 +13,24 @@ Content-Type: application/json
   "roles": [
     "Manager"
   ]
+}
+
+### Auth | Login user | 200
+
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "neod",
+  "password": "NhojEod001"
+}
+
+### Auth | Login user - invalid credentials | 401
+
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "jdoe",
+  "password": "NhojEod001"
 }

@@ -4,6 +4,13 @@ GET {{host}}/api
 Accept: application/vnd.nanotome.apiroot+json
 
 ### Organization | Get all organizations | 200
+### todo: login, get the token then make the query
+
+GET {{ host }}/api/orgs
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Organization | Get all organizations | 401
 
 GET {{ host }}/api/orgs
 Accept: application/json
