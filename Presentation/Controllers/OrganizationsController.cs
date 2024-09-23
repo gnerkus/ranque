@@ -24,7 +24,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet(Name = "GetOrganizations")]
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
