@@ -1,7 +1,7 @@
 ﻿using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Contracts;
-using Entities.Models;
+using Entities;
 using LoggerService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
