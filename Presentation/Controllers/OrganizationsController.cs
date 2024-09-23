@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.RateLimiting;
@@ -23,6 +24,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet(Name = "GetOrganizations")]
+        [Authorize]
         [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
