@@ -1,0 +1,16 @@
+﻿### Auth | Register user | 201
+
+POST {{host}}/api/auth
+Content-Type: application/json
+
+{
+  "firstname": "Nhoj",
+  "lastname": "Eod",
+  "username": "neod",
+  "password": "NhojEod001",
+  "email": "nhojeod@gmail.com",
+  "phonenumber": "589-654",
+  "roles": [
+    "Manager"
+  ]
+}

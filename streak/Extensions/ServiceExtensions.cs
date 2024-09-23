@@ -121,7 +121,6 @@ namespace streak.Extensions
                 })
                 .AddEntityFrameworkStores<RepositoryContext>()
                 .AddDefaultTokenProviders();
-
         }
 
         public static void ConfigureRateLimitingOptions(this IServiceCollection services)
