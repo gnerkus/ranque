@@ -27,6 +27,9 @@ namespace streak
             // participant
             CreateMap<ParticipantForCreationDto, Participant>();
             CreateMap<ParticipantForUpdateDto, Participant>().ReverseMap();
+            
+            // user
+            CreateMap<UserForRegistrationDto, User>();
         }
     }
 }

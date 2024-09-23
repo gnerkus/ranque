@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using Shared;
 
 namespace Contracts
@@ -50,5 +51,10 @@ namespace Contracts
 
         Task SaveChangesForPatchAsync(ParticipantForUpdateDto participantToPatch,
             Participant participant);
+    }
+
+    public interface IAuthenticationService
+    {
+        Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto);
     }
 }
