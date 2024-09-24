@@ -6,6 +6,7 @@ using AutoMapper;
 using Contracts;
 using Entities;
 using Entities.Exceptions;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +21,7 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private User? _user;
+        private readonly JwtConfiguration _jwtConfig;
 
         public AuthenticationService(ILoggerManager logger, IMapper mapper, UserManager<User>
             userManager, IConfiguration configuration)
@@ -28,6 +30,8 @@ namespace Service
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
+            _jwtConfig = new JwtConfiguration();
+            _configuration.Bind(_jwtConfig.Section, _jwtConfig);
         }
 
         public async Task<IdentityResult> RegisterUser(UserForRegistrationDto
@@ -85,10 +89,10 @@ namespace Service
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var tokenOptions = new JwtSecurityToken
             (
-                issuer: jwtSettings["validIssuer"],
-                audience: jwtSettings["validAudience"],
+                issuer: _jwtConfig.ValidIssuer,
+                audience: _jwtConfig.ValidAudience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtConfig.Expires)),
                 signingCredentials: signingCredentials
             );
             return tokenOptions;
@@ -135,8 +139,8 @@ namespace Service
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET"))),
                 ValidateLifetime = true,
-                ValidIssuer = jwtSettings["validIssuer"],
-                ValidAudience = jwtSettings["validAudience"]
+                ValidIssuer = _jwtConfig.ValidIssuer,
+                ValidAudience = _jwtConfig.ValidAudience
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;

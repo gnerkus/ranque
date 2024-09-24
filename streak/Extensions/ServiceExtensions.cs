@@ -3,6 +3,7 @@ using System.Threading.RateLimiting;
 using Asp.Versioning;
 using Contracts;
 using Entities;
+using Entities.Models;
 using LoggerService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -175,7 +176,9 @@ namespace streak.Extensions
         public static void ConfigureJWT(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var jwtSettings = configuration.GetSection("JwtSettings");
+            var jwtConfig = new JwtConfiguration();
+            configuration.Bind(jwtConfig.Section, jwtConfig);
+            
             var secretKey = Environment.GetEnvironmentVariable("RANQUE_SECRET");
             services.AddAuthentication(opt =>
                 {
@@ -190,8 +193,8 @@ namespace streak.Extensions
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = jwtSettings["validIssuer"],
-                        ValidAudience = jwtSettings["validAudience"],
+                        ValidIssuer = jwtConfig.ValidIssuer,
+                        ValidAudience = jwtConfig.ValidAudience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                     };
                 });
