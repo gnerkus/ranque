@@ -36,6 +36,8 @@ namespace Shared
 
     public record ParticipantForUpdateDto : ParticipantForManipulationDto;
 
+    
+    // AUTH =====================================================================
     public record UserForRegistrationDto
     {
         public string? FirstName { get; init; }
@@ -56,4 +58,6 @@ namespace Shared
         [Required(ErrorMessage = "Password name is required")]
         public string? Password { get; init; }
     }
+
+    public record TokenDto(string AccessToken, string RefreshToken);
 }
