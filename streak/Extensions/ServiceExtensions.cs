@@ -200,5 +200,9 @@ namespace streak.Extensions
                 });
 
         }
+
+        public static void AddJwtConfiguration(this IServiceCollection services, IConfiguration
+            config) =>
+            services.Configure<JwtConfiguration>(config.GetSection("JwtSettings"));
     }
 }

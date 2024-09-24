@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities;
+using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Service
 {
@@ -15,7 +17,7 @@ namespace Service
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
             loggerManager, IMapper mapper, IParticipantLinks participantLinks, UserManager<User>
-             userManager, IConfiguration configuration)
+             userManager, IOptions<JwtConfiguration> configuration)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));
