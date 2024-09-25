@@ -5,6 +5,8 @@ namespace Entities
 {
     public class Score
     {
+        public Guid Id { get; set; }
+        
         [Required(ErrorMessage = "Score must have a value")]
         [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public float Value { get; set; }

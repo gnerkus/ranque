@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace streak.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20240925150042_AddIdColumnToScoresTable")]
+    partial class AddIdColumnToScoresTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,13 +296,13 @@ namespace streak.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5f28a933-104d-4d94-840f-da95c666c096",
+                            Id = "d6eb0e86-adc5-4e94-8b46-ea4ab9dd89ef",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
-                            Id = "bf6357a3-296e-47da-96eb-1f657e01cd8b",
+                            Id = "c7e21106-fa05-4c9e-9340-b8eddea9839f",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -416,7 +419,7 @@ namespace streak.Migrations
                     b.HasOne("Entities.Organization", "Organization")
                         .WithMany("Leaderboards")
                         .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Organization");
