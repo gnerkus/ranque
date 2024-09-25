@@ -13,10 +13,18 @@ namespace Repository
 
         public DbSet<Organization>? Organizations { get; set; }
         public DbSet<Participant>? Participants { get; set; }
+        public DbSet<Score>? Scores { get; set; }
+        public DbSet<Leaderboard>? Leaderboards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Leaderboard>()
+                .HasMany(e => e.Participants)
+                .WithMany(e => e.Leaderboards)
+                .UsingEntity<Score>();
+
             modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
             modelBuilder.ApplyConfiguration(new LeaderboardConfiguration());
             modelBuilder.ApplyConfiguration(new ParticipantConfiguration());

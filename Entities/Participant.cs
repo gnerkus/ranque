@@ -21,7 +21,8 @@ namespace Entities
         [ForeignKey(nameof(Organization))] public Guid OrganizationId { get; set; }
 
         public Organization? Organization { get; set; }
+
+        public List<Score> Scores { get; set; } = new ();
+        public List<Leaderboard> Leaderboards { get; set; } = new();
     }
 }
-
-// TODO: establish relationship between leaderboard and participants

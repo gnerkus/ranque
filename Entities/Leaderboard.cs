@@ -14,5 +14,8 @@ namespace Entities
         [ForeignKey(nameof(Organization))] public Guid OrganizationId { get; set; }
 
         public Organization? Organization { get; set; }
+
+        public List<Score> Scores { get; set; } = new();
+        public List<Participant> Participants { get; set; } = new();
     }
 }

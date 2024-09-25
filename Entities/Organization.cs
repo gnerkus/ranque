@@ -17,7 +17,7 @@ namespace Entities
 
         public string? Country { get; set; }
 
-        public ICollection<Leaderboard>? Leaderboards { get; set; }
-        public ICollection<Participant>? Participants { get; set; }
+        public List<Leaderboard> Leaderboards { get; set; } = new();
+        public List<Participant> Participants { get; set; } = new();
     }
 }
