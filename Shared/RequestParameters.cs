@@ -31,4 +31,15 @@
 
         public string? SearchTerm { get; set; }
     }
+
+    public class ScoreParameters : RequestParameters
+    {
+        public ScoreParameters()
+        {
+            OrderBy = "value";
+        }
+
+        public Guid ParticipantId { get; set; }
+        public Guid LeaderboardId { get; set; }
+    }
 }

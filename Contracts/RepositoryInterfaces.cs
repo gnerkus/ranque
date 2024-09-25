@@ -16,6 +16,17 @@ namespace Contracts
 
     public interface ILeaderboardRepository
     {
+        
+    }
+
+    public interface IScoreRepository
+    {
+        Task<PagedList<Score>> GetAllScoresAsync(ScoreParameters parameters,
+            bool trackChanges);
+        Task<Score?> GetScoreAsync(Guid scoreId, bool trackChanges);
+        void CreateScore(Guid leaderboardId, Guid participantId, Score score);
+
+        void DeleteScore(Score score);
     }
 
     public interface IParticipantRepository
