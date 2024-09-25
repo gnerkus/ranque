@@ -26,6 +26,24 @@ namespace Contracts
     {
     }
 
+    public interface IScoreService
+    {
+        Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync
+        (ScoreLinkParams
+                parameters, bool
+                trackChanges);
+
+        Task<ScoreDto> GetScoreAsync(Guid scoreId, bool trackChanges);
+
+        Task<ScoreDto> CreateScoreAsync(Guid leaderboardId, Guid participantId,
+            ScoreForManipulationDto scoreForCreationDto, bool trackChanges);
+
+        Task DeleteScoreAsync(Guid scoreId, bool trackChanges);
+        
+        Task UpdateScoreAsync(Guid scoreId, ScoreForManipulationDto
+            scoreForUpdateDto, bool trackChanges);
+    }
+
     public interface IParticipantService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetParticipantsAsync

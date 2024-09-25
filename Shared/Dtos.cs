@@ -16,6 +16,14 @@ namespace Shared
     public record OrgForUpdateDto(string Name, string Address, string Country,
         IEnumerable<ParticipantForCreationDto> Participants);
 
+    public record ScoreDto(Guid Id, float Value);
+
+    public record ScoreForManipulationDto
+    {
+        [Range(1, 100, ErrorMessage = "Value is required and can't be lower than 1")]
+        public int Value { get; init; }
+    }
+
     public record ParticipantDto(Guid Id, string Name, int Age, string Position);
 
     public abstract record ParticipantForManipulationDto
