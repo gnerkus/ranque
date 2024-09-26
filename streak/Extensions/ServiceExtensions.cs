@@ -35,7 +35,7 @@ namespace streak.Extensions
             config)
         {
             services.AddDbContext<RepositoryContext>(opts =>
-                opts.UseSqlServer(config.GetConnectionString("sqlConnection")));
+                opts.UseSqlServer(config.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
         }
 
 
