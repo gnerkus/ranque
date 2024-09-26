@@ -22,6 +22,7 @@ steps:
       restoreSolution: '$(solution)'
 
   - task: VSBuild@1
+    displayName: 'Build'
     inputs:
       solution: '$(solution)'
       msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
@@ -34,6 +35,7 @@ steps:
       publishWebProjects: true
 
   - task: AzureWebApp@1
+    displayName: 'Deploy to Azure App Service'
     inputs:
       azureSubscription: 'Azure-streak'
       appType: 'webApp'
@@ -43,6 +45,13 @@ steps:
       slotName: 'production'
       package: '$(System.DefaultWorkingDirectory)/**/*.zip'
       deploymentMethod: 'auto'
+      
+  - task: DotNetCoreCLI@2
+    displayName: 'Install dotnet-ef'
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'install dotnet-ef -g --version 8.0.7'
       
   - task: AzureCLI@2
     displayName: 'Run Migrations'
