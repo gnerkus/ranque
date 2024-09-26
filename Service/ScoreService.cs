@@ -31,7 +31,7 @@ namespace Service
             trackChanges);
             var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
             var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
-                .Fields, leaderboardId, participantId, parameters.Context);
+                .Fields, parameters.Context);
             
             return (linkResponse: links, metaData: scores.MetaData);
         }

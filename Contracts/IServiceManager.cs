@@ -6,6 +6,8 @@
         IParticipantService ParticipantService { get; }
         ILeaderboardService LeaderboardService { get; }
         
+        IScoreService ScoreService { get; }
+        
         IAuthenticationService AuthenticationService { get; }
     }
 }

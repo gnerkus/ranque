@@ -21,12 +21,12 @@ namespace streak.Utility
         {
             var shapedParticipants = ShapeData(participantsDto, fields);
             if (ShouldGenerateLinks(httpContext))
-                return ReturnLinkdedParticipants(participantsDto, fields, orgId, httpContext,
+                return ReturnLinkedParticipants(participantsDto, fields, orgId, httpContext,
                     shapedParticipants);
             return ReturnShapedParticipants(shapedParticipants);
         }
 
-        private LinkResponse ReturnLinkdedParticipants(IEnumerable<ParticipantDto> participantsDto, string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedParticipants)
+        private LinkResponse ReturnLinkedParticipants(IEnumerable<ParticipantDto> participantsDto, string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedParticipants)
         {
             var participantDtoList = participantsDto.ToList();
             for (var index = 0; index < participantDtoList.Count(); index++)

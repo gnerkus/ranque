@@ -3,7 +3,6 @@ using Contracts;
 using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Service
@@ -13,11 +12,12 @@ namespace Service
         private readonly Lazy<ILeaderboardService> _leaderboardService;
         private readonly Lazy<IOrganizationService> _orgService;
         private readonly Lazy<IParticipantService> _participantService;
+        private readonly Lazy<IScoreService> _scoreService;
         private readonly Lazy<IAuthenticationService> _authenticationService;
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
             loggerManager, IMapper mapper, IParticipantLinks participantLinks, UserManager<User>
-             userManager, IOptions<JwtConfiguration> configuration)
+             userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));
@@ -25,6 +25,8 @@ namespace Service
                 (repositoryManager, loggerManager, mapper, participantLinks));
             _leaderboardService = new Lazy<ILeaderboardService>(() => new LeaderboardService
                 (repositoryManager, loggerManager, mapper));
+            _scoreService = new Lazy<IScoreService>(() => new ScoreService
+                (repositoryManager, loggerManager, mapper, scoreLinks));
             _authenticationService = new Lazy<IAuthenticationService>(() => new
                 AuthenticationService(loggerManager, mapper, userManager, configuration));
         }
@@ -32,6 +34,7 @@ namespace Service
         public IOrganizationService OrganizationService => _orgService.Value;
         public IParticipantService ParticipantService => _participantService.Value;
         public ILeaderboardService LeaderboardService => _leaderboardService.Value;
+        public IScoreService ScoreService => _scoreService.Value;
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
     }
 }
