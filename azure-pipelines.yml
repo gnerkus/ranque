@@ -43,3 +43,14 @@ steps:
       slotName: 'production'
       package: '$(System.DefaultWorkingDirectory)/**/*.zip'
       deploymentMethod: 'auto'
+      
+  - task: AzureCLI@2
+    displayName: 'Run Migrations'
+    inputs:
+      azureSubscription: 'Azure-streak'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az --version
+        az account show
+        dotnet ef database update --project streak/streak.csproj
