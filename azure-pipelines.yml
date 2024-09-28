@@ -61,8 +61,8 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       timeoutInMinutes: '1'
+      failOnStandardError: true
       inlineScript: |
-        set -e
         az --version
         az account show
         dotnet ef database update --project streak/streak.csproj
