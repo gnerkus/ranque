@@ -59,6 +59,7 @@ steps:
       azureSubscription: 'Azure-streak'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
+      continueOnError: true
       inlineScript: |
         az --version
         az account show
