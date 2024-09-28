@@ -54,13 +54,21 @@ steps:
       arguments: 'install dotnet-ef -g --version 8.0.7'
       
   - task: AzureCLI@2
+    displayName: 'Wake DB'
+    inputs:
+      azureSubscription: 'Azure-streak'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az --version
+        az account show
+        Invoke-Sqlcmd -Query "SELECT @@VERSION as version"
+      
+  - task: AzureCLI@2
     displayName: 'Run Migrations'
     inputs:
       azureSubscription: 'Azure-streak'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
-      retryCountOnTaskFailure: 2
       inlineScript: |
-        az --version
-        az account show
         dotnet ef database update --project streak/streak.csproj
