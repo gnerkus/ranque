@@ -47,6 +47,7 @@ steps:
       deploymentMethod: 'auto'
       
   - task: DotNetCoreCLI@2
+    name: 'EF Install'
     displayName: 'Install dotnet-ef'
     inputs:
       command: 'custom'
@@ -55,13 +56,14 @@ steps:
       
   - task: AzureCLI@2
     displayName: 'Wake DB'
+    continueOnError: true
     inputs:
       azureSubscription: 'Azure-streak'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
-      continueOnError: true
       timeoutInMinutes: '1'
       inlineScript: |
+        set -e
         az --version
         az account show
         dotnet ef database update --project streak/streak.csproj
