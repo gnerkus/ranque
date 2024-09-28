@@ -59,6 +59,7 @@ steps:
       azureSubscription: 'Azure-streak'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
+      retryCountOnTaskFailure: 2
       inlineScript: |
         az --version
         az account show
