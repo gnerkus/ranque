@@ -47,7 +47,6 @@ steps:
       deploymentMethod: 'auto'
       
   - task: DotNetCoreCLI@2
-    name: 'EF Install'
     displayName: 'Install dotnet-ef'
     inputs:
       command: 'custom'
