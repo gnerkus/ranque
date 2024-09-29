@@ -21,7 +21,7 @@ namespace Contracts
         Task<Leaderboard?> GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
         void CreateLeaderboard(Guid orgId, Leaderboard leaderboard);
 
-        void DeleteScore(Leaderboard leaderboard);
+        void DeleteLeaderboard(Leaderboard leaderboard);
     }
 
     public interface IScoreRepository

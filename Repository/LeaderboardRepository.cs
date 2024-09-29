@@ -43,7 +43,7 @@ namespace Repository
             Create(leaderboard);
         }
 
-        public void DeleteScore(Leaderboard leaderboard)
+        public void DeleteLeaderboard(Leaderboard leaderboard)
         {
             Delete(leaderboard);
         }

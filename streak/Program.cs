@@ -39,9 +39,10 @@ builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
 builder.Services.AddScoped<IDataShaper<ScoreDto>, DataShaper<ScoreDto>>();
+builder.Services.AddScoped<IDataShaper<LeaderboardDto>, DataShaper<LeaderboardDto>>();
 builder.Services.AddScoped<IParticipantLinks, ParticipantLinks>();
 builder.Services.AddScoped<IScoreLinks, ScoreLinks>();
-
+builder.Services.AddScoped<ILeaderboardLinks, LeaderboardLinks>();
 
 // Add services to the container.
 builder.Services.AddControllers(config =>

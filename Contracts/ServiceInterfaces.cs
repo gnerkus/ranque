@@ -26,7 +26,7 @@ namespace Contracts
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
         (Guid orgId,
-            LinkParameters
+            LeaderboardLinkParams
                 parameters, bool
                 trackChanges);
 

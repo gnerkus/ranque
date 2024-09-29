@@ -59,4 +59,7 @@ namespace Entities.Models
     public record LinkParameters(ParticipantParameters ParticipantParameters, HttpContext Context);
 
     public record ScoreLinkParams(ScoreParameters ScoreParameters, HttpContext Context);
+    
+    public record LeaderboardLinkParams(LeaderboardParameters LeaderboardParameters, HttpContext 
+    Context);
 }

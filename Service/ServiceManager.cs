@@ -17,14 +17,15 @@ namespace Service
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
             loggerManager, IMapper mapper, IParticipantLinks participantLinks, UserManager<User>
-             userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks)
+             userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks, 
+             ILeaderboardLinks leaderboardLinks)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));
             _participantService = new Lazy<IParticipantService>(() => new ParticipantService
                 (repositoryManager, loggerManager, mapper, participantLinks));
             _leaderboardService = new Lazy<ILeaderboardService>(() => new LeaderboardService
-                (repositoryManager, loggerManager, mapper));
+                (repositoryManager, loggerManager, mapper, leaderboardLinks));
             _scoreService = new Lazy<IScoreService>(() => new ScoreService
                 (repositoryManager, loggerManager, mapper, scoreLinks));
             _authenticationService = new Lazy<IAuthenticationService>(() => new
