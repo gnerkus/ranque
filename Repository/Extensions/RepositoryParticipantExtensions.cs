@@ -25,12 +25,7 @@ namespace Repository.Extensions
             if (string.IsNullOrWhiteSpace(orderByQueryString))
                 return participants.OrderBy(e => e.Name);
 
-            var a = participants.OrderBy(e => e.Name);
-
             var orderQuery = OrderQueryBuilder.CreateOrderByQuery<Participant>(orderByQueryString);
-
-            var b = participants.OrderBy(orderQuery);
-
             
             return string.IsNullOrWhiteSpace(orderQuery)
                 ? participants.OrderBy(e => e.Name)

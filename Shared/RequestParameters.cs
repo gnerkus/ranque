@@ -42,4 +42,12 @@
         public Guid ParticipantId { get; set; }
         public Guid LeaderboardId { get; set; }
     }
+    
+    public class LeaderboardParameters : RequestParameters
+    {
+        public LeaderboardParameters()
+        {
+            OrderBy = "name";
+        }
+    }
 }
