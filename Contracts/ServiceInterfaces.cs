@@ -24,6 +24,29 @@ namespace Contracts
 
     public interface ILeaderboardService
     {
+        Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
+        (Guid orgId,
+            LinkParameters
+                parameters, bool
+                trackChanges);
+
+        Task<LeaderboardDto> GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+
+        Task<LeaderboardDto> CreateLeaderboardForOrgAsync(Guid orgId, LeaderboardForCreationDto
+            leaderboardForCreationDto, bool trackChanges);
+
+        Task DeleteLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+
+        Task UpdateLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, LeaderboardForUpdateDto
+            leaderboardForUpdateDto, bool orgTrackChanges, bool leaderboardTrackChanges);
+
+        Task<(LeaderboardForUpdateDto leaderboardToPatch, Leaderboard leaderboard)>
+            GetLeaderboardForPatchAsync(
+                Guid orgId, Guid leaderboardId, bool orgTrackChanges, bool leaderboardTrackChanges
+            );
+
+        Task SaveChangesForPatchAsync(LeaderboardForUpdateDto leaderboardToPatch,
+            Leaderboard leaderboard);
     }
 
     public interface IScoreService

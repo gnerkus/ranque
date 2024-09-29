@@ -15,4 +15,10 @@ namespace Contracts
         LinkResponse TryGenerateLinks(IEnumerable<ScoreDto> scoresDto,
             string fields, HttpContext httpContext);
     }
+    
+    public interface ILeaderboardLinks
+    {
+        LinkResponse TryGenerateLinks(IEnumerable<LeaderboardDto> leaderboardsDto,
+            string fields, Guid orgId, HttpContext httpContext);
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace Shared
 {
-    // [Serializable]
     public record OrganizationDto
     {
         public Guid Id { get; init; }
@@ -23,6 +22,19 @@ namespace Shared
         [Range(1, 100, ErrorMessage = "Value is required and can't be lower than 1")]
         public int Value { get; init; }
     }
+
+    public record LeaderboardDto(Guid Id, string Name);
+
+    public abstract record LeaderboardForManipulationDto
+    {
+        [Required(ErrorMessage = "Leaderboard name is a required field")]
+        [MaxLength(30, ErrorMessage = "Maximum length for the Name is 30 characters.")]
+        public string? Name { get; init; }
+    }
+
+    public record LeaderboardForCreationDto : LeaderboardForManipulationDto;
+    
+    public record LeaderboardForUpdateDto : LeaderboardForManipulationDto;
 
     public record ParticipantDto(Guid Id, string Name, int Age, string Position);
 
