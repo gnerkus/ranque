@@ -1,6 +1,9 @@
-﻿using Asp.Versioning;
+﻿using System.Text.Json;
+using Asp.Versioning;
 using Contracts;
+using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.RateLimiting;
@@ -59,7 +62,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost("collection")]
-        public async Task<IActionResult> CreateCompanyCollection([FromBody]
+        public async Task<IActionResult> CreateOrganizationCollection([FromBody]
             IEnumerable<OrgForCreationDto>
                 orgCollection)
         {
@@ -85,6 +88,96 @@ namespace Presentation.Controllers
             await _service.OrganizationService.DeleteOrganizationAsync(id, false);
             return NoContent();
         }
+        
+        //============== LEADERBOARDS =============================================
+
+        [HttpGet("{orgId:guid}/leaderboards")]
+        [HttpHead]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        public async Task<IActionResult> GetLeaderboardsForOrganization(Guid orgId, [FromBody] 
+            LeaderboardParameters parameters)
+        {
+            var linkParams = new LeaderboardLinkParams(parameters, HttpContext);
+
+            var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(orgId,
+                linkParams, false);
+            
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+            return pagedResult.linkResponse.HasLinks ? Ok(pagedResult.linkResponse
+                .LinkedEntities) : Ok(pagedResult.linkResponse.ShapedEntities);
+        }
+        
+        [HttpGet("{orgId:guid}/leaderboards/{id:guid}", Name = "GetLeaderboardForOrg")]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        public async Task<IActionResult> GetLeaderboardForOrganization(Guid orgId, Guid id)
+        {
+            var leaderboard = await _service.LeaderboardService.GetLeaderboardAsync(orgId,
+                id, false);
+
+            return Ok(leaderboard);
+        }
+        
+        [HttpPost("{orgId:guid}/leaderboards")]
+        public async Task<IActionResult> CreateLeaderboardForOrg(Guid orgId,
+            [FromBody] LeaderboardForCreationDto leaderboardForCreationDto)
+        {
+            if (leaderboardForCreationDto is null) return BadRequest("Leaderboard creation request body is null");
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            var leaderboard = await _service.LeaderboardService.CreateLeaderboardForOrgAsync(orgId,
+                leaderboardForCreationDto, false);
+
+            return CreatedAtRoute("GetLeaderboardForOrg", new { orgId, id = leaderboard.Id },
+                leaderboard);
+        }
+        
+        [HttpPut("{orgId:guid}/leaderboards/{leaderboardId:guid}")]
+        public async Task<IActionResult> UpdateLeaderboardForOrg(Guid orgId, Guid leaderboardId,
+            [FromBody] LeaderboardForUpdateDto leaderboardForUpdateDto)
+        {
+            if (leaderboardForUpdateDto is null) return BadRequest("Leaderboard body is null");
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            await _service.LeaderboardService.UpdateLeaderboardForOrgAsync(orgId, leaderboardId,
+                leaderboardForUpdateDto, false, true);
+
+            return NoContent();
+        }
+        
+        [HttpPatch("{orgId:guid}/leaderboards/{id:guid}")]
+        public async Task<IActionResult> PartiallyUpdateLeaderboardForOrg(Guid orgId, Guid id,
+            [FromBody] JsonPatchDocument<LeaderboardForUpdateDto> patchDoc)
+        {
+            if (patchDoc is null)
+                return BadRequest("patchDoc object sent from client is null.");
+            var result = await _service.LeaderboardService.GetLeaderboardForPatchAsync(orgId, id,
+                false,
+                true);
+            patchDoc.ApplyTo(result.leaderboardToPatch, ModelState);
+
+            TryValidateModel(result.leaderboardToPatch);
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            await _service.LeaderboardService.SaveChangesForPatchAsync(result.leaderboardToPatch,
+                result.leaderboard);
+            return NoContent();
+        }
+        
+        [HttpDelete("{orgId:guid}/leaderboards/{id:guid}")]
+        public async Task<IActionResult> DeleteLeaderboardForOrg(Guid orgId, Guid id)
+        {
+            await _service.LeaderboardService.DeleteLeaderboardForOrgAsync(orgId, id, false);
+            return NoContent();
+        }
+        
+        //================== GENERAL ========================================
 
         [HttpOptions]
         public IActionResult GetOrgOptions()
