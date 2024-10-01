@@ -49,7 +49,7 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                             httpContext, 
                         "GetParticipantForOrganization",
-                            controller: "Participants",
+                            controller: "Organizations",
                             values: new { orgId, id, fields }
                         ),
                     "self", 
@@ -59,7 +59,7 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext, 
                         "DeleteParticipantForOrg",
-                        controller: "Participants",
+                        controller: "Organizations",
                         values: new { orgId, id }
                     ),
                     "delete_participant", 
@@ -69,7 +69,7 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext, 
                         "UpdateParticipantForOrg",
-                        controller: "Participants",
+                        controller: "Organizations",
                         values: new { orgId, id }
                     ),
                     "update_participant", 
@@ -79,7 +79,7 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext, 
                         "PartiallyUpdateParticipantForOrg",
-                        controller: "Participants",
+                        controller: "Organizations",
                         values: new { orgId, id }
                     ),
                     "partially_update_participant", 
@@ -94,7 +94,7 @@ namespace streak.Utility
          LinkCollectionWrapper<Entity> participantsWrapper)
         {
             participantsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetParticipantsForOrganization", controller: "Participants", values: new { }),
+                    "GetParticipantsForOrganization", controller: "Organizations", values: new { }),
                 "self",
                 "GET"));
             return participantsWrapper;
