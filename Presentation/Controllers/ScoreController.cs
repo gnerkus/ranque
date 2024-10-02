@@ -40,8 +40,24 @@ namespace Presentation.Controllers
             return Ok(score);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateScore([FromBody] ScoreForCreationDto scoreForCreationDto)
+        {
+            if (scoreForCreationDto is null) return BadRequest("Score creation request body is null");
+            
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            
+            var score = await _service.ScoreService.CreateScoreAsync(scoreForCreationDto.LeaderboardId,
+                scoreForCreationDto.ParticipantId, scoreForCreationDto, false);
+            
+            return CreatedAtRoute("GetScore", new { id = score.Id}, score);
+
+        }
+
         [HttpPut("{id:guid}", Name = "UpdateScore")]
-        public async Task<IActionResult> UpdateScoreAsync(Guid id, [FromBody] ScoreForManipulationDto scoreForManipulationDto)
+        public async Task<IActionResult> UpdateScoreAsync(Guid id, [FromBody] ScoreForUpdateDto 
+        scoreForManipulationDto)
         {
             if (scoreForManipulationDto is null)
             {

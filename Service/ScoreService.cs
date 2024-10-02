@@ -44,7 +44,7 @@ namespace Service
         }
 
         public async Task<ScoreDto> CreateScoreAsync(Guid leaderboardId, Guid participantId,
-            ScoreForManipulationDto scoreForCreationDto, bool trackChanges)
+            ScoreForCreationDto scoreForCreationDto, bool trackChanges)
         {
             var score = _mapper.Map<Score>(scoreForCreationDto);
             _repository.Score.CreateScore(leaderboardId, participantId, score);

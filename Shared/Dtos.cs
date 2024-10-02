@@ -17,11 +17,22 @@ namespace Shared
 
     public record ScoreDto(Guid Id, float Value);
 
-    public record ScoreForManipulationDto
+    public abstract record ScoreForManipulationDto
     {
         [Range(1, 100, ErrorMessage = "Value is required and can't be lower than 1")]
         public int Value { get; init; }
     }
+
+    public record ScoreForCreationDto: ScoreForManipulationDto
+    {
+        [Required(ErrorMessage = "Leaderboard id is required")]
+        public Guid LeaderboardId { get; init; }
+        
+        [Required(ErrorMessage = "Participant id is required")]
+        public Guid ParticipantId { get; init; }
+    }
+
+    public record ScoreForUpdateDto : ScoreForManipulationDto;
 
     public record LeaderboardDto(Guid Id, string Name);
 
