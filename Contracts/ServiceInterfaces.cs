@@ -52,7 +52,7 @@ namespace Contracts
     public interface IScoreService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync
-        (Guid leaderboardId, Guid participantId, ScoreLinkParams
+        (ScoreLinkParams
                 parameters, bool
                 trackChanges);
 

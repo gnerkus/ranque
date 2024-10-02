@@ -24,8 +24,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetScoresAsync([FromQuery] ScoreParameters parameters)
         {
             var linkParams = new ScoreLinkParams(parameters, HttpContext);
-            var pagedResult = await _service.ScoreService.GetAllScoresAsync(parameters
-                .LeaderboardId, parameters.ParticipantId, linkParams, false);
+            var pagedResult = await _service.ScoreService.GetAllScoresAsync(linkParams, false);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
             

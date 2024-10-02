@@ -23,9 +23,7 @@ namespace Service
             _scoreLinks = scoreLinks;
         }
         
-        public async Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync(Guid
-         leaderboardId, Guid participantId, 
-        ScoreLinkParams parameters, bool trackChanges)
+        public async Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync(ScoreLinkParams parameters, bool trackChanges)
         {
             var scores = await _repository.Score.GetAllScoresAsync(parameters.ScoreParameters, 
             trackChanges);
