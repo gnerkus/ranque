@@ -30,11 +30,20 @@ namespace Repository
                 parameters.PageSize);
         }
 
-        public async Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool
+        public async Task<Participant?> GetParticipantForOrgAsync(Guid orgId, Guid participantId, bool
             trackChanges)
         {
             return await FindByCondition(
                     c => c.OrganizationId.Equals(orgId) && c.Id.Equals(participantId),
+                    trackChanges)
+                .SingleOrDefaultAsync();
+        }
+        
+        public async Task<Participant?> GetParticipantAsync(Guid participantId, bool
+            trackChanges)
+        {
+            return await FindByCondition(
+                    c => c.Id.Equals(participantId),
                     trackChanges)
                 .SingleOrDefaultAsync();
         }

@@ -46,7 +46,15 @@ namespace Presentation.Controllers
             
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
-            
+
+            var isValidOrg = await _service.ScoreService.CheckScoreOrg(scoreForCreationDto
+                .LeaderboardId, scoreForCreationDto.ParticipantId, false);
+
+            if (!isValidOrg)
+            {
+                return BadRequest("Participant does not share org with leaderboard");
+            }
+
             var score = await _service.ScoreService.CreateScoreAsync(scoreForCreationDto.LeaderboardId,
                 scoreForCreationDto.ParticipantId, scoreForCreationDto, false);
             

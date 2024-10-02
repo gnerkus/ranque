@@ -28,12 +28,21 @@ namespace Repository
                 parameters.PageSize);
         }
 
-        public async Task<Leaderboard?> GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool 
+        public async Task<Leaderboard?> GetLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, bool 
         trackChanges)
         {
             return await FindByCondition(c => c.OrganizationId.Equals(orgId) && c.Id.Equals
             (leaderboardId), 
             trackChanges)
+                .SingleOrDefaultAsync();
+        }
+        
+        public async Task<Leaderboard?> GetLeaderboardAsync(Guid leaderboardId, bool 
+            trackChanges)
+        {
+            return await FindByCondition(c => c.Id.Equals
+                        (leaderboardId), 
+                    trackChanges)
                 .SingleOrDefaultAsync();
         }
 

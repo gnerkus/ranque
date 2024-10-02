@@ -41,6 +41,14 @@ namespace Service
             return score;
         }
 
+        public async Task<bool> CheckScoreOrg(Guid leaderboardId, Guid participantId, bool trackChanges)
+        {
+            var participant = await IsParticipantExist(participantId, trackChanges);
+            var leaderboard = await IsLeaderboardExist(leaderboardId, trackChanges);
+
+            return participant.OrganizationId.Equals(leaderboard.OrganizationId);
+        }
+
         public async Task<ScoreDto> CreateScoreAsync(Guid leaderboardId, Guid participantId,
             ScoreForCreationDto scoreForCreationDto, bool trackChanges)
         {
@@ -74,6 +82,22 @@ namespace Service
                 throw new ScoreNotFoundException(scoreId);
 
             return scoreDb;
+        }
+        
+        private async Task<Participant> IsParticipantExist(Guid participantId, bool trackChanges)
+        {
+            var pcpt = await _repository.Participant.GetParticipantAsync(participantId, 
+            trackChanges);
+            if (pcpt is null) throw new ParticipantNotFoundException(participantId);
+            return pcpt;
+        }
+        
+        private async Task<Leaderboard> IsLeaderboardExist(Guid leaderboardId, bool trackChanges)
+        {
+            var leaderboard = await _repository.Leaderboard.GetLeaderboardAsync(leaderboardId, 
+                trackChanges);
+            if (leaderboard is null) throw new LeaderboardNotFoundException(leaderboardId);
+            return leaderboard;
         }
     }
 }

@@ -58,6 +58,8 @@ namespace Contracts
 
         Task<ScoreDto> GetScoreAsync(Guid scoreId, bool trackChanges);
 
+        Task<bool> CheckScoreOrg(Guid leaderboardId, Guid participantId, bool trackChanges);
+
         Task<ScoreDto> CreateScoreAsync(Guid leaderboardId, Guid participantId,
             ScoreForCreationDto scoreForCreationDto, bool trackChanges);
 

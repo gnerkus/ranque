@@ -111,7 +111,7 @@ namespace Service
         private async Task<Leaderboard> IsLeaderboardExist(Guid orgId, Guid leaderboardId,
             bool trackChanges)
         {
-            var leaderboardDb = await _repository.Leaderboard.GetLeaderboardAsync(orgId,
+            var leaderboardDb = await _repository.Leaderboard.GetLeaderboardForOrgAsync(orgId,
                 leaderboardId,
                 trackChanges);
             if (leaderboardDb is null)
