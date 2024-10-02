@@ -52,14 +52,16 @@ namespace Contracts
     public interface IScoreService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync
-        (Guid leaderboardId, Guid participantId, ScoreLinkParams
+        (ScoreLinkParams
                 parameters, bool
                 trackChanges);
 
         Task<ScoreDto> GetScoreAsync(Guid scoreId, bool trackChanges);
 
+        Task<bool> CheckScoreOrg(Guid leaderboardId, Guid participantId, bool trackChanges);
+
         Task<ScoreDto> CreateScoreAsync(Guid leaderboardId, Guid participantId,
-            ScoreForManipulationDto scoreForCreationDto, bool trackChanges);
+            ScoreForCreationDto scoreForCreationDto, bool trackChanges);
 
         Task DeleteScoreAsync(Guid scoreId, bool trackChanges);
         

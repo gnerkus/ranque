@@ -49,8 +49,8 @@ namespace streak.Utility
                 new(
                     _linkGenerator.GetUriByAction(
                             httpContext, 
-                        "GetParticipantForOrganization",
-                            controller: "Participants",
+                        "GetLeaderboardForOrganization",
+                            controller: "Organizations",
                             values: new { orgId, id, fields }
                         ),
                     "self", 
@@ -59,8 +59,8 @@ namespace streak.Utility
                 new(
                     _linkGenerator.GetUriByAction(
                         httpContext, 
-                        "DeleteParticipantForOrg",
-                        controller: "Participants",
+                        "DeleteLeaderboardForOrg",
+                        controller: "Organizations",
                         values: new { orgId, id }
                     ),
                     "delete_participant", 
@@ -69,8 +69,8 @@ namespace streak.Utility
                 new(
                     _linkGenerator.GetUriByAction(
                         httpContext, 
-                        "UpdateParticipantForOrg",
-                        controller: "Participants",
+                        "UpdateLeaderboardForOrg",
+                        controller: "Organizations",
                         values: new { orgId, id }
                     ),
                     "update_participant", 
@@ -79,8 +79,8 @@ namespace streak.Utility
                 new(
                     _linkGenerator.GetUriByAction(
                         httpContext, 
-                        "PartiallyUpdateParticipantForOrg",
-                        controller: "Participants",
+                        "PartiallyUpdateLeaderboardForOrg",
+                        controller: "Organizations",
                         values: new { orgId, id }
                     ),
                     "partially_update_participant", 
@@ -95,7 +95,7 @@ namespace streak.Utility
          LinkCollectionWrapper<Entity> leaderboardsWrapper)
         {
             leaderboardsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetParticipantsForOrganization", controller: "Participants", values: new { }),
+                    "GetLeaderboardsForOrganization", controller: "Organizations", values: new { }),
                 "self",
                 "GET"));
             return leaderboardsWrapper;

@@ -117,7 +117,7 @@ namespace Service
         private async Task<Participant> IsParticipantExist(Guid orgId, Guid participantId,
             bool trackChanges)
         {
-            var participantDb = await _repository.Participant.GetParticipantAsync(orgId,
+            var participantDb = await _repository.Participant.GetParticipantForOrgAsync(orgId,
                 participantId,
                 trackChanges);
             if (participantDb is null)

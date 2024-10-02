@@ -18,7 +18,10 @@ namespace Contracts
     {
         Task<PagedList<Leaderboard>> GetAllLeaderboardsAsync(Guid orgId, LeaderboardParameters parameters,
             bool trackChanges);
-        Task<Leaderboard?> GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+        Task<Leaderboard?> GetLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+        
+        Task<Leaderboard?> GetLeaderboardAsync(Guid leaderboardId, bool trackChanges);
+
         void CreateLeaderboard(Guid orgId, Leaderboard leaderboard);
 
         void DeleteLeaderboard(Leaderboard leaderboard);
@@ -40,7 +43,9 @@ namespace Contracts
             ParticipantParameters parameters,
             bool trackChanges);
 
-        Task<Participant?> GetParticipantAsync(Guid orgId, Guid participantId, bool trackChanges);
+        Task<Participant?> GetParticipantForOrgAsync(Guid orgId, Guid participantId, bool trackChanges);
+        Task<Participant?> GetParticipantAsync(Guid participantId, bool trackChanges);
+
         void CreateParticipant(Guid orgId, Participant participant);
 
         void DeleteParticipant(Participant participant);

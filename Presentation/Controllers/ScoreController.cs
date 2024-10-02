@@ -24,8 +24,7 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetScoresAsync([FromQuery] ScoreParameters parameters)
         {
             var linkParams = new ScoreLinkParams(parameters, HttpContext);
-            var pagedResult = await _service.ScoreService.GetAllScoresAsync(parameters
-                .LeaderboardId, parameters.ParticipantId, linkParams, false);
+            var pagedResult = await _service.ScoreService.GetAllScoresAsync(linkParams, false);
             
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
             
@@ -40,8 +39,32 @@ namespace Presentation.Controllers
             return Ok(score);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateScore([FromBody] ScoreForCreationDto scoreForCreationDto)
+        {
+            if (scoreForCreationDto is null) return BadRequest("Score creation request body is null");
+            
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
+            var isValidOrg = await _service.ScoreService.CheckScoreOrg(scoreForCreationDto
+                .LeaderboardId, scoreForCreationDto.ParticipantId, false);
+
+            if (!isValidOrg)
+            {
+                return BadRequest("Participant does not share org with leaderboard");
+            }
+
+            var score = await _service.ScoreService.CreateScoreAsync(scoreForCreationDto.LeaderboardId,
+                scoreForCreationDto.ParticipantId, scoreForCreationDto, false);
+            
+            return CreatedAtRoute("GetScore", new { id = score.Id}, score);
+
+        }
+
         [HttpPut("{id:guid}", Name = "UpdateScore")]
-        public async Task<IActionResult> UpdateScoreAsync(Guid id, [FromBody] ScoreForManipulationDto scoreForManipulationDto)
+        public async Task<IActionResult> UpdateScoreAsync(Guid id, [FromBody] ScoreForUpdateDto 
+        scoreForManipulationDto)
         {
             if (scoreForManipulationDto is null)
             {
