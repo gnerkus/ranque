@@ -7,7 +7,7 @@ using Shared;
 
 namespace Presentation.Controllers
 {
-    [Route("api/leaderboards")]
+    [Route("api/leaderboards/{leaderboardId:guid}")]
     [ApiController]
     public class LeaderboardController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet("{leaderboardId:guid}/scores", Name = "GetLeaderboardScores")]
+        [HttpGet("scores", Name = "GetLeaderboardScores")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetLeaderboardScores(Guid leaderboardId,
             [FromQuery] ScoreParameters parameters)
@@ -33,6 +33,15 @@ namespace Presentation.Controllers
                 ? Ok(pagedResult.linkResponse
                     .LinkedEntities)
                 : Ok(pagedResult.linkResponse.ShapedEntities);
+        }
+        
+        [HttpGet("participants", Name = "GetParticipants")]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        public async Task<IActionResult> GetParticipants(Guid leaderboardId)
+        {
+            var participants = await _service.LeaderboardService.GetParticipantsAsync
+                (leaderboardId, false);
+            return Ok(participants);
         }
     }
 }

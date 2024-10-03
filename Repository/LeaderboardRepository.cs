@@ -47,6 +47,16 @@ namespace Repository
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid leaderboardId, bool trackChanges)
+        {
+            var leaderboard = await FindByCondition(c => c.Id.Equals(leaderboardId),
+                    trackChanges)
+                .Include(p => p.Participants)
+                .SingleOrDefaultAsync();
+
+            return leaderboard != null ? leaderboard.Participants : new List<Participant>();
+        }
+
         public void CreateLeaderboard(Guid orgId, Leaderboard leaderboard)
         {
             leaderboard.OrganizationId = orgId;

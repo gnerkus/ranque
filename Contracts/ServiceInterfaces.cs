@@ -32,6 +32,8 @@ namespace Contracts
 
         Task<LeaderboardDto>
             GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+        Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid leaderboardId,
+            bool trackChanges);
 
         Task<LeaderboardDto> CreateLeaderboardForOrgAsync(Guid orgId, LeaderboardForCreationDto
             leaderboardForCreationDto, bool trackChanges);
