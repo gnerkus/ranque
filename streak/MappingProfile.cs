@@ -33,6 +33,10 @@ namespace streak
             // participant
             CreateMap<ParticipantForCreationDto, Participant>();
             CreateMap<ParticipantForUpdateDto, Participant>().ReverseMap();
+            
+            // leaderboard
+            CreateMap<LeaderboardForCreationDto, Leaderboard>();
+            CreateMap<LeaderboardForUpdateDto, Leaderboard>().ReverseMap();
 
             // score
             CreateMap<ScoreForManipulationDto, Score>();

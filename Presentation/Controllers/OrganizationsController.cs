@@ -95,7 +95,7 @@ namespace Presentation.Controllers
         [HttpHead]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetLeaderboardsForOrganization(Guid orgId,
-            [FromBody] LeaderboardParameters parameters)
+            [FromQuery] LeaderboardParameters parameters)
         {
             var linkParams = new LeaderboardLinkParams(parameters, HttpContext);
 
