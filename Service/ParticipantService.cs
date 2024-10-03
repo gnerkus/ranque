@@ -54,6 +54,14 @@ namespace Service
             return participant;
         }
 
+        public async Task<IEnumerable<LeaderboardDto>> GetLeaderboardsAsync(Guid participantId, bool trackChanges)
+        {
+            var leaderboards =
+                await _repository.Participant.GetLeaderboardsAsync(participantId, trackChanges);
+
+            return _mapper.Map<IEnumerable<LeaderboardDto>>(leaderboards);
+        }
+
         public async Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId,
             ParticipantForCreationDto participantForCreationDto, bool trackChanges)
         {

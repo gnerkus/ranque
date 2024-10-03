@@ -34,5 +34,14 @@ namespace Presentation.Controllers
                     .LinkedEntities)
                 : Ok(pagedResult.linkResponse.ShapedEntities);
         }
+
+        [HttpGet("{participantId:guid}/leaderboards", Name = "GetLeaderboards")]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        public async Task<IActionResult> GetLeaderboards(Guid participantId)
+        {
+            var leaderboards = await _service.ParticipantService.GetLeaderboardsAsync
+                (participantId, false);
+            return Ok(leaderboards);
+        }
     }
 }

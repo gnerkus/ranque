@@ -60,6 +60,8 @@ namespace Contracts
 
         Task<Participant?> GetParticipantAsync(Guid participantId, bool trackChanges);
 
+        Task<IEnumerable<Leaderboard>> GetLeaderboardsAsync(Guid participantId, bool trackChanges);
+        
         void CreateParticipant(Guid orgId, Participant participant);
 
         void DeleteParticipant(Participant participant);

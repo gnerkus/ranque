@@ -17,6 +17,9 @@ namespace streak
 
             // participant
             CreateMap<Participant, ParticipantDto>();
+            
+            // leaderboard
+            CreateMap<Leaderboard, LeaderboardDto>();
 
             // score
             CreateMap<Score, ScoreDto>();

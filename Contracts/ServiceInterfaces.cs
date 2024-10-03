@@ -90,6 +90,9 @@ namespace Contracts
 
         Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool trackChanges);
 
+        Task<IEnumerable<LeaderboardDto>> GetLeaderboardsAsync(Guid participantId,
+            bool trackChanges);
+        
         Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId, ParticipantForCreationDto
             participantForCreationDto, bool trackChanges);
 
