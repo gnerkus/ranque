@@ -1,0 +1,41 @@
+﻿### Score | Get all scores | 200
+### login, get the token then make the query
+
+GET {{ host }}/api/scores
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Score | Get score | 200
+### todo: create two scores before testing get, update and delete routes
+
+GET {{ host }}/api/scores/{{score_01_Id}}
+Accept: application/json
+
+### Score | Create score | 201
+
+POST {{host}}/api/scores
+Content-Type: application/json
+
+{
+  "value": 20,
+  "leaderboardId": "a478da4c-a47b-4d95-896f-06368e844232",
+  "participantId": "42829fe2-fb6c-4d53-b3fe-08dcd3674a21"
+}
+
+### Score | Update score | 204
+
+PATCH {{host}}/api/scores/{{score_01_Id}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/value",
+    "value": 50
+  }
+]
+
+### Scores | Delete score | 204
+
+DELETE {{host}}/api/scores/{{score_02_Id}}
+Accept: application/json

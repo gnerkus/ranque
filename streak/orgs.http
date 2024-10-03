@@ -63,3 +63,175 @@ Content-Type: application/json
 
 POST {{host}}/api/orgs
 Content-Type: application/json
+
+## PARTICIPANTS
+
+### Participants | Get all participants | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
+Accept: application/json
+
+### Participants | Get all participants - Cached | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
+Accept: application/json
+Cache-Control: max-age=604800
+
+### Participants | Get all participants - Paged | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?pageNumber=2&pageSize=1
+Accept: application/json
+
+### Participants | Get all participants - Search | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?searchTerm=Oliver
+Accept: application/json
+
+### Participants | Get all participants - Sort | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?orderBy=name,age desc
+Accept: application/json
+
+### Participants | Get all participants - Selected Fields | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?fields=name
+Accept: application/json
+
+### Participants | Get all participants - Selected Fields (XML) | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?fields=name
+Accept: application/xml
+
+### Participants | Get all participants - HATEOAS | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
+Accept: application/vnd.nanotome.hateoas+json
+
+### Participants | Get participant | 200
+
+GET {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
+Accept: application/json
+
+### Participants | Create participant | 201
+
+POST {{host}}/api/orgs/{{org_01_Id}}/participants
+Content-Type: application/json
+
+{
+  "name": "Hanako Taro",
+  "age": 20,
+  "position": "Software Developer"
+}
+
+### Participants | Create participant | 422: UNPROCESSABLE ENTITY
+
+POST {{host}}/api/orgs/{{org_01_Id}}/participants
+Content-Type: application/json
+
+{
+  "name": null,
+  "age": 20,
+  "position": null
+}
+
+### Participants | Update participant | 204
+
+PATCH {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_02_Id}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/age",
+    "value": 16
+  }
+]
+
+### Participants | Delete participant | 204
+
+DELETE {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_02_Id}}
+Accept: application/json
+
+## LEADERBOARDS
+
+### Leaderboards | Get all leaderboards | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards
+Accept: application/json
+
+### leaderboards | Get all leaderboards - Cached | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards
+Accept: application/json
+Cache-Control: max-age=604800
+
+### leaderboards | Get all leaderboards - Paged | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?pageNumber=2&pageSize=1
+Accept: application/json
+
+### leaderboards | Get all leaderboards - Search | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?searchTerm=Oliver
+Accept: application/json
+
+### leaderboards | Get all leaderboards - Sort | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?orderBy=name desc
+Accept: application/json
+
+### leaderboards | Get all leaderboards - Selected Fields | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?fields=name
+Accept: application/json
+
+### leaderboards | Get all leaderboards - Selected Fields (XML) | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?fields=name
+Accept: application/xml
+
+### leaderboards | Get all leaderboards - HATEOAS | 200
+
+GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards
+Accept: application/vnd.nanotome.hateoas+json
+
+### leaderboards | Get leaderboard | 200
+
+GET {{host}}/api/orgs/{{org_01_Id}}/leaderboards/{{leaderboard_01_Id}}
+Accept: application/json
+
+### leaderboards | Create leaderboard | 201
+
+POST {{host}}/api/orgs/{{org_01_Id}}/leaderboards
+Content-Type: application/json
+
+{
+  "name": "General Sales"
+}
+
+### leaderboards | Create leaderboard | 422: UNPROCESSABLE ENTITY
+
+POST {{host}}/api/orgs/{{org_01_Id}}/leaderboards
+Content-Type: application/json
+
+{
+  "name": null
+}
+
+### leaderboards | Update leaderboard | 204
+
+PATCH {{host}}/api/orgs/{{org_01_Id}}/leaderboards/{{leaderboard_02_Id}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/name",
+    "value": "new ranking"
+  }
+]
+
+### leaderboards | Delete leaderboard | 204
+
+DELETE {{host}}/api/orgs/{{org_01_Id}}/leaderboards/{{leaderboard_02_Id}}
+Accept: application/json
