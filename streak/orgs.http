@@ -180,46 +180,55 @@ Authorization: Bearer {{token}}
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards
 Accept: application/json
 Cache-Control: max-age=604800
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - Paged | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?pageNumber=2&pageSize=1
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - Search | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?searchTerm=Oliver
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - Sort | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?orderBy=name desc
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - Selected Fields | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?fields=name
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - Selected Fields (XML) | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards?fields=name
 Accept: application/xml
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - HATEOAS | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards
 Accept: application/vnd.nanotome.hateoas+json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get leaderboard | 200
 
 GET {{host}}/api/orgs/{{org_01_Id}}/leaderboards/{{leaderboard_01_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Create leaderboard | 201
 
 POST {{host}}/api/orgs/{{org_01_Id}}/leaderboards
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "General Sales"
@@ -229,6 +238,7 @@ Content-Type: application/json
 
 POST {{host}}/api/orgs/{{org_01_Id}}/leaderboards
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": null
@@ -238,6 +248,7 @@ Content-Type: application/json
 
 PATCH {{host}}/api/orgs/{{org_01_Id}}/leaderboards/{{leaderboard_02_Id}}
 Content-Type: application/json-patch+json
+Authorization: Bearer {{token}}
 
 [
   {
@@ -251,3 +262,4 @@ Content-Type: application/json-patch+json
 
 DELETE {{host}}/api/orgs/{{org_01_Id}}/leaderboards/{{leaderboard_02_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}
