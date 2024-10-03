@@ -15,6 +15,7 @@ namespace Presentation.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/orgs")]
+    [Authorize(Roles = "Manager")]
     [ApiController]
     [OutputCache(PolicyName = "120s")]
     public class OrganizationsController : ControllerBase
@@ -27,7 +28,6 @@ namespace Presentation.Controllers
         }
 
         [HttpGet(Name = "GetOrganizations")]
-        [Authorize(Roles = "Manager")]
         [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
@@ -95,7 +95,7 @@ namespace Presentation.Controllers
         [HttpHead]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetLeaderboardsForOrganization(Guid orgId,
-            [FromBody] LeaderboardParameters parameters)
+            [FromQuery] LeaderboardParameters parameters)
         {
             var linkParams = new LeaderboardLinkParams(parameters, HttpContext);
 

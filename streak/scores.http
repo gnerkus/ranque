@@ -10,11 +10,13 @@ Authorization: Bearer {{token}}
 
 GET {{ host }}/api/scores/{{score_01_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Score | Create score | 201
 
 POST {{host}}/api/scores
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "value": 20,
@@ -24,18 +26,16 @@ Content-Type: application/json
 
 ### Score | Update score | 204
 
-PATCH {{host}}/api/scores/{{score_01_Id}}
+PUT {{host}}/api/scores/{{score_01_Id}}
 Content-Type: application/json-patch+json
+Authorization: Bearer {{token}}
 
-[
-  {
-    "op": "replace",
-    "path": "/value",
-    "value": 50
-  }
-]
+{
+  "value": 50
+}
 
 ### Scores | Delete score | 204
 
 DELETE {{host}}/api/scores/{{score_02_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}

@@ -1,14 +1,14 @@
 ### Participants | Get all scores | 200
 ### login, get the token then make the query
 
-GET {{ host }}/api/participants/{{participant_01_Id}}scores
+GET {{ host }}/api/participants/{{participant_01_Id}}/scores
 Accept: application/json
 Authorization: Bearer {{token}}
 
 ### Participants | Get all leaderboards | 200
 ### login, get the token then make the query
 
-GET {{ host }}/api/participants/{{participant_01_Id}}leaderboards
+GET {{ host }}/api/participants/{{participant_01_Id}}/leaderboards
 Accept: application/json
 Authorization: Bearer {{token}}
 

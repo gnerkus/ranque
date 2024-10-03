@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Contracts;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
 using Shared;
@@ -8,6 +9,7 @@ using Shared;
 namespace Presentation.Controllers
 {
     [Route("api/leaderboards/{leaderboardId:guid}")]
+    [Authorize(Roles = "Manager")]
     [ApiController]
     public class LeaderboardController : ControllerBase
     {
