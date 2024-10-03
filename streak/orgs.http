@@ -4,7 +4,6 @@ GET {{host}}/api
 Accept: application/vnd.nanotome.apiroot+json
 
 ### Organization | Get all organizations | 200
-### login, get the token then make the query
 
 GET {{ host }}/api/orgs
 Accept: application/json
@@ -19,11 +18,13 @@ Accept: application/json
 
 GET {{ host }}/api/orgs/{{org_01_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Organization | Get organization | 404: NOT FOUND
 
 GET {{ host }}/api/orgs/{{badOrgId}}
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Organization | Create organization | 201
 
@@ -63,6 +64,7 @@ Content-Type: application/json
 
 POST {{host}}/api/orgs
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ## PARTICIPANTS
 
@@ -70,52 +72,62 @@ Content-Type: application/json
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Participants | Get all participants - Cached | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/json
+Authorization: Bearer {{token}}
 Cache-Control: max-age=604800
 
 ### Participants | Get all participants - Paged | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?pageNumber=2&pageSize=1
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Participants | Get all participants - Search | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?searchTerm=Oliver
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Participants | Get all participants - Sort | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?orderBy=name,age desc
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Participants | Get all participants - Selected Fields | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?fields=name
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Participants | Get all participants - Selected Fields (XML) | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants?fields=name
 Accept: application/xml
+Authorization: Bearer {{token}}
 
 ### Participants | Get all participants - HATEOAS | 200
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/participants
 Accept: application/vnd.nanotome.hateoas+json
+Authorization: Bearer {{token}}
 
 ### Participants | Get participant | 200
 
 GET {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### Participants | Create participant | 201
 
 POST {{host}}/api/orgs/{{org_01_Id}}/participants
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "Hanako Taro",
@@ -127,6 +139,7 @@ Content-Type: application/json
 
 POST {{host}}/api/orgs/{{org_01_Id}}/participants
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": null,
@@ -136,14 +149,15 @@ Content-Type: application/json
 
 ### Participants | Update participant | 204
 
-PATCH {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_02_Id}}
+PATCH {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_01_Id}}
 Content-Type: application/json-patch+json
+Authorization: Bearer {{token}}
 
 [
   {
     "op": "replace",
     "path": "/age",
-    "value": 16
+    "value": 19
   }
 ]
 
@@ -151,6 +165,7 @@ Content-Type: application/json-patch+json
 
 DELETE {{host}}/api/orgs/{{org_01_Id}}/participants/{{participant_02_Id}}
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ## LEADERBOARDS
 
@@ -158,6 +173,7 @@ Accept: application/json
 
 GET {{ host }}/api/orgs/{{ org_01_Id}}/leaderboards
 Accept: application/json
+Authorization: Bearer {{token}}
 
 ### leaderboards | Get all leaderboards - Cached | 200
 
