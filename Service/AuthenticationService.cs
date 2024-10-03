@@ -8,7 +8,6 @@ using Entities;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Shared;
@@ -18,11 +17,11 @@ namespace Service
     internal sealed class AuthenticationService : IAuthenticationService
     {
         private readonly IOptions<JwtConfiguration> _configuration;
+        private readonly JwtConfiguration _jwtConfig;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private User? _user;
-        private readonly JwtConfiguration _jwtConfig;
 
         public AuthenticationService(ILoggerManager logger, IMapper mapper, UserManager<User>
             userManager, IOptions<JwtConfiguration> configuration)
@@ -63,10 +62,10 @@ namespace Service
             var signingCredentials = GetSigningCredentials();
             var claims = await GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
-            
+
             var refreshToken = GenerateRefreshToken();
             _user.RefreshToken = refreshToken;
-            if(populateExp)
+            if (populateExp)
                 _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
             await _userManager.UpdateAsync(_user);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
@@ -81,16 +80,17 @@ namespace Service
                 user.RefreshTokenExpiryTime <= DateTime.Now)
                 throw new RefreshTokenBadRequest();
             _user = user;
-            return await CreateToken(populateExp: false);
+            return await CreateToken(false);
         }
 
-        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
+        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials,
+            List<Claim> claims)
         {
             var tokenOptions = new JwtSecurityToken
             (
-                issuer: _jwtConfig.ValidIssuer,
-                audience: _jwtConfig.ValidAudience,
-                claims: claims,
+                _jwtConfig.ValidIssuer,
+                _jwtConfig.ValidAudience,
+                claims,
                 expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtConfig.Expires)),
                 signingCredentials: signingCredentials
             );
@@ -101,13 +101,10 @@ namespace Service
         {
             var claims = new List<Claim>
             {
-                new (ClaimTypes.Name, _user.UserName)
+                new(ClaimTypes.Name, _user.UserName)
             };
             var roles = await _userManager.GetRolesAsync(_user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            foreach (var role in roles) claims.Add(new Claim(ClaimTypes.Role, role));
             return claims;
         }
 
@@ -147,9 +144,7 @@ namespace Service
             if (jwtSecurityToken == null ||
                 !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                     StringComparison.InvariantCultureIgnoreCase))
-            {
                 throw new SecurityTokenException("Invalid token");
-            }
             return principal;
         }
     }

@@ -23,11 +23,11 @@ namespace Shared
         public int Value { get; init; }
     }
 
-    public record ScoreForCreationDto: ScoreForManipulationDto
+    public record ScoreForCreationDto : ScoreForManipulationDto
     {
         [Required(ErrorMessage = "Leaderboard id is required")]
         public Guid LeaderboardId { get; init; }
-        
+
         [Required(ErrorMessage = "Participant id is required")]
         public Guid ParticipantId { get; init; }
     }
@@ -44,7 +44,7 @@ namespace Shared
     }
 
     public record LeaderboardForCreationDto : LeaderboardForManipulationDto;
-    
+
     public record LeaderboardForUpdateDto : LeaderboardForManipulationDto;
 
     public record ParticipantDto(Guid Id, string Name, int Age, string Position);
@@ -67,25 +67,29 @@ namespace Shared
 
     public record ParticipantForUpdateDto : ParticipantForManipulationDto;
 
-    
+
     // AUTH =====================================================================
     public record UserForRegistrationDto
     {
         public string? FirstName { get; init; }
         public string? LastName { get; init; }
+
         [Required(ErrorMessage = "Username is required")]
         public string? UserName { get; init; }
+
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; init; }
+
         public string? Email { get; init; }
         public string? PhoneNumber { get; init; }
         public ICollection<string>? Roles { get; init; }
     }
-    
+
     public record UserForAuthenticationDto
     {
         [Required(ErrorMessage = "User name is required")]
         public string? UserName { get; init; }
+
         [Required(ErrorMessage = "Password name is required")]
         public string? Password { get; init; }
     }

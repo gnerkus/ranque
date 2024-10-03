@@ -7,7 +7,7 @@ namespace Presentation.Controllers
 {
     [Route("api/token")]
     [ApiController]
-    public class TokenController: ControllerBase
+    public class TokenController : ControllerBase
     {
         private readonly IServiceManager _service;
 

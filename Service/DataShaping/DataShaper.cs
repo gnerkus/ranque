@@ -35,7 +35,7 @@ namespace Service.DataShaping
                 var objectPropertyValue = property.GetValue(entity);
                 shapedObject.Entity.TryAdd(property.Name, objectPropertyValue);
             }
-            
+
             var objectProperty = entity.GetType().GetProperty("Id");
             shapedObject.Id = (Guid)objectProperty.GetValue(entity);
 

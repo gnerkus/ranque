@@ -88,26 +88,28 @@ namespace Presentation.Controllers
             await _service.OrganizationService.DeleteOrganizationAsync(id, false);
             return NoContent();
         }
-        
+
         //============== LEADERBOARDS =============================================
 
         [HttpGet("{orgId:guid}/leaderboards")]
         [HttpHead]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
-        public async Task<IActionResult> GetLeaderboardsForOrganization(Guid orgId, [FromBody] 
-            LeaderboardParameters parameters)
+        public async Task<IActionResult> GetLeaderboardsForOrganization(Guid orgId,
+            [FromBody] LeaderboardParameters parameters)
         {
             var linkParams = new LeaderboardLinkParams(parameters, HttpContext);
 
             var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(orgId,
                 linkParams, false);
-            
+
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
 
-            return pagedResult.linkResponse.HasLinks ? Ok(pagedResult.linkResponse
-                .LinkedEntities) : Ok(pagedResult.linkResponse.ShapedEntities);
+            return pagedResult.linkResponse.HasLinks
+                ? Ok(pagedResult.linkResponse
+                    .LinkedEntities)
+                : Ok(pagedResult.linkResponse.ShapedEntities);
         }
-        
+
         [HttpGet("{orgId:guid}/leaderboards/{id:guid}", Name = "GetLeaderboardForOrg")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetLeaderboardForOrganization(Guid orgId, Guid id)
@@ -117,12 +119,13 @@ namespace Presentation.Controllers
 
             return Ok(leaderboard);
         }
-        
+
         [HttpPost("{orgId:guid}/leaderboards")]
         public async Task<IActionResult> CreateLeaderboardForOrg(Guid orgId,
             [FromBody] LeaderboardForCreationDto leaderboardForCreationDto)
         {
-            if (leaderboardForCreationDto is null) return BadRequest("Leaderboard creation request body is null");
+            if (leaderboardForCreationDto is null)
+                return BadRequest("Leaderboard creation request body is null");
 
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
@@ -133,7 +136,7 @@ namespace Presentation.Controllers
             return CreatedAtRoute("GetLeaderboardForOrg", new { orgId, id = leaderboard.Id },
                 leaderboard);
         }
-        
+
         [HttpPut("{orgId:guid}/leaderboards/{leaderboardId:guid}")]
         public async Task<IActionResult> UpdateLeaderboardForOrg(Guid orgId, Guid leaderboardId,
             [FromBody] LeaderboardForUpdateDto leaderboardForUpdateDto)
@@ -148,7 +151,7 @@ namespace Presentation.Controllers
 
             return NoContent();
         }
-        
+
         [HttpPatch("{orgId:guid}/leaderboards/{id:guid}")]
         public async Task<IActionResult> PartiallyUpdateLeaderboardForOrg(Guid orgId, Guid id,
             [FromBody] JsonPatchDocument<LeaderboardForUpdateDto> patchDoc)
@@ -169,16 +172,16 @@ namespace Presentation.Controllers
                 result.leaderboard);
             return NoContent();
         }
-        
+
         [HttpDelete("{orgId:guid}/leaderboards/{id:guid}")]
         public async Task<IActionResult> DeleteLeaderboardForOrg(Guid orgId, Guid id)
         {
             await _service.LeaderboardService.DeleteLeaderboardForOrgAsync(orgId, id, false);
             return NoContent();
         }
-        
+
         // ================ PARTICIPANTS =====================================
-        
+
         [HttpGet("{orgId:guid}/participants")]
         [HttpHead]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
@@ -186,15 +189,17 @@ namespace Presentation.Controllers
             [FromQuery] ParticipantParameters parameters)
         {
             var linkParams = new LinkParameters(parameters, HttpContext);
-            
+
             var pagedResult = await _service.ParticipantService.GetParticipantsAsync(orgId,
                 linkParams,
                 false);
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
 
-            return pagedResult.linkResponse.HasLinks ? Ok(pagedResult.linkResponse
-            .LinkedEntities) : Ok(pagedResult.linkResponse.ShapedEntities);
+            return pagedResult.linkResponse.HasLinks
+                ? Ok(pagedResult.linkResponse
+                    .LinkedEntities)
+                : Ok(pagedResult.linkResponse.ShapedEntities);
         }
 
         [HttpGet("{orgId:guid}/participants/{id:guid}", Name = "GetParticipantForOrg")]
@@ -264,7 +269,7 @@ namespace Presentation.Controllers
             await _service.ParticipantService.DeleteParticipantForOrgAsync(orgId, id, false);
             return NoContent();
         }
-        
+
         //================== GENERAL ========================================
 
         [HttpOptions]

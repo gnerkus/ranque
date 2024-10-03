@@ -11,8 +11,8 @@ namespace Service
     {
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
-        private readonly IRepositoryManager _repository;
         private readonly IParticipantLinks _participantLinks;
+        private readonly IRepositoryManager _repository;
 
         public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
             mapper, IParticipantLinks participantLinks)
@@ -27,18 +27,20 @@ namespace Service
             GetParticipantsAsync(Guid orgId,
                 LinkParameters parameters, bool trackChanges)
         {
-            if (!parameters.ParticipantParameters.ValidAgeRange) throw new 
-            MaxAgeBadRequestException();
+            if (!parameters.ParticipantParameters.ValidAgeRange)
+                throw new
+                    MaxAgeBadRequestException();
 
             await IsOrgExist(orgId, trackChanges);
 
             var participants =
-                await _repository.Participant.GetParticipantsAsync(orgId, parameters.ParticipantParameters,
+                await _repository.Participant.GetParticipantsAsync(orgId,
+                    parameters.ParticipantParameters,
                     trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
             var links = _participantLinks.TryGenerateLinks(participantDtos, parameters
                 .ParticipantParameters.Fields, orgId, parameters.Context);
-            
+
             return (linkResponse: links, metaData: participants.MetaData);
         }
 
@@ -50,6 +52,14 @@ namespace Service
 
             var participant = _mapper.Map<ParticipantDto>(participantDb);
             return participant;
+        }
+
+        public async Task<IEnumerable<LeaderboardDto>> GetLeaderboardsAsync(Guid participantId, bool trackChanges)
+        {
+            var leaderboards =
+                await _repository.Participant.GetLeaderboardsAsync(participantId, trackChanges);
+
+            return _mapper.Map<IEnumerable<LeaderboardDto>>(leaderboards);
         }
 
         public async Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId,

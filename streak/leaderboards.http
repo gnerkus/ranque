@@ -1,0 +1,13 @@
+﻿### Leaderboard | Get all scores | 200
+### login, get the token then make the query
+
+GET {{ host }}/api/leaderboards/{{leaderboard_01_Id}}scores
+Accept: application/json
+Authorization: Bearer {{token}}
+
+### Leaderboard | Get all participants | 200
+### login, get the token then make the query
+
+GET {{ host }}/api/leaderboards/{{leaderboard_01_Id}}participants
+Accept: application/json
+Authorization: Bearer {{token}}

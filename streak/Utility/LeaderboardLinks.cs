@@ -5,19 +5,20 @@ using Shared;
 
 namespace streak.Utility
 {
-    public class LeaderboardLinks: ILeaderboardLinks
+    public class LeaderboardLinks : ILeaderboardLinks
     {
-        private readonly LinkGenerator _linkGenerator;
         private readonly IDataShaper<LeaderboardDto> _dataShaper;
+        private readonly LinkGenerator _linkGenerator;
 
-        public LeaderboardLinks(LinkGenerator linkGenerator, IDataShaper<LeaderboardDto> 
-        dataShaper)
+        public LeaderboardLinks(LinkGenerator linkGenerator, IDataShaper<LeaderboardDto>
+            dataShaper)
         {
             _linkGenerator = linkGenerator;
             _dataShaper = dataShaper;
         }
-        
-        public LinkResponse TryGenerateLinks(IEnumerable<LeaderboardDto> leaderboardsDto, string fields, Guid orgId,
+
+        public LinkResponse TryGenerateLinks(IEnumerable<LeaderboardDto> leaderboardsDto,
+            string fields, Guid orgId,
             HttpContext httpContext)
         {
             var shapedLeaderboards = ShapeData(leaderboardsDto, fields);
@@ -27,7 +28,8 @@ namespace streak.Utility
             return ReturnShapedLeaderboards(shapedLeaderboards);
         }
 
-        private LinkResponse ReturnLinkedLeaderboards(IEnumerable<LeaderboardDto> leaderboardsDto, string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedLeaderboards)
+        private LinkResponse ReturnLinkedLeaderboards(IEnumerable<LeaderboardDto> leaderboardsDto,
+            string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedLeaderboards)
         {
             var leaderboardDtoList = leaderboardsDto.ToList();
             for (var index = 0; index < leaderboardDtoList.Count(); index++)
@@ -36,66 +38,68 @@ namespace streak.Utility
                     leaderboardDtoList[index].Id, fields);
                 shapedLeaderboards[index].Add("Links", leaderboardLinks);
             }
+
             var leaderboardCollection = new LinkCollectionWrapper<Entity>(shapedLeaderboards);
-            var linkedLeaderboards = CreateLinksForLeaderboards(httpContext, leaderboardCollection);
+            var linkedLeaderboards =
+                CreateLinksForLeaderboards(httpContext, leaderboardCollection);
             return new LinkResponse { HasLinks = true, LinkedEntities = linkedLeaderboards };
         }
 
         private List<Link> CreateLinksForLeaderboard(HttpContext httpContext, Guid orgId, Guid
-         id, string fields = "")
+            id, string fields = "")
         {
             var links = new List<Link>
             {
                 new(
                     _linkGenerator.GetUriByAction(
-                            httpContext, 
+                        httpContext,
                         "GetLeaderboardForOrganization",
-                            controller: "Organizations",
-                            values: new { orgId, id, fields }
-                        ),
-                    "self", 
-                    "GET"
+                        "Organizations",
+                        new { orgId, id, fields }
                     ),
+                    "self",
+                    "GET"
+                ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "DeleteLeaderboardForOrg",
-                        controller: "Organizations",
-                        values: new { orgId, id }
+                        "Organizations",
+                        new { orgId, id }
                     ),
-                    "delete_participant", 
+                    "delete_participant",
                     "DELETE"
                 ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "UpdateLeaderboardForOrg",
-                        controller: "Organizations",
-                        values: new { orgId, id }
+                        "Organizations",
+                        new { orgId, id }
                     ),
-                    "update_participant", 
+                    "update_participant",
                     "PUT"
                 ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "PartiallyUpdateLeaderboardForOrg",
-                        controller: "Organizations",
-                        values: new { orgId, id }
+                        "Organizations",
+                        new { orgId, id }
                     ),
-                    "partially_update_participant", 
+                    "partially_update_participant",
                     "PATCH"
                 )
             };
 
             return links;
         }
-        
+
         private LinkCollectionWrapper<Entity> CreateLinksForLeaderboards(HttpContext httpContext,
-         LinkCollectionWrapper<Entity> leaderboardsWrapper)
+            LinkCollectionWrapper<Entity> leaderboardsWrapper)
         {
             leaderboardsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetLeaderboardsForOrganization", controller: "Organizations", values: new { }),
+                    "GetLeaderboardsForOrganization", "Organizations", new { }),
                 "self",
                 "GET"));
             return leaderboardsWrapper;

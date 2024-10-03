@@ -16,11 +16,15 @@ namespace Contracts
 
     public interface ILeaderboardRepository
     {
-        Task<PagedList<Leaderboard>> GetAllLeaderboardsAsync(Guid orgId, LeaderboardParameters parameters,
+        Task<PagedList<Leaderboard>> GetAllLeaderboardsAsync(Guid orgId,
+            LeaderboardParameters parameters,
             bool trackChanges);
-        Task<Leaderboard?> GetLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
-        
+
+        Task<Leaderboard?> GetLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId,
+            bool trackChanges);
+
         Task<Leaderboard?> GetLeaderboardAsync(Guid leaderboardId, bool trackChanges);
+        Task<IEnumerable<Participant>> GetParticipantsAsync(Guid leaderboardId, bool trackChanges);
 
         void CreateLeaderboard(Guid orgId, Leaderboard leaderboard);
 
@@ -31,6 +35,15 @@ namespace Contracts
     {
         Task<PagedList<Score>> GetAllScoresAsync(ScoreParameters parameters,
             bool trackChanges);
+
+        Task<PagedList<Score>> GetParticipantScoresAsync(Guid participantId,
+            ScoreParameters parameters, bool
+                trackChanges);
+
+        Task<PagedList<Score>> GetLeaderboardScoresAsync(Guid leaderboardId, ScoreParameters
+            parameters, bool
+            trackChanges);
+
         Task<Score?> GetScoreAsync(Guid scoreId, bool trackChanges);
         void CreateScore(Guid leaderboardId, Guid participantId, Score score);
 
@@ -43,9 +56,13 @@ namespace Contracts
             ParticipantParameters parameters,
             bool trackChanges);
 
-        Task<Participant?> GetParticipantForOrgAsync(Guid orgId, Guid participantId, bool trackChanges);
+        Task<Participant?> GetParticipantForOrgAsync(Guid orgId, Guid participantId,
+            bool trackChanges);
+
         Task<Participant?> GetParticipantAsync(Guid participantId, bool trackChanges);
 
+        Task<IEnumerable<Leaderboard>> GetLeaderboardsAsync(Guid participantId, bool trackChanges);
+        
         void CreateParticipant(Guid orgId, Participant participant);
 
         void DeleteParticipant(Participant participant);

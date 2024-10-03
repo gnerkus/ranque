@@ -5,8 +5,8 @@ using Contracts;
 using Entities;
 using Entities.Models;
 using LoggerService;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -159,16 +159,12 @@ namespace streak.Extensions
 
                     if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var
                             retryAfter))
-                    {
                         await context.HttpContext.Response.WriteAsync(
                             $"Too many requests. Please try again after {retryAfter.TotalSeconds} second(s).",
                             token);
-                    }
                     else
-                    {
                         await context.HttpContext.Response.WriteAsync(
                             "Too many requests. Please try again later", token);
-                    }
                 };
             });
         }
@@ -178,7 +174,7 @@ namespace streak.Extensions
         {
             var jwtConfig = new JwtConfiguration();
             configuration.Bind(jwtConfig.Section, jwtConfig);
-            
+
             var secretKey = Environment.GetEnvironmentVariable("RANQUE_SECRET");
             services.AddAuthentication(opt =>
                 {
@@ -195,14 +191,16 @@ namespace streak.Extensions
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = jwtConfig.ValidIssuer,
                         ValidAudience = jwtConfig.ValidAudience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                     };
                 });
-
         }
 
         public static void AddJwtConfiguration(this IServiceCollection services, IConfiguration
-            config) =>
+            config)
+        {
             services.Configure<JwtConfiguration>(config.GetSection("JwtSettings"));
+        }
     }
 }

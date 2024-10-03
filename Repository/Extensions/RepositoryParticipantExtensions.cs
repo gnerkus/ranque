@@ -26,7 +26,7 @@ namespace Repository.Extensions
                 return participants.OrderBy(e => e.Name);
 
             var orderQuery = OrderQueryBuilder.CreateOrderByQuery<Participant>(orderByQueryString);
-            
+
             return string.IsNullOrWhiteSpace(orderQuery)
                 ? participants.OrderBy(e => e.Name)
                 : participants.OrderBy(orderQuery);
