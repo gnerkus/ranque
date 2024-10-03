@@ -7,7 +7,7 @@ namespace Presentation.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthenticationController: ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IServiceManager _service;
 
@@ -26,16 +26,14 @@ namespace Presentation.Controllers
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
-                {
                     ModelState.TryAddModelError(error.Code, error.Description);
-                }
 
                 return BadRequest(ModelState);
             }
 
             return StatusCode(201);
         }
-        
+
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto
@@ -45,9 +43,8 @@ namespace Presentation.Controllers
                 return Unauthorized();
 
             var tokenDto = await _service.AuthenticationService.CreateToken(true);
-            
+
             return Ok(tokenDto);
         }
-
     }
 }

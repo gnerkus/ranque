@@ -9,16 +9,17 @@ namespace Service
 {
     public sealed class ServiceManager : IServiceManager
     {
+        private readonly Lazy<IAuthenticationService> _authenticationService;
         private readonly Lazy<ILeaderboardService> _leaderboardService;
         private readonly Lazy<IOrganizationService> _orgService;
         private readonly Lazy<IParticipantService> _participantService;
         private readonly Lazy<IScoreService> _scoreService;
-        private readonly Lazy<IAuthenticationService> _authenticationService;
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
-            loggerManager, IMapper mapper, IParticipantLinks participantLinks, UserManager<User>
-             userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks, 
-             ILeaderboardLinks leaderboardLinks)
+                loggerManager, IMapper mapper, IParticipantLinks participantLinks,
+            UserManager<User>
+                userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks,
+            ILeaderboardLinks leaderboardLinks)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, loggerManager, mapper));

@@ -5,18 +5,20 @@ using Shared;
 
 namespace streak.Utility
 {
-    public class ParticipantLinks: IParticipantLinks
+    public class ParticipantLinks : IParticipantLinks
     {
-        private readonly LinkGenerator _linkGenerator;
         private readonly IDataShaper<ParticipantDto> _dataShaper;
+        private readonly LinkGenerator _linkGenerator;
 
-        public ParticipantLinks(LinkGenerator linkGenerator, IDataShaper<ParticipantDto> dataShaper)
+        public ParticipantLinks(LinkGenerator linkGenerator,
+            IDataShaper<ParticipantDto> dataShaper)
         {
             _linkGenerator = linkGenerator;
             _dataShaper = dataShaper;
         }
-        
-        public LinkResponse TryGenerateLinks(IEnumerable<ParticipantDto> participantsDto, string fields, Guid orgId,
+
+        public LinkResponse TryGenerateLinks(IEnumerable<ParticipantDto> participantsDto,
+            string fields, Guid orgId,
             HttpContext httpContext)
         {
             var shapedParticipants = ShapeData(participantsDto, fields);
@@ -26,7 +28,8 @@ namespace streak.Utility
             return ReturnShapedParticipants(shapedParticipants);
         }
 
-        private LinkResponse ReturnLinkedParticipants(IEnumerable<ParticipantDto> participantsDto, string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedParticipants)
+        private LinkResponse ReturnLinkedParticipants(IEnumerable<ParticipantDto> participantsDto,
+            string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedParticipants)
         {
             var participantDtoList = participantsDto.ToList();
             for (var index = 0; index < participantDtoList.Count(); index++)
@@ -35,66 +38,68 @@ namespace streak.Utility
                     participantDtoList[index].Id, fields);
                 shapedParticipants[index].Add("Links", participantLinks);
             }
+
             var participantCollection = new LinkCollectionWrapper<Entity>(shapedParticipants);
-            var linkedParticipants = CreateLinksForParticipants(httpContext, participantCollection);
+            var linkedParticipants =
+                CreateLinksForParticipants(httpContext, participantCollection);
             return new LinkResponse { HasLinks = true, LinkedEntities = linkedParticipants };
         }
 
         private List<Link> CreateLinksForParticipant(HttpContext httpContext, Guid orgId, Guid
-         id, string fields = "")
+            id, string fields = "")
         {
             var links = new List<Link>
             {
                 new(
                     _linkGenerator.GetUriByAction(
-                            httpContext, 
+                        httpContext,
                         "GetParticipantForOrganization",
-                            controller: "Organizations",
-                            values: new { orgId, id, fields }
-                        ),
-                    "self", 
-                    "GET"
+                        "Organizations",
+                        new { orgId, id, fields }
                     ),
+                    "self",
+                    "GET"
+                ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "DeleteParticipantForOrg",
-                        controller: "Organizations",
-                        values: new { orgId, id }
+                        "Organizations",
+                        new { orgId, id }
                     ),
-                    "delete_participant", 
+                    "delete_participant",
                     "DELETE"
                 ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "UpdateParticipantForOrg",
-                        controller: "Organizations",
-                        values: new { orgId, id }
+                        "Organizations",
+                        new { orgId, id }
                     ),
-                    "update_participant", 
+                    "update_participant",
                     "PUT"
                 ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "PartiallyUpdateParticipantForOrg",
-                        controller: "Organizations",
-                        values: new { orgId, id }
+                        "Organizations",
+                        new { orgId, id }
                     ),
-                    "partially_update_participant", 
+                    "partially_update_participant",
                     "PATCH"
                 )
             };
 
             return links;
         }
-        
+
         private LinkCollectionWrapper<Entity> CreateLinksForParticipants(HttpContext httpContext,
-         LinkCollectionWrapper<Entity> participantsWrapper)
+            LinkCollectionWrapper<Entity> participantsWrapper)
         {
             participantsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetParticipantsForOrganization", controller: "Organizations", values: new { }),
+                    "GetParticipantsForOrganization", "Organizations", new { }),
                 "self",
                 "GET"));
             return participantsWrapper;

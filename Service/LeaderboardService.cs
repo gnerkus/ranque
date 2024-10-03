@@ -9,10 +9,10 @@ namespace Service
 {
     internal sealed class LeaderboardService : ILeaderboardService
     {
+        private readonly ILeaderboardLinks _leaderboardLinks;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
-        private readonly ILeaderboardLinks _leaderboardLinks;
 
         public LeaderboardService(IRepositoryManager repository, ILoggerManager logger,
             IMapper mapper, ILeaderboardLinks leaderboardLinks)
@@ -24,21 +24,23 @@ namespace Service
         }
 
         public async Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
-        (Guid orgId, LeaderboardLinkParams parameters, bool trackChanges)
+            (Guid orgId, LeaderboardLinkParams parameters, bool trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
 
             var leaderboards =
-                await _repository.Leaderboard.GetAllLeaderboardsAsync(orgId, parameters.LeaderboardParameters,
+                await _repository.Leaderboard.GetAllLeaderboardsAsync(orgId,
+                    parameters.LeaderboardParameters,
                     trackChanges);
             var leaderboardDtos = _mapper.Map<IEnumerable<LeaderboardDto>>(leaderboards);
             var links = _leaderboardLinks.TryGenerateLinks(leaderboardDtos, parameters
                 .LeaderboardParameters.Fields, orgId, parameters.Context);
-            
+
             return (linkResponse: links, metaData: leaderboards.MetaData);
         }
 
-        public async Task<LeaderboardDto> GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges)
+        public async Task<LeaderboardDto> GetLeaderboardAsync(Guid orgId, Guid leaderboardId,
+            bool trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
 
@@ -49,7 +51,8 @@ namespace Service
             return leaderboard;
         }
 
-        public async Task<LeaderboardDto> CreateLeaderboardForOrgAsync(Guid orgId, LeaderboardForCreationDto leaderboardForCreationDto,
+        public async Task<LeaderboardDto> CreateLeaderboardForOrgAsync(Guid orgId,
+            LeaderboardForCreationDto leaderboardForCreationDto,
             bool trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
@@ -61,7 +64,8 @@ namespace Service
             return _mapper.Map<LeaderboardDto>(leaderboard);
         }
 
-        public async Task DeleteLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, bool trackChanges)
+        public async Task DeleteLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId,
+            bool trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
 
@@ -83,8 +87,9 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task<(LeaderboardForUpdateDto leaderboardToPatch, Leaderboard leaderboard)> GetLeaderboardForPatchAsync(Guid orgId, Guid leaderboardId, bool orgTrackChanges,
-            bool leaderboardTrackChanges)
+        public async Task<(LeaderboardForUpdateDto leaderboardToPatch, Leaderboard leaderboard)>
+            GetLeaderboardForPatchAsync(Guid orgId, Guid leaderboardId, bool orgTrackChanges,
+                bool leaderboardTrackChanges)
         {
             await IsOrgExist(orgId, orgTrackChanges);
 
@@ -96,12 +101,13 @@ namespace Service
             return (leaderboardToPatch, leaderboardDb);
         }
 
-        public async Task SaveChangesForPatchAsync(LeaderboardForUpdateDto leaderboardToPatch, Leaderboard leaderboard)
+        public async Task SaveChangesForPatchAsync(LeaderboardForUpdateDto leaderboardToPatch,
+            Leaderboard leaderboard)
         {
             _mapper.Map(leaderboardToPatch, leaderboard);
             await _repository.SaveAsync();
         }
-        
+
         private async Task IsOrgExist(Guid orgId, bool trackChanges)
         {
             var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);

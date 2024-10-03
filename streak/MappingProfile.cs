@@ -17,7 +17,7 @@ namespace streak
 
             // participant
             CreateMap<Participant, ParticipantDto>();
-            
+
             // score
             CreateMap<Score, ScoreDto>();
 
@@ -30,10 +30,10 @@ namespace streak
             // participant
             CreateMap<ParticipantForCreationDto, Participant>();
             CreateMap<ParticipantForUpdateDto, Participant>().ReverseMap();
-            
+
             // score
             CreateMap<ScoreForManipulationDto, Score>();
-            
+
             // user
             CreateMap<UserForRegistrationDto, User>();
         }

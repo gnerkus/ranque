@@ -39,10 +39,10 @@
             OrderBy = "value";
         }
 
-        public Guid ParticipantId { get; set; }
-        public Guid LeaderboardId { get; set; }
+        public Guid? ParticipantId { get; } = Guid.Empty;
+        public Guid? LeaderboardId { get; } = Guid.Empty;
     }
-    
+
     public class LeaderboardParameters : RequestParameters
     {
         public LeaderboardParameters()

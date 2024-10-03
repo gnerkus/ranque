@@ -7,30 +7,31 @@ using Shared;
 
 namespace Service
 {
-    public class ScoreService: IScoreService
+    public class ScoreService : IScoreService
     {
-        private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
+        private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
 
-        public ScoreService(IRepositoryManager repository, ILoggerManager logger, IMapper 
-        mapper, IScoreLinks scoreLinks)
+        public ScoreService(IRepositoryManager repository, ILoggerManager logger, IMapper
+            mapper, IScoreLinks scoreLinks)
         {
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
             _scoreLinks = scoreLinks;
         }
-        
-        public async Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync(ScoreLinkParams parameters, bool trackChanges)
+
+        public async Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync(
+            ScoreLinkParams parameters, bool trackChanges)
         {
-            var scores = await _repository.Score.GetAllScoresAsync(parameters.ScoreParameters, 
-            trackChanges);
+            var scores = await _repository.Score.GetAllScoresAsync(parameters.ScoreParameters,
+                trackChanges);
             var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
             var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
                 .Fields, parameters.Context);
-            
+
             return (linkResponse: links, metaData: scores.MetaData);
         }
 
@@ -41,7 +42,37 @@ namespace Service
             return score;
         }
 
-        public async Task<bool> CheckScoreOrg(Guid leaderboardId, Guid participantId, bool trackChanges)
+        public async Task<(LinkResponse linkResponse, MetaData metaData)>
+            GetParticipantScoresAsync(Guid participantId, ScoreLinkParams parameters,
+                bool trackChanges)
+        {
+            var scores = await _repository.Score.GetParticipantScoresAsync(participantId,
+                parameters.ScoreParameters,
+                trackChanges);
+            var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
+            var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
+                .Fields, parameters.Context);
+
+            return (linkResponse: links, metaData: scores.MetaData);
+        }
+
+        public async Task<(LinkResponse linkResponse, MetaData metaData)>
+            GetLeaderboardScoresAsync(Guid leaderboardId, ScoreLinkParams parameters,
+                bool trackChanges)
+        {
+            var scores = await _repository.Score.GetLeaderboardScoresAsync(leaderboardId,
+                parameters
+                    .ScoreParameters,
+                trackChanges);
+            var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
+            var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
+                .Fields, parameters.Context);
+
+            return (linkResponse: links, metaData: scores.MetaData);
+        }
+
+        public async Task<bool> CheckScoreOrg(Guid leaderboardId, Guid participantId,
+            bool trackChanges)
         {
             var participant = await IsParticipantExist(participantId, trackChanges);
             var leaderboard = await IsLeaderboardExist(leaderboardId, trackChanges);
@@ -66,13 +97,14 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task UpdateScoreAsync(Guid scoreId, ScoreForManipulationDto scoreForUpdateDto, bool trackChanges)
+        public async Task UpdateScoreAsync(Guid scoreId, ScoreForManipulationDto scoreForUpdateDto,
+            bool trackChanges)
         {
             var scoreDb = await IsScoreExist(scoreId, trackChanges);
             _mapper.Map(scoreForUpdateDto, scoreDb);
             await _repository.SaveAsync();
         }
-        
+
         private async Task<Score> IsScoreExist(Guid scoreId,
             bool trackChanges)
         {
@@ -83,18 +115,18 @@ namespace Service
 
             return scoreDb;
         }
-        
+
         private async Task<Participant> IsParticipantExist(Guid participantId, bool trackChanges)
         {
-            var pcpt = await _repository.Participant.GetParticipantAsync(participantId, 
-            trackChanges);
+            var pcpt = await _repository.Participant.GetParticipantAsync(participantId,
+                trackChanges);
             if (pcpt is null) throw new ParticipantNotFoundException(participantId);
             return pcpt;
         }
-        
+
         private async Task<Leaderboard> IsLeaderboardExist(Guid leaderboardId, bool trackChanges)
         {
-            var leaderboard = await _repository.Leaderboard.GetLeaderboardAsync(leaderboardId, 
+            var leaderboard = await _repository.Leaderboard.GetLeaderboardAsync(leaderboardId,
                 trackChanges);
             if (leaderboard is null) throw new LeaderboardNotFoundException(leaderboardId);
             return leaderboard;

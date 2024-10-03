@@ -1,5 +1,5 @@
-﻿using Entities;
-using System.Linq.Dynamic.Core;
+﻿using System.Linq.Dynamic.Core;
+using Entities;
 
 namespace Repository.Extensions
 {

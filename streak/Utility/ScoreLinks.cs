@@ -5,19 +5,19 @@ using Shared;
 
 namespace streak.Utility
 {
-    public class ScoreLinks: IScoreLinks
+    public class ScoreLinks : IScoreLinks
     {
-        private readonly LinkGenerator _linkGenerator;
         private readonly IDataShaper<ScoreDto> _dataShaper;
+        private readonly LinkGenerator _linkGenerator;
 
         public ScoreLinks(LinkGenerator linkGenerator, IDataShaper<ScoreDto> dataShaper)
         {
             _linkGenerator = linkGenerator;
             _dataShaper = dataShaper;
         }
-        
-        public LinkResponse TryGenerateLinks(IEnumerable<ScoreDto> scoresDto, string 
-        fields, HttpContext httpContext)
+
+        public LinkResponse TryGenerateLinks(IEnumerable<ScoreDto> scoresDto, string
+            fields, HttpContext httpContext)
         {
             var shapedScores = ShapeData(scoresDto, fields);
             if (ShouldGenerateLinks(httpContext))
@@ -26,8 +26,8 @@ namespace streak.Utility
             return ReturnShapedScores(shapedScores);
         }
 
-        private LinkResponse ReturnLinkedScores(IEnumerable<ScoreDto> scoresDto, string fields, 
-        HttpContext httpContext, List<Entity> shapedScores)
+        private LinkResponse ReturnLinkedScores(IEnumerable<ScoreDto> scoresDto, string fields,
+            HttpContext httpContext, List<Entity> shapedScores)
         {
             var scoreDtoList = scoresDto.ToList();
             for (var index = 0; index < scoreDtoList.Count(); index++)
@@ -35,56 +35,57 @@ namespace streak.Utility
                 var scoreLinks = CreateLinksForScore(httpContext, scoreDtoList[index].Id, fields);
                 shapedScores[index].Add("Links", scoreLinks);
             }
+
             var scoreCollection = new LinkCollectionWrapper<Entity>(shapedScores);
             var linkedScores = CreateLinksForScores(httpContext, scoreCollection);
             return new LinkResponse { HasLinks = true, LinkedEntities = linkedScores };
         }
 
         private List<Link> CreateLinksForScore(HttpContext httpContext, Guid
-         id, string fields = "")
+            id, string fields = "")
         {
             var links = new List<Link>
             {
                 new(
                     _linkGenerator.GetUriByAction(
-                            httpContext, 
+                        httpContext,
                         "GetScore",
-                            controller: "Score",
-                            values: new { id, fields }
-                        ),
-                    "self", 
-                    "GET"
+                        "Score",
+                        new { id, fields }
                     ),
+                    "self",
+                    "GET"
+                ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "DeleteScore",
-                        controller: "Score",
-                        values: new { id }
+                        "Score",
+                        new { id }
                     ),
-                    "delete_score", 
+                    "delete_score",
                     "DELETE"
                 ),
                 new(
                     _linkGenerator.GetUriByAction(
-                        httpContext, 
+                        httpContext,
                         "UpdateScore",
-                        controller: "Score",
-                        values: new { id }
+                        "Score",
+                        new { id }
                     ),
-                    "update_score", 
+                    "update_score",
                     "PUT"
                 )
             };
 
             return links;
         }
-        
+
         private LinkCollectionWrapper<Entity> CreateLinksForScores(HttpContext httpContext,
-         LinkCollectionWrapper<Entity> scoresWrapper)
+            LinkCollectionWrapper<Entity> scoresWrapper)
         {
             scoresWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetScores", controller: "Score", values: new { }),
+                    "GetScores", "Score", new { }),
                 "self",
                 "GET"));
             return scoresWrapper;

@@ -7,8 +7,8 @@ namespace Repository
         private readonly Lazy<ILeaderboardRepository> _leaderboardRepository;
         private readonly Lazy<IOrganizationRepository> _organizationRepository;
         private readonly Lazy<IParticipantRepository> _participantRepository;
-        private readonly Lazy<IScoreRepository> _scoreRepository;
         private readonly RepositoryContext _repositoryContext;
+        private readonly Lazy<IScoreRepository> _scoreRepository;
 
         public RepositoryManager(RepositoryContext repositoryContext)
         {
