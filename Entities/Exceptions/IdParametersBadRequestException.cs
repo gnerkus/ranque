@@ -15,9 +15,9 @@
         }
     }
 
-    public sealed class OrgCollectionBadRequest : BadRequestException
+    public sealed class OrgCollectionBadRequestException : BadRequestException
     {
-        public OrgCollectionBadRequest() : base("Company collection sent from a client is null.")
+        public OrgCollectionBadRequestException() : base("Company collection sent from a client is null.")
         {
         }
     }
