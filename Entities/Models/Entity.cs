@@ -35,7 +35,7 @@ namespace Entities.Models
 
         public bool TryGetValue(string key, out object value)
         {
-            return _expando.TryGetValue(key, out value);
+            return _expando.TryGetValue(key, out value!);
         }
 
         public ICollection<object> Values => _expando.Values;
@@ -97,14 +97,15 @@ namespace Entities.Models
             while (!reader.Name.Equals(Root))
             {
                 string typeContent;
-                Type underlyingType;
+                Type? underlyingType;
                 var name = reader.Name;
 
                 reader.MoveToAttribute("type");
                 typeContent = reader.ReadContentAsString();
                 underlyingType = Type.GetType(typeContent);
                 reader.MoveToContent();
-                _expando[name] = reader.ReadElementContentAs(underlyingType, null);
+                if (underlyingType != null)
+                    _expando[name] = reader.ReadElementContentAs(underlyingType, null!);
             }
         }
 
