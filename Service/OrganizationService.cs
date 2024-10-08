@@ -78,7 +78,7 @@ namespace Service
             CreateOrgCollectionAsync(
                 IEnumerable<OrgForCreationDto> orgCollection)
         {
-            if (orgCollection is null) throw new OrgCollectionBadRequest();
+            if (orgCollection is null) throw new OrgCollectionBadRequestException();
 
             var dbOrgs = _mapper.Map<IEnumerable<Organization>>(orgCollection);
             foreach (var org in dbOrgs) _repository.Organization.CreateOrganization(org);

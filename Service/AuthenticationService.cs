@@ -78,7 +78,7 @@ namespace Service
             var user = await _userManager.FindByNameAsync(principal.Identity.Name);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
                 user.RefreshTokenExpiryTime <= DateTime.Now)
-                throw new RefreshTokenBadRequest();
+                throw new RefreshTokenBadRequestException();
             _user = user;
             return await CreateToken(false);
         }

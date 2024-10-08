@@ -1,8 +1,8 @@
 ﻿namespace Entities.Exceptions
 {
-    public class RefreshTokenBadRequest : BadRequestException
+    public class RefreshTokenBadRequestException : BadRequestException
     {
-        public RefreshTokenBadRequest() : base(
+        public RefreshTokenBadRequestException() : base(
             "Invalid client request. The tokenDto has some invalid values.")
         {
         }
