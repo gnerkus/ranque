@@ -9,11 +9,11 @@ namespace Entities.Models
     public class Entity : DynamicObject, IXmlSerializable, IDictionary<string, object>
     {
         private readonly IDictionary<string, object> _expando;
-        private readonly string _root = "Entity";
+        private const string Root = "Entity";
 
         public Entity()
         {
-            _expando = new ExpandoObject();
+            _expando = new ExpandoObject()!;
         }
 
         public void Add(string key, object value)
@@ -92,9 +92,9 @@ namespace Entities.Models
 
         public void ReadXml(XmlReader reader)
         {
-            reader.ReadStartElement(_root);
+            reader.ReadStartElement(Root);
 
-            while (!reader.Name.Equals(_root))
+            while (!reader.Name.Equals(Root))
             {
                 string typeContent;
                 Type underlyingType;
