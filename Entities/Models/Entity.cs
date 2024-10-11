@@ -96,13 +96,11 @@ namespace Entities.Models
 
             while (!reader.Name.Equals(Root))
             {
-                string typeContent;
-                Type? underlyingType;
                 var name = reader.Name;
 
                 reader.MoveToAttribute("type");
-                typeContent = reader.ReadContentAsString();
-                underlyingType = Type.GetType(typeContent);
+                var typeContent = reader.ReadContentAsString();
+                var underlyingType = Type.GetType(typeContent);
                 reader.MoveToContent();
                 if (underlyingType != null)
                     _expando[name] = reader.ReadElementContentAs(underlyingType, null!);
@@ -120,37 +118,42 @@ namespace Entities.Models
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (_expando.TryGetValue(binder.Name, out var value))
-            {
-                result = value;
-                return true;
-            }
+            if (!_expando.TryGetValue(binder.Name, out var value))
+                return base.TryGetMember(binder, out result!);
+            result = value;
+            return true;
 
-            return base.TryGetMember(binder, out result);
         }
 
-        public override bool TrySetMember(SetMemberBinder binder, object value)
+        public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            _expando[binder.Name] = value;
+            _expando[binder.Name] = value!;
 
             return true;
         }
 
-        private void WriteLinksToXml(string key, object value, XmlWriter writer)
+        private static void WriteLinksToXml(string key, object value, XmlWriter writer)
         {
             writer.WriteStartElement(key);
 
             if (value.GetType() == typeof(List<Link>))
-                foreach (var val in value as List<Link>)
+            {
+                if (value is List<Link> linkList)
                 {
-                    writer.WriteStartElement(nameof(Link));
-                    WriteLinksToXml(nameof(val.Href), val.Href, writer);
-                    WriteLinksToXml(nameof(val.Method), val.Method, writer);
-                    WriteLinksToXml(nameof(val.Rel), val.Rel, writer);
-                    writer.WriteEndElement();
+                    foreach (var val in linkList)
+                    {
+                        writer.WriteStartElement(nameof(Link));
+                        WriteLinksToXml(nameof(val.Href), val.Href!, writer);
+                        WriteLinksToXml(nameof(val.Method), val.Method!, writer);
+                        WriteLinksToXml(nameof(val.Rel), val.Rel!, writer);
+                        writer.WriteEndElement();
+                    }
                 }
+            }
             else
+            {
                 writer.WriteString(value.ToString());
+            }
 
             writer.WriteEndElement();
         }
