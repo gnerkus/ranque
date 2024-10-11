@@ -2,6 +2,7 @@
 using Contracts;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
 using Shared;
@@ -29,7 +30,8 @@ namespace Presentation.Controllers
             var pagedResult = await _service.ScoreService.GetLeaderboardScoresAsync
                 (leaderboardId, linkParams, false);
 
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult
+            .metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse

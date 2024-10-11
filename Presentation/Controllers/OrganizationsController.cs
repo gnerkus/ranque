@@ -3,6 +3,7 @@ using Asp.Versioning;
 using Contracts;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -72,7 +73,7 @@ namespace Presentation.Controllers
             return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut("{orgId:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto
             orgDto)
@@ -102,7 +103,7 @@ namespace Presentation.Controllers
             var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(orgId,
                 linkParams, false);
 
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse
@@ -194,7 +195,7 @@ namespace Presentation.Controllers
                 linkParams,
                 false);
 
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse
@@ -275,7 +276,7 @@ namespace Presentation.Controllers
         [HttpOptions]
         public IActionResult GetOrgOptions()
         {
-            Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, DELETE");
+            Response.Headers.Append("Allow", "GET, OPTIONS, POST, PUT, DELETE");
 
             return Ok();
         }
