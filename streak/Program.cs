@@ -63,7 +63,7 @@ builder.Services.AddControllers(config =>
     })
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
-    .AddApplicationPart(typeof(AssemblyReference).Assembly);
+    .AddApplicationPart(typeof(IAssemblyReference).Assembly);
 
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();

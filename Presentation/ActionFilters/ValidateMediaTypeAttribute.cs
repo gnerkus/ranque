@@ -17,7 +17,7 @@ namespace Presentation.ActionFilters
             }
 
             var mediaType = context.HttpContext
-                .Request.Headers["Accept"].FirstOrDefault();
+                .Request.Headers.Accept.FirstOrDefault();
             if (!MediaTypeHeaderValue.TryParse(mediaType, out var
                     outMediaType))
             {
