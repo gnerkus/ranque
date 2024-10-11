@@ -1,6 +1,6 @@
 ﻿namespace Presentation
 {
-    public static class AssemblyReference
+    public interface IAssemblyReference
     {
     }
 }
