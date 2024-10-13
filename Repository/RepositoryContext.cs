@@ -16,19 +16,19 @@ namespace Repository
         public DbSet<Score>? Scores { get; set; }
         public DbSet<Leaderboard>? Leaderboards { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Leaderboard>()
+            builder.Entity<Leaderboard>()
                 .HasMany(e => e.Participants)
                 .WithMany(e => e.Leaderboards)
                 .UsingEntity<Score>();
 
-            modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
-            modelBuilder.ApplyConfiguration(new LeaderboardConfiguration());
-            modelBuilder.ApplyConfiguration(new ParticipantConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new OrganizationConfiguration());
+            builder.ApplyConfiguration(new LeaderboardConfiguration());
+            builder.ApplyConfiguration(new ParticipantConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
         }
     }
 }

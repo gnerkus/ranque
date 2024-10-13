@@ -6,6 +6,8 @@ namespace Presentation.ModelBinders
 {
     public class ArrayModelBinder : IModelBinder
     {
+        private static readonly string[] Separator = { "," };
+
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
             if (!bindingContext.ModelMetadata.IsEnumerableType)
@@ -26,7 +28,7 @@ namespace Presentation.ModelBinders
             var genericType =
                 bindingContext.ModelType.GetTypeInfo().GenericTypeArguments[0];
             var converter = TypeDescriptor.GetConverter(genericType);
-            var objectArray = providedValue.Split(new[] { "," },
+            var objectArray = providedValue.Split(Separator,
                     StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => converter.ConvertFromString(x.Trim()))
                 .ToArray();
