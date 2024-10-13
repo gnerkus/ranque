@@ -25,7 +25,7 @@ namespace Service.DataShaping
             return FetchDataForEntity(entity, requiredProperties);
         }
 
-        private ShapedEntity FetchDataForEntity(T entity,
+        private static ShapedEntity FetchDataForEntity(T entity,
             IEnumerable<PropertyInfo> requiredProperties)
         {
             var shapedObject = new ShapedEntity();
@@ -33,7 +33,7 @@ namespace Service.DataShaping
             foreach (var property in requiredProperties)
             {
                 var objectPropertyValue = property.GetValue(entity);
-                shapedObject.Entity.TryAdd(property.Name, objectPropertyValue);
+                shapedObject.Entity.TryAdd(property.Name, objectPropertyValue!);
             }
 
             var objectProperty = entity.GetType().GetProperty("Id");
