@@ -9,7 +9,6 @@ namespace Service
 {
     internal sealed class ParticipantService : IParticipantService
     {
-        private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IParticipantLinks _participantLinks;
         private readonly IRepositoryManager _repository;
@@ -17,7 +16,6 @@ namespace Service
         public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
             mapper, IParticipantLinks participantLinks)
         {
-            _logger = logger;
             _repository = repository;
             _mapper = mapper;
             _participantLinks = participantLinks;
@@ -39,7 +37,7 @@ namespace Service
                     trackChanges);
             var participantDtos = _mapper.Map<IEnumerable<ParticipantDto>>(participants);
             var links = _participantLinks.TryGenerateLinks(participantDtos, parameters
-                .ParticipantParameters.Fields, orgId, parameters.Context);
+                .ParticipantParameters.Fields!, orgId, parameters.Context);
 
             return (linkResponse: links, metaData: participants.MetaData);
         }
