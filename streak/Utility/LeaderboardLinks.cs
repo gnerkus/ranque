@@ -100,7 +100,7 @@ namespace streak.Utility
             LinkCollectionWrapper<Entity> leaderboardsWrapper)
         {
             leaderboardsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetLeaderboardsForOrganization", "Organizations", new { }),
+                    "GetLeaderboardsForOrganization", "Organizations", new { })!,
                 "self",
                 "GET"));
             return leaderboardsWrapper;

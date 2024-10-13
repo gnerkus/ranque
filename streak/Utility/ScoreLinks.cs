@@ -30,7 +30,7 @@ namespace streak.Utility
             HttpContext httpContext, List<Entity> shapedScores)
         {
             var scoreDtoList = scoresDto.ToList();
-            for (var index = 0; index < scoreDtoList.Count(); index++)
+            for (var index = 0; index < scoreDtoList.Count; index++)
             {
                 var scoreLinks = CreateLinksForScore(httpContext, scoreDtoList[index].Id, fields);
                 shapedScores[index].Add("Links", scoreLinks);
@@ -44,15 +44,16 @@ namespace streak.Utility
         private List<Link> CreateLinksForScore(HttpContext httpContext, Guid
             id, string fields = "")
         {
+            const string scoreController = "Score";
             var links = new List<Link>
             {
                 new(
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "GetScore",
-                        "Score",
+                        scoreController,
                         new { id, fields }
-                    ),
+                    )!,
                     "self",
                     "GET"
                 ),
@@ -60,9 +61,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "DeleteScore",
-                        "Score",
+                        scoreController,
                         new { id }
-                    ),
+                    )!,
                     "delete_score",
                     "DELETE"
                 ),
@@ -70,9 +71,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "UpdateScore",
-                        "Score",
+                        scoreController,
                         new { id }
-                    ),
+                    )!,
                     "update_score",
                     "PUT"
                 )
@@ -85,20 +86,25 @@ namespace streak.Utility
             LinkCollectionWrapper<Entity> scoresWrapper)
         {
             scoresWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetScores", "Score", new { }),
+                    "GetScores", "Score", new { })!,
                 "self",
                 "GET"));
             return scoresWrapper;
         }
 
-        private LinkResponse ReturnShapedScores(List<Entity> shapedScores)
+        private static LinkResponse ReturnShapedScores(List<Entity> shapedScores)
         {
             return new LinkResponse { ShapedEntities = shapedScores };
         }
 
-        private bool ShouldGenerateLinks(HttpContext httpContext)
+        private static bool ShouldGenerateLinks(HttpContext httpContext)
         {
-            var mediaType = (MediaTypeHeaderValue)httpContext.Items["AcceptHeaderMediaType"];
+            var acceptMediaType = httpContext.Items["AcceptHeaderMediaType"];
+            if (acceptMediaType is null)
+            {
+                return false;
+            }
+            var mediaType = (MediaTypeHeaderValue)acceptMediaType;
             return mediaType.SubTypeWithoutSuffix.EndsWith("hateoas",
                 StringComparison.InvariantCultureIgnoreCase);
         }
