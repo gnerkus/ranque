@@ -16,7 +16,6 @@ namespace Service
 {
     internal sealed class AuthenticationService : IAuthenticationService
     {
-        private readonly IOptions<JwtConfiguration> _configuration;
         private readonly JwtConfiguration _jwtConfig;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
@@ -29,15 +28,14 @@ namespace Service
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
-            _configuration = configuration;
-            _jwtConfig = _configuration.Value;
+            _jwtConfig = configuration.Value;
         }
 
         public async Task<IdentityResult> RegisterUser(UserForRegistrationDto
             userForRegistrationDto)
         {
             var user = _mapper.Map<User>(userForRegistrationDto);
-            var result = await _userManager.CreateAsync(user, userForRegistrationDto.Password);
+            var result = await _userManager.CreateAsync(user, userForRegistrationDto.Password!);
 
             if (result.Succeeded)
                 await _userManager.AddToRolesAsync(user, userForRegistrationDto.Roles);
@@ -47,10 +45,10 @@ namespace Service
 
         public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
         {
-            _user = await _userManager.FindByEmailAsync(userForAuth.UserName);
+            _user = await _userManager.FindByEmailAsync(userForAuth.UserName!);
 
             var result = _user != null && await _userManager.CheckPasswordAsync(_user,
-                userForAuth.Password);
+                userForAuth.Password ?? string.Empty);
             if (!result)
                 _logger.LogWarn(
                     $"{nameof(ValidateUser)}: Authentication failed. Wrong username or password.");
@@ -62,6 +60,11 @@ namespace Service
             var signingCredentials = GetSigningCredentials();
             var claims = await GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+
+            if (_user == null)
+            {
+                throw new UserNotFoundException();
+            }
 
             var refreshToken = GenerateRefreshToken();
             _user.RefreshToken = refreshToken;
@@ -75,7 +78,11 @@ namespace Service
         public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
         {
             var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
-            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+            if (principal?.Identity == null)
+            {
+                throw new RefreshTokenBadRequestException();
+            }
+            var user = await _userManager.FindByNameAsync(principal.Identity.Name!);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
                 user.RefreshTokenExpiryTime <= DateTime.Now)
                 throw new RefreshTokenBadRequestException();
@@ -101,16 +108,16 @@ namespace Service
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Name, _user.UserName)
+                new(ClaimTypes.Name, _user?.UserName!)
             };
-            var roles = await _userManager.GetRolesAsync(_user);
+            var roles = await _userManager.GetRolesAsync(_user!);
             foreach (var role in roles) claims.Add(new Claim(ClaimTypes.Role, role));
             return claims;
         }
 
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET"));
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET")!);
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
@@ -131,7 +138,7 @@ namespace Service
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET"))),
+                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET")!)),
                 ValidateLifetime = true,
                 ValidIssuer = _jwtConfig.ValidIssuer,
                 ValidAudience = _jwtConfig.ValidAudience
