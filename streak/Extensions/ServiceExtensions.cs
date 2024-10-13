@@ -70,7 +70,7 @@ namespace streak.Extensions
             services.Configure<MvcOptions>(config =>
             {
                 var systemTextJsonOutputFormatter = config.OutputFormatters
-                    .OfType<SystemTextJsonOutputFormatter>()?
+                    .OfType<SystemTextJsonOutputFormatter>()
                     .FirstOrDefault();
                 if (systemTextJsonOutputFormatter != null)
                 {
@@ -81,7 +81,7 @@ namespace streak.Extensions
                 }
 
                 var xmlOutputFormatter = config.OutputFormatters
-                    .OfType<XmlDataContractSerializerOutputFormatter>()?
+                    .OfType<XmlDataContractSerializerOutputFormatter>()
                     .FirstOrDefault();
                 if (xmlOutputFormatter != null)
                 {
@@ -114,7 +114,7 @@ namespace streak.Extensions
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            var builder = services.AddIdentity<User, IdentityRole>(o =>
+            services.AddIdentity<User, IdentityRole>(o =>
                 {
                     o.Password.RequireDigit = true;
                     o.Password.RequireLowercase = false;
