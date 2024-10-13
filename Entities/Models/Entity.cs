@@ -132,27 +132,27 @@ namespace Entities.Models
             return true;
         }
 
-        private static void WriteLinksToXml(string key, object value, XmlWriter writer)
+        private static void WriteLinksToXml(string key, object? value, XmlWriter writer)
         {
             writer.WriteStartElement(key);
 
-            if (value.GetType() == typeof(List<Link>))
+            if (value is not null)
             {
                 if (value is List<Link> linkList)
                 {
-                    foreach (var val in linkList)
-                    {
-                        writer.WriteStartElement(nameof(Link));
-                        WriteLinksToXml(nameof(val.Href), val.Href!, writer);
-                        WriteLinksToXml(nameof(val.Method), val.Method!, writer);
-                        WriteLinksToXml(nameof(val.Rel), val.Rel!, writer);
-                        writer.WriteEndElement();
-                    }
+                        foreach (var val in linkList)
+                        {
+                            writer.WriteStartElement(nameof(Link));
+                            WriteLinksToXml(nameof(val.Href), val.Href, writer);
+                            WriteLinksToXml(nameof(val.Method), val.Method, writer);
+                            WriteLinksToXml(nameof(val.Rel), val.Rel, writer);
+                            writer.WriteEndElement();
+                        }
                 }
-            }
-            else
-            {
-                writer.WriteString(value.ToString());
+                else
+                {
+                    writer.WriteString(value.ToString());
+                }
             }
 
             writer.WriteEndElement();

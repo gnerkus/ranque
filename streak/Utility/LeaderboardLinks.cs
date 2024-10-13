@@ -32,7 +32,7 @@ namespace streak.Utility
             string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedLeaderboards)
         {
             var leaderboardDtoList = leaderboardsDto.ToList();
-            for (var index = 0; index < leaderboardDtoList.Count(); index++)
+            for (var index = 0; index < leaderboardDtoList.Count; index++)
             {
                 var leaderboardLinks = CreateLinksForLeaderboard(httpContext, orgId,
                     leaderboardDtoList[index].Id, fields);
@@ -48,15 +48,16 @@ namespace streak.Utility
         private List<Link> CreateLinksForLeaderboard(HttpContext httpContext, Guid orgId, Guid
             id, string fields = "")
         {
+            const string orgController = "Organizations";
             var links = new List<Link>
             {
                 new(
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "GetLeaderboardForOrganization",
-                        "Organizations",
+                        orgController,
                         new { orgId, id, fields }
-                    ),
+                    )!,
                     "self",
                     "GET"
                 ),
@@ -64,9 +65,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "DeleteLeaderboardForOrg",
-                        "Organizations",
+                        orgController,
                         new { orgId, id }
-                    ),
+                    )!,
                     "delete_participant",
                     "DELETE"
                 ),
@@ -74,9 +75,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "UpdateLeaderboardForOrg",
-                        "Organizations",
+                        orgController,
                         new { orgId, id }
-                    ),
+                    )!,
                     "update_participant",
                     "PUT"
                 ),
@@ -84,9 +85,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "PartiallyUpdateLeaderboardForOrg",
-                        "Organizations",
+                        orgController,
                         new { orgId, id }
-                    ),
+                    )!,
                     "partially_update_participant",
                     "PATCH"
                 )
@@ -99,20 +100,25 @@ namespace streak.Utility
             LinkCollectionWrapper<Entity> leaderboardsWrapper)
         {
             leaderboardsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetLeaderboardsForOrganization", "Organizations", new { }),
+                    "GetLeaderboardsForOrganization", "Organizations", new { })!,
                 "self",
                 "GET"));
             return leaderboardsWrapper;
         }
 
-        private LinkResponse ReturnShapedLeaderboards(List<Entity> shapedLeaderboards)
+        private static LinkResponse ReturnShapedLeaderboards(List<Entity> shapedLeaderboards)
         {
             return new LinkResponse { ShapedEntities = shapedLeaderboards };
         }
 
-        private bool ShouldGenerateLinks(HttpContext httpContext)
+        private static bool ShouldGenerateLinks(HttpContext httpContext)
         {
-            var mediaType = (MediaTypeHeaderValue)httpContext.Items["AcceptHeaderMediaType"];
+            var acceptMediaType = httpContext.Items["AcceptHeaderMediaType"];
+            if (acceptMediaType is null)
+            {
+                return false;
+            }
+            var mediaType = (MediaTypeHeaderValue)acceptMediaType;
             return mediaType.SubTypeWithoutSuffix.EndsWith("hateoas",
                 StringComparison.InvariantCultureIgnoreCase);
         }

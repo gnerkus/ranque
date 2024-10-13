@@ -32,7 +32,7 @@ namespace streak.Utility
             string fields, Guid orgId, HttpContext httpContext, List<Entity> shapedParticipants)
         {
             var participantDtoList = participantsDto.ToList();
-            for (var index = 0; index < participantDtoList.Count(); index++)
+            for (var index = 0; index < participantDtoList.Count; index++)
             {
                 var participantLinks = CreateLinksForParticipant(httpContext, orgId,
                     participantDtoList[index].Id, fields);
@@ -48,15 +48,16 @@ namespace streak.Utility
         private List<Link> CreateLinksForParticipant(HttpContext httpContext, Guid orgId, Guid
             id, string fields = "")
         {
+            const string orgController = "Organizations";
             var links = new List<Link>
             {
                 new(
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "GetParticipantForOrganization",
-                        "Organizations",
+                        orgController,
                         new { orgId, id, fields }
-                    ),
+                    )!,
                     "self",
                     "GET"
                 ),
@@ -64,9 +65,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "DeleteParticipantForOrg",
-                        "Organizations",
+                        orgController,
                         new { orgId, id }
-                    ),
+                    )!,
                     "delete_participant",
                     "DELETE"
                 ),
@@ -74,9 +75,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "UpdateParticipantForOrg",
-                        "Organizations",
+                        orgController,
                         new { orgId, id }
-                    ),
+                    )!,
                     "update_participant",
                     "PUT"
                 ),
@@ -84,9 +85,9 @@ namespace streak.Utility
                     _linkGenerator.GetUriByAction(
                         httpContext,
                         "PartiallyUpdateParticipantForOrg",
-                        "Organizations",
+                        orgController,
                         new { orgId, id }
-                    ),
+                    )!,
                     "partially_update_participant",
                     "PATCH"
                 )
@@ -99,20 +100,25 @@ namespace streak.Utility
             LinkCollectionWrapper<Entity> participantsWrapper)
         {
             participantsWrapper.Links.Add(new Link(_linkGenerator.GetUriByAction(httpContext,
-                    "GetParticipantsForOrganization", "Organizations", new { }),
+                    "GetParticipantsForOrganization", "Organizations", new { })!,
                 "self",
                 "GET"));
             return participantsWrapper;
         }
 
-        private LinkResponse ReturnShapedParticipants(List<Entity> shapedParticipants)
+        private static LinkResponse ReturnShapedParticipants(List<Entity> shapedParticipants)
         {
             return new LinkResponse { ShapedEntities = shapedParticipants };
         }
 
-        private bool ShouldGenerateLinks(HttpContext httpContext)
+        private static bool ShouldGenerateLinks(HttpContext httpContext)
         {
-            var mediaType = (MediaTypeHeaderValue)httpContext.Items["AcceptHeaderMediaType"];
+            var acceptMediaType = httpContext.Items["AcceptHeaderMediaType"];
+            if (acceptMediaType is null)
+            {
+                return false;
+            }
+            var mediaType = (MediaTypeHeaderValue)acceptMediaType;
             return mediaType.SubTypeWithoutSuffix.EndsWith("hateoas",
                 StringComparison.InvariantCultureIgnoreCase);
         }
