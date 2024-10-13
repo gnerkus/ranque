@@ -18,7 +18,7 @@ namespace Repository.Extensions
                 if (string.IsNullOrWhiteSpace(param)) continue;
 
                 var propFromQueryName = param.Split(" ")[0];
-                var objProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals
+                var objProperty = propertyInfos.ToList().Find(pi => pi.Name.Equals
                     (propFromQueryName, StringComparison.InvariantCultureIgnoreCase));
 
                 if (objProperty == null) continue;

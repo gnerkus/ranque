@@ -16,7 +16,7 @@ namespace Repository.Extensions
         {
             return string.IsNullOrWhiteSpace(searchTerm)
                 ? participants
-                : participants.Where(e => e.Name.ToLower().Contains(searchTerm.Trim().ToLower()));
+                : participants.Where(e => e.Name != null && e.Name.Contains(searchTerm.Trim(), StringComparison.CurrentCultureIgnoreCase));
         }
 
         public static IQueryable<Participant> Sort(this IQueryable<Participant> participants,
