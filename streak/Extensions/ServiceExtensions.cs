@@ -192,7 +192,7 @@ namespace streak.Extensions
                         ValidIssuer = jwtConfig.ValidIssuer,
                         ValidAudience = jwtConfig.ValidAudience,
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
                     };
                 });
         }
