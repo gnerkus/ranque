@@ -37,12 +37,16 @@ namespace Service.DataShaping
             }
 
             var objectProperty = entity.GetType().GetProperty("Id");
-            shapedObject.Id = (Guid)objectProperty.GetValue(entity);
+
+            if (objectProperty is not null)
+            {
+                shapedObject.Id = (Guid)objectProperty.GetValue(entity)!;
+            }
 
             return shapedObject;
         }
 
-        private IEnumerable<ShapedEntity> FetchData(IEnumerable<T> entities,
+        private static List<ShapedEntity> FetchData(IEnumerable<T> entities,
             IEnumerable<PropertyInfo> requiredProperties)
         {
             var shapedData = new List<ShapedEntity>();
@@ -55,7 +59,7 @@ namespace Service.DataShaping
             return shapedData;
         }
 
-        private IEnumerable<PropertyInfo> GetRequiredProperties(string fieldsString)
+        private List<PropertyInfo> GetRequiredProperties(string fieldsString)
         {
             var requiredProperties = new List<PropertyInfo>();
             if (!string.IsNullOrWhiteSpace(fieldsString))
@@ -64,9 +68,8 @@ namespace Service.DataShaping
                     StringSplitOptions.RemoveEmptyEntries);
                 foreach (var field in fields)
                 {
-                    var property = Properties
-                        .FirstOrDefault(pi => pi.Name.Equals(field.Trim(),
-                            StringComparison.InvariantCultureIgnoreCase));
+                    var property = Properties.ToList().Find(pi => pi.Name.Equals(field.Trim(),
+                        StringComparison.InvariantCultureIgnoreCase));
                     if (property == null)
                         continue;
                     requiredProperties.Add(property);
