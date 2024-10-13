@@ -9,7 +9,6 @@ namespace Service
 {
     public class ScoreService : IScoreService
     {
-        private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
@@ -18,7 +17,6 @@ namespace Service
             mapper, IScoreLinks scoreLinks)
         {
             _repository = repository;
-            _logger = logger;
             _mapper = mapper;
             _scoreLinks = scoreLinks;
         }
@@ -30,7 +28,7 @@ namespace Service
                 trackChanges);
             var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
             var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
-                .Fields, parameters.Context);
+                .Fields!, parameters.Context);
 
             return (linkResponse: links, metaData: scores.MetaData);
         }
@@ -51,7 +49,7 @@ namespace Service
                 trackChanges);
             var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
             var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
-                .Fields, parameters.Context);
+                .Fields!, parameters.Context);
 
             return (linkResponse: links, metaData: scores.MetaData);
         }
@@ -66,7 +64,7 @@ namespace Service
                 trackChanges);
             var scoreDtos = _mapper.Map<IEnumerable<ScoreDto>>(scores);
             var links = _scoreLinks.TryGenerateLinks(scoreDtos, parameters.ScoreParameters
-                .Fields, parameters.Context);
+                .Fields!, parameters.Context);
 
             return (linkResponse: links, metaData: scores.MetaData);
         }

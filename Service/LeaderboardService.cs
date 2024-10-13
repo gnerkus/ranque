@@ -10,14 +10,12 @@ namespace Service
     internal sealed class LeaderboardService : ILeaderboardService
     {
         private readonly ILeaderboardLinks _leaderboardLinks;
-        private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
         public LeaderboardService(IRepositoryManager repository, ILoggerManager logger,
             IMapper mapper, ILeaderboardLinks leaderboardLinks)
         {
-            _logger = logger;
             _repository = repository;
             _mapper = mapper;
             _leaderboardLinks = leaderboardLinks;
@@ -34,7 +32,7 @@ namespace Service
                     trackChanges);
             var leaderboardDtos = _mapper.Map<IEnumerable<LeaderboardDto>>(leaderboards);
             var links = _leaderboardLinks.TryGenerateLinks(leaderboardDtos, parameters
-                .LeaderboardParameters.Fields, orgId, parameters.Context);
+                .LeaderboardParameters.Fields!, orgId, parameters.Context);
 
             return (linkResponse: links, metaData: leaderboards.MetaData);
         }
