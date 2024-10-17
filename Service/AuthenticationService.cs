@@ -61,10 +61,7 @@ namespace Service
             var claims = await GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
-            if (_user == null)
-            {
-                throw new UserNotFoundException();
-            }
+            if (_user == null) throw new UserNotFoundException();
 
             var refreshToken = GenerateRefreshToken();
             _user.RefreshToken = refreshToken;
@@ -78,10 +75,7 @@ namespace Service
         public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
         {
             var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
-            if (principal?.Identity == null)
-            {
-                throw new RefreshTokenBadRequestException();
-            }
+            if (principal?.Identity == null) throw new RefreshTokenBadRequestException();
             var user = await _userManager.FindByNameAsync(principal.Identity.Name!);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
                 user.RefreshTokenExpiryTime <= DateTime.Now)
@@ -144,7 +138,8 @@ namespace Service
                 ValidAudience = _jwtConfig.ValidAudience
             };
             var tokenHandler = new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters,
+                out var securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null ||
                 !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,

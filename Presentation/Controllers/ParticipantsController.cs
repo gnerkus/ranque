@@ -30,7 +30,8 @@ namespace Presentation.Controllers
             var pagedResult = await _service.ScoreService.GetParticipantScoresAsync
                 (participantId, linkParams, false);
 
-            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination",
+                JsonSerializer.Serialize(pagedResult.metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse

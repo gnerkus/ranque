@@ -8,8 +8,8 @@ namespace Entities.Models
 {
     public class Entity : DynamicObject, IXmlSerializable, IDictionary<string, object>
     {
-        private readonly IDictionary<string, object> _expando;
         private const string Root = "Entity";
+        private readonly IDictionary<string, object> _expando;
 
         public Entity()
         {
@@ -122,7 +122,6 @@ namespace Entities.Models
                 return base.TryGetMember(binder, out result!);
             result = value;
             return true;
-
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object? value)
@@ -139,20 +138,16 @@ namespace Entities.Models
             if (value is not null)
             {
                 if (value is List<Link> linkList)
-                {
-                        foreach (var val in linkList)
-                        {
-                            writer.WriteStartElement(nameof(Link));
-                            WriteLinksToXml(nameof(val.Href), val.Href, writer);
-                            WriteLinksToXml(nameof(val.Method), val.Method, writer);
-                            WriteLinksToXml(nameof(val.Rel), val.Rel, writer);
-                            writer.WriteEndElement();
-                        }
-                }
+                    foreach (var val in linkList)
+                    {
+                        writer.WriteStartElement(nameof(Link));
+                        WriteLinksToXml(nameof(val.Href), val.Href, writer);
+                        WriteLinksToXml(nameof(val.Method), val.Method, writer);
+                        WriteLinksToXml(nameof(val.Rel), val.Rel, writer);
+                        writer.WriteEndElement();
+                    }
                 else
-                {
                     writer.WriteString(value.ToString());
-                }
             }
 
             writer.WriteEndElement();

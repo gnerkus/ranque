@@ -29,7 +29,8 @@ namespace Presentation.Controllers
             var linkParams = new ScoreLinkParams(parameters, HttpContext);
             var pagedResult = await _service.ScoreService.GetAllScoresAsync(linkParams, false);
 
-            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination",
+                JsonSerializer.Serialize(pagedResult.metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse
