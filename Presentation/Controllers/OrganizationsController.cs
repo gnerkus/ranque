@@ -103,7 +103,8 @@ namespace Presentation.Controllers
             var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(orgId,
                 linkParams, false);
 
-            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination",
+                JsonSerializer.Serialize(pagedResult.metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse
@@ -195,7 +196,8 @@ namespace Presentation.Controllers
                 linkParams,
                 false);
 
-            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+            Response.Headers.Append("X-Pagination",
+                JsonSerializer.Serialize(pagedResult.metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse

@@ -100,10 +100,7 @@ namespace streak.Utility
         private static bool ShouldGenerateLinks(HttpContext httpContext)
         {
             var acceptMediaType = httpContext.Items["AcceptHeaderMediaType"];
-            if (acceptMediaType is null)
-            {
-                return false;
-            }
+            if (acceptMediaType is null) return false;
             var mediaType = (MediaTypeHeaderValue)acceptMediaType;
             return mediaType.SubTypeWithoutSuffix.EndsWith("hateoas",
                 StringComparison.InvariantCultureIgnoreCase);

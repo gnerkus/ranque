@@ -52,7 +52,8 @@ namespace Service
             return participant;
         }
 
-        public async Task<IEnumerable<LeaderboardDto>> GetLeaderboardsAsync(Guid participantId, bool trackChanges)
+        public async Task<IEnumerable<LeaderboardDto>> GetLeaderboardsAsync(Guid participantId,
+            bool trackChanges)
         {
             var leaderboards =
                 await _repository.Participant.GetLeaderboardsAsync(participantId, trackChanges);

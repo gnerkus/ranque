@@ -47,7 +47,8 @@ namespace Repository
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid leaderboardId, bool trackChanges)
+        public async Task<IEnumerable<Participant>> GetParticipantsAsync(Guid leaderboardId,
+            bool trackChanges)
         {
             var leaderboard = await FindByCondition(c => c.Id.Equals(leaderboardId),
                     trackChanges)

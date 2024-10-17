@@ -31,14 +31,14 @@ namespace Presentation.Controllers
                 (leaderboardId, linkParams, false);
 
             Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagedResult
-            .metaData));
+                .metaData));
 
             return pagedResult.linkResponse.HasLinks
                 ? Ok(pagedResult.linkResponse
                     .LinkedEntities)
                 : Ok(pagedResult.linkResponse.ShapedEntities);
         }
-        
+
         [HttpGet("participants", Name = "GetParticipants")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetParticipants(Guid leaderboardId)

@@ -1,5 +1,4 @@
-﻿using System.Linq.Dynamic.Core;
-using Contracts;
+﻿using Contracts;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Repository.Extensions;
@@ -50,10 +49,11 @@ namespace Repository
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Leaderboard>> GetLeaderboardsAsync(Guid participantId, bool trackChanges)
+        public async Task<IEnumerable<Leaderboard>> GetLeaderboardsAsync(Guid participantId,
+            bool trackChanges)
         {
             var participant = await FindByCondition(c => c.Id.Equals(participantId),
-                trackChanges)
+                    trackChanges)
                 .Include(p => p.Leaderboards)
                 .SingleOrDefaultAsync();
 

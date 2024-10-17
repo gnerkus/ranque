@@ -39,9 +39,7 @@ namespace Service.DataShaping
             var objectProperty = entity.GetType().GetProperty("Id");
 
             if (objectProperty is not null)
-            {
                 shapedObject.Id = (Guid)objectProperty.GetValue(entity)!;
-            }
 
             return shapedObject;
         }

@@ -27,7 +27,7 @@ namespace streak.ContextFactory
                     b =>
                     {
                         b.EnableRetryOnFailure();
-                        b.MigrationsAssembly("streak");
+                        b.MigrationsAssembly("Core");
                     });
 
             return new RepositoryContext(builder.Options);
