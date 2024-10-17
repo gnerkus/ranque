@@ -1,7 +1,6 @@
-using Entities;
 using Entities.Models;
 
-namespace Core.Test;
+namespace Entities.Test;
 
 public class OrganizationTests
 {
