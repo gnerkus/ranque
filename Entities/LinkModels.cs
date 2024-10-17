@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Shared;
 
-namespace Entities.Models
+namespace Entities
 {
     public class Link
     {

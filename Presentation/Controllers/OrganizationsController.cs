@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Asp.Versioning;
 using Contracts;
-using Entities.Models;
+using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
