@@ -37,6 +37,8 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Build and run tests with Coverlet
+        run: dotnet test  /p:CollectCoverage=true /p:IncludeTestAssembly=true /p:CoverletOutputFormat=opencover
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -45,4 +47,5 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"gnerkus_streak" /o:"nanotome" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.exclusions="**/Migrations/**"
           dotnet build
+          dotnet test --collect:"XPlat Code Coverage" --format opencover
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
