@@ -2,6 +2,7 @@
 using Contracts;
 using Entities;
 using Entities.Exceptions;
+using Entities.Models;
 using Shared;
 
 namespace Service

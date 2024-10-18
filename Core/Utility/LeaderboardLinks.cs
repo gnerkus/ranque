@@ -1,5 +1,5 @@
 ﻿using Contracts;
-using Entities.Models;
+using Entities;
 using Microsoft.Net.Http.Headers;
 using Shared;
 

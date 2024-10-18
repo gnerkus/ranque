@@ -1,4 +1,4 @@
-﻿using Entities.Models;
+﻿using Entities;
 using Microsoft.AspNetCore.Http;
 using Shared;
 

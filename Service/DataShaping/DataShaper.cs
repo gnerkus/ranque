@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Contracts;
-using Entities.Models;
+using Entities;
 
 namespace Service.DataShaping
 {

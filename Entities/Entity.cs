@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Entities.Models
+namespace Entities
 {
     public class Entity : DynamicObject, IXmlSerializable, IDictionary<string, object>
     {

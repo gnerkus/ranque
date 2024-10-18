@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Contracts;
-using Entities.Models;
+using Entities;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace streak.Extensions

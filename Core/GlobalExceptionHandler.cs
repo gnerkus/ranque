@@ -1,6 +1,6 @@
 ﻿using Contracts;
+using Entities;
 using Entities.Exceptions;
-using Entities.Models;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace streak

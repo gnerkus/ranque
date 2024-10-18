@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Contracts;
-using Entities.Models;
+using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

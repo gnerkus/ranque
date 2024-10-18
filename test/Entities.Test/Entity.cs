@@ -1,6 +1,4 @@
-﻿using Entities.Models;
-
-namespace Core.Test;
+﻿namespace Entities.Test;
     
 
 public class EntityTests
