@@ -9,6 +9,8 @@ public class UserTests
     {
         var user = new User();
         Assert.NotNull(user.FirstName);
+        Assert.Equal(user.FirstName, string.Empty);
         Assert.NotNull(user.LastName);
+        Assert.Equal(user.LastName, string.Empty);
     }
 }
