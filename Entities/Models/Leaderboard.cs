@@ -8,7 +8,7 @@ namespace Entities.Models
         [Column("LeaderboardId")] public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Leaderboard name is a required field")]
-        [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters")]
+        [MaxLength(50, ErrorMessage = "Maximum length for the Name is 50 characters")]
         public string? Name { get; set; }
 
         [ForeignKey(nameof(Organization))] public Guid OrganizationId { get; set; }

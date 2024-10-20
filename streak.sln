@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{AEFF0184-A308-439F-ABC3-B88FCB68DBF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities.Test", "test\Entities.Test\Entities.Test.csproj", "{4E7C5128-CA8F-4C18-A9E7-70B4013C8631}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Test", "test\Api.Test\Api.Test.csproj", "{4E7C5128-CA8F-4C18-A9E7-70B4013C8631}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
