@@ -8,7 +8,7 @@ namespace Entities.Models
         [Column("OrganizationId")] public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Organization name is a required field")]
-        [MaxLength(60, ErrorMessage = "Maximum length for the Name is 60 characters")]
+        [MaxLength(50, ErrorMessage = "Maximum length for the Name is 50 characters")]
         public string? Name { get; set; }
 
         [Required(ErrorMessage = "Company address is a required field")]
