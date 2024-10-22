@@ -3,11 +3,11 @@ using FluentAssertions;
 
 namespace Entities.Test;
 
-public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFactory<Program>>
+public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFactory>
 {
-    private readonly ApiTestWebApplicationFactory<Program> _factory;
+    private readonly ApiTestWebApplicationFactory _factory;
 
-    public LeaderboardControllerTests(ApiTestWebApplicationFactory<Program> factory)
+    public LeaderboardControllerTests(ApiTestWebApplicationFactory factory)
     {
         _factory = factory;
     }
@@ -20,9 +20,11 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
         var request = new HttpRequestMessage(new HttpMethod("GET"),
             $"api/leaderboards/{leaderboardId}/participants");
+        request.Headers.Add("Accept", "application/json");
+        
         // Act
         var response = await client.SendAsync(request);
-
+        
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
