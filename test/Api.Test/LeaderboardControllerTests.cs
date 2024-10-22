@@ -17,6 +17,8 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
     {
         // Arrange
         var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
+        
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
         var request = new HttpRequestMessage(new HttpMethod("GET"),
             $"api/leaderboards/{leaderboardId}/participants");
@@ -26,6 +28,6 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         var response = await client.SendAsync(request);
         
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 }
