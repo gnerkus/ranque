@@ -1,19 +1,29 @@
 ﻿using System.Net;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Entities.Test;
 
-public class LeaderboardControllerTests
+public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFactory<Program>>
 {
+    private readonly ApiTestWebApplicationFactory<Program> _factory;
+
+    public LeaderboardControllerTests(ApiTestWebApplicationFactory<Program> factory)
+    {
+        _factory = factory;
+    }
+    
     [Fact]
     public async Task GET_retrieves_participants()
     {
-        await using var app = new WebApplicationFactory<Program>();
-        using var client = app.CreateClient();
-
+        // Arrange
+        var client = _factory.CreateClient();
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
-        var response = await client.GetAsync($"api/leaderboards/{leaderboardId}/participants");
+        var request = new HttpRequestMessage(new HttpMethod("GET"),
+            $"api/leaderboards/{leaderboardId}/participants");
+        // Act
+        var response = await client.SendAsync(request);
+
+        // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }
