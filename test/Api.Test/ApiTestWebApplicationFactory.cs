@@ -25,14 +25,14 @@ public class ApiTestWebApplicationFactory: WebApplicationFactory<Program>, IAsyn
                 services.Remove(dbContextDescriptor);
             }
 
-            // Use SQLite as in-memory database for the tests
             services.AddDbContext<RepositoryContext>((container, options) =>
-            {
-                options.UseSqlServer(MsSqlConnectionString);
-            });
+                {
+                    options.UseSqlServer(MsSqlConnectionString);
+                })
+                .AddSingleton<IStartupFilter>(new AutoAuthorizeStartupFilter());
         });
 
-        builder.UseEnvironment("Development");
+        builder.UseEnvironment("Test");
     }
 
     public async Task InitializeAsync()
