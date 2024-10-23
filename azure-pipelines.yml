@@ -15,6 +15,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.0.x'
+      
   - task: NuGetToolInstaller@1
 
   - task: NuGetCommand@2
@@ -63,3 +68,16 @@ steps:
         az --version
         az account show
         dotnet ef database update --project Core/Core.csproj
+        
+  - task: DotNetCoreCLI@2
+    displayName: 'Run tests'
+    inputs:
+      command: 'test'
+      arguments: '--settings "./tests.runsettings"'
+      publishTestResults: true
+      
+  - task: PublishCodeCoverageResults@2
+    displayName: 'Publish code coverage: Azure DevOps'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Agent.TempDirectory)/**/*cobertura.xml'
