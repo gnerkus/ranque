@@ -14,6 +14,38 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
     }
     
     [Fact]
+    public async Task GET_retrieves_scores()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
+        
+        const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
+        const string participantId = "79e49410-c239-4443-bc96-30a515289c97";
+        
+        var createScoreRequest = new HttpRequestMessage(new HttpMethod("POST"),
+            $"api/scores");
+        createScoreRequest.Content = JsonContent.Create(new
+        {
+            value = 20,
+            leaderboardId,
+            participantId
+        });
+        
+        // Act
+        await client.SendAsync(createScoreRequest);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        var scoreDtos = await client.GetFromJsonAsync<IEnumerable<ScoreDto>>(
+            $"api/leaderboards/{leaderboardId}/scores");
+        
+        // Assert
+        var score = new ScoreDto(new Guid(participantId), 20);
+        scoreDtos.Should().NotBeEmpty()
+            .And.ContainSingle()
+            .And.ContainEquivalentOf(score, options => options.Excluding(o => o.Id));
+    }
+    
+    [Fact]
     public async Task GET_retrieves_participants()
     {
         // Arrange
