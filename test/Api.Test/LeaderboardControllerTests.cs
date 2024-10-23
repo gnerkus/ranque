@@ -19,7 +19,8 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         // Arrange
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
-        
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
         const string participantId = "79e49410-c239-4443-bc96-30a515289c97";
         
@@ -34,7 +35,6 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         
         // Act
         await client.SendAsync(createScoreRequest);
-        client.DefaultRequestHeaders.Add("Accept", "application/json");
         var scoreDtos = await client.GetFromJsonAsync<IEnumerable<ScoreDto>>(
             $"api/leaderboards/{leaderboardId}/scores");
         
@@ -51,7 +51,8 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         // Arrange
         var client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
-        
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
         const string participantId = "79e49410-c239-4443-bc96-30a515289c97";
         
@@ -66,7 +67,6 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         
         // Act
         await client.SendAsync(createScoreRequest);
-        client.DefaultRequestHeaders.Add("Accept", "application/json");
         var participantDtos = await client.GetFromJsonAsync<IEnumerable<ParticipantDto>>(
             $"api/leaderboards/{leaderboardId}/participants");
         
