@@ -1,5 +1,6 @@
-﻿using System.Net;
+﻿using System.Net.Http.Json;
 using FluentAssertions;
+using Shared;
 
 namespace Entities.Test;
 
@@ -20,14 +21,27 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
         
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
-        var request = new HttpRequestMessage(new HttpMethod("GET"),
-            $"api/leaderboards/{leaderboardId}/participants");
-        request.Headers.Add("Accept", "application/json");
+        const string participantId = "79e49410-c239-4443-bc96-30a515289c97";
+        
+        var createScoreRequest = new HttpRequestMessage(new HttpMethod("POST"),
+            $"api/scores");
+        createScoreRequest.Content = JsonContent.Create(new
+        {
+            value = 20,
+            leaderboardId,
+            participantId
+        });
         
         // Act
-        var response = await client.SendAsync(request);
+        await client.SendAsync(createScoreRequest);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        var participantDtos = await client.GetFromJsonAsync<IEnumerable<ParticipantDto>>(
+            $"api/leaderboards/{leaderboardId}/participants");
         
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var participant = new ParticipantDto(new Guid(participantId), "Jane Smith", 28, "Software developer");
+        participantDtos.Should().NotBeEmpty()
+            .And.ContainSingle()
+            .And.ContainEquivalentOf(participant);
     }
 }
