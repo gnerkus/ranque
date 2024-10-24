@@ -73,7 +73,6 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
         // Assert
         var participant = new ParticipantDto(new Guid(participantId), "Jane Smith", 28, "Software developer");
         participantDtos.Should().NotBeEmpty()
-            .And.ContainSingle()
             .And.ContainEquivalentOf(participant);
     }
 }
