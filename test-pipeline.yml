@@ -11,11 +11,11 @@ pool:
 
 steps:
   - task: Bash@3
-      inputs:
-        targetType: "inline"
-        script: 'sh -c "$(curl -fsSL https://get.testcontainers.cloud/bash)"'
-      env:
-        TC_CLOUD_TOKEN: $(TC_CLOUD_TOKEN)
+    inputs:
+      targetType: "inline"
+      script: 'sh -c "$(curl -fsSL https://get.testcontainers.cloud/bash)"'
+    env:
+      TC_CLOUD_TOKEN: $(TC_CLOUD_TOKEN)
         
   - task: UseDotNet@2
     inputs:
