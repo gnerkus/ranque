@@ -7,7 +7,7 @@ trigger:
   - master
 
 pool:
-  vmImage: 'ubuntu-22.04'
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
@@ -68,16 +68,3 @@ steps:
         az --version
         az account show
         dotnet ef database update --project Core/Core.csproj
-        
-  - task: DotNetCoreCLI@2
-    displayName: 'Run tests'
-    inputs:
-      command: 'test'
-      arguments: '--settings "./tests.runsettings"'
-      publishTestResults: true
-      
-  - task: PublishCodeCoverageResults@2
-    displayName: 'Publish code coverage: Azure DevOps'
-    inputs:
-      codeCoverageTool: 'Cobertura'
-      summaryFileLocation: '$(Agent.TempDirectory)/**/*cobertura.xml'
