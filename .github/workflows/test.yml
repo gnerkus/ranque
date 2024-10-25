@@ -27,6 +27,9 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
+        env:
+          RANQUE_SECRET: ${{ secrets.RANQUE_SECRET }}
+          AZURE_SQL_CONNECTIONSTRING: ${{ secrets.AZURE_SQL_CONNECTIONSTRING }}
         run: dotnet test --no-build --settings tests.runsettings
 
       - name: Publish coverage
