@@ -10,6 +10,8 @@ public class ApiTestWebApplicationFactory(DatabaseFixture fixture): WebApplicati
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // builder.UseEnvironment("Test");
+        
         builder.ConfigureServices(services =>
         {
             // Find the existing db context and remove it
@@ -30,7 +32,5 @@ public class ApiTestWebApplicationFactory(DatabaseFixture fixture): WebApplicati
                 })
                 .AddSingleton<IStartupFilter>(new AutoAuthorizeStartupFilter());
         });
-
-        builder.UseEnvironment("Test");
     }
 }
