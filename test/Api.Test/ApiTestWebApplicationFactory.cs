@@ -47,7 +47,7 @@ public class ApiTestWebApplicationFactory: WebApplicationFactory<Program>, IAsyn
             })
             .Options;
         _dbContext = new RepositoryContext(dbContextOptions);
-        await _dbContext.Database.MigrateAsync();
+        _dbContext.Database.Migrate();
     }
 
     public new async Task DisposeAsync()
