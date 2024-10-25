@@ -36,11 +36,13 @@ public class OrganizationControllerTests: IClassFixture<ApiTestWebApplicationFac
         var result = await response.Content.ReadAsStringAsync();
         _output.WriteLine("WRITING RESPONSE CONTENT");
         _output.WriteLine(result);
-        JsonSerializerOptions options = new()
+        JsonSerializerOptions seroptions = new()
         {
             IncludeFields = true,
         };
-        var leaderboardDto = JsonSerializer.Deserialize<LeaderboardDto>(result, options)!;
+        var leaderboardDto = JsonSerializer.Deserialize<LeaderboardDto>(result, seroptions)!;
+        _output.WriteLine("WRITING DTO");
+        _output.WriteLine(leaderboardDto.ToString());
         // end TODO
         
         // Act
