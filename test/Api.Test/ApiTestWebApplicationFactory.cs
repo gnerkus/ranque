@@ -24,6 +24,9 @@ public class ApiTestWebApplicationFactory: WebApplicationFactory<Program>, IAsyn
             {
                 services.Remove(dbContextDescriptor);
             }
+            
+            var ctx = services.SingleOrDefault(d => d.ServiceType == typeof(RepositoryContext));
+            services.Remove(ctx!);
 
             services.AddDbContext<RepositoryContext>((container, options) =>
                 {
