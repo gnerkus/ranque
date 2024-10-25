@@ -3,15 +3,11 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repository;
-using Testcontainers.MsSql;
 
 namespace Entities.Test;
     
-public class ApiTestWebApplicationFactory: WebApplicationFactory<Program>, IAsyncLifetime
+public class ApiTestWebApplicationFactory(DatabaseFixture fixture): WebApplicationFactory<Program>
 {
-    private RepositoryContext _dbContext = default!;
-    private string MsSqlConnectionString => _dbContainer.GetConnectionString();
-    private readonly MsSqlContainer _dbContainer = new MsSqlBuilder().Build();
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -30,39 +26,11 @@ public class ApiTestWebApplicationFactory: WebApplicationFactory<Program>, IAsyn
 
             services.AddDbContext<RepositoryContext>((container, options) =>
                 {
-                    options.UseSqlServer(MsSqlConnectionString);
+                    options.UseSqlServer(fixture.MsSqlConnectionString);
                 })
                 .AddSingleton<IStartupFilter>(new AutoAuthorizeStartupFilter());
         });
 
         builder.UseEnvironment("Test");
-    }
-
-    public async Task InitializeAsync()
-    {
-        await _dbContainer.StartAsync();
-
-        var dbContextOptions = new DbContextOptionsBuilder<RepositoryContext>()
-            .UseSqlServer(MsSqlConnectionString, b =>
-            {
-                b.MigrationsAssembly("Core");
-            })
-            .Options;
-        _dbContext = new RepositoryContext(dbContextOptions);
-        await _dbContext.Database.MigrateAsync();
-    }
-
-    public new async Task DisposeAsync()
-    {
-        if (_dbContext is not null)
-        {
-            await _dbContext.DisposeAsync();
-        }
-
-        if (_dbContainer is not null)
-        {
-            await _dbContainer.StopAsync();
-            await _dbContainer.DisposeAsync();
-        }
     }
 }

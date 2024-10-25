@@ -4,20 +4,15 @@ using Shared;
 
 namespace Entities.Test;
 
-public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFactory>
+[Collection("IntegrationTests")]
+public class LeaderboardControllerTests(
+    ApiTestWebApplicationFactory factory): IClassFixture<ApiTestWebApplicationFactory>
 {
-    private readonly ApiTestWebApplicationFactory _factory;
-
-    public LeaderboardControllerTests(ApiTestWebApplicationFactory factory)
-    {
-        _factory = factory;
-    }
-    
     [Fact]
     public async Task GET_retrieves_scores()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
         client.DefaultRequestHeaders.Add("Accept", "application/json");
 
@@ -49,7 +44,7 @@ public class LeaderboardControllerTests: IClassFixture<ApiTestWebApplicationFact
     public async Task GET_retrieves_participants()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
         client.DefaultRequestHeaders.Add("Accept", "application/json");
 

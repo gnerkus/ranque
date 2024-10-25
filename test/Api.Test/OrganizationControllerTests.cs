@@ -6,23 +6,18 @@ using Xunit.Abstractions;
 
 namespace Entities.Test;
 
-public class OrganizationControllerTests: IClassFixture<ApiTestWebApplicationFactory>
+[Collection("IntegrationTests")]
+public class OrganizationControllerTests(
+    ApiTestWebApplicationFactory factory,
+    ITestOutputHelper
+        output)
+    : IClassFixture<ApiTestWebApplicationFactory>
 {
-    private readonly ApiTestWebApplicationFactory _factory;
-    private readonly ITestOutputHelper _output;
-
-    public OrganizationControllerTests(ApiTestWebApplicationFactory factory, ITestOutputHelper 
-            output)
-    {
-        _factory = factory;
-        _output = output;
-    }
-
     [Fact]
     public async Task GET_retrieve_leaderboard()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add("X-Test-role", "Manager");
         client.DefaultRequestHeaders.Add("Accept", "application/json");
 
@@ -34,15 +29,15 @@ public class OrganizationControllerTests: IClassFixture<ApiTestWebApplicationFac
             $"api/orgs/{orgId}/leaderboards/{leaderboardId}");
         var response = await client.SendAsync(getLeaderboardMessage);
         var result = await response.Content.ReadAsStringAsync();
-        _output.WriteLine("WRITING RESPONSE CONTENT");
-        _output.WriteLine(result);
+        output.WriteLine("WRITING RESPONSE CONTENT");
+        output.WriteLine(result);
         JsonSerializerOptions seroptions = new()
         {
             IncludeFields = true,
         };
         var leaderboardDto = JsonSerializer.Deserialize<LeaderboardDto>(result, seroptions)!;
-        _output.WriteLine("WRITING DTO");
-        _output.WriteLine(leaderboardDto.ToString());
+        output.WriteLine("WRITING DTO");
+        output.WriteLine(leaderboardDto.ToString());
         // end TODO
         
         // Act
