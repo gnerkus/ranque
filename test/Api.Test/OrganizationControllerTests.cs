@@ -25,11 +25,19 @@ public class OrganizationControllerTests(
         const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
         
         // TODO: remove the next 5 lines after inspecting
+        var getLeaderboardsMessage = new HttpRequestMessage(new HttpMethod("GET"),
+            $"api/orgs/{orgId}/leaderboards/");
+        var arrayResponse = await client.SendAsync(getLeaderboardsMessage);
+        var arrayResult = await arrayResponse.Content.ReadAsStringAsync();
+        output.WriteLine("WRITING LEADERBOARDS CONTENT");
+        output.WriteLine(arrayResult);
         var getLeaderboardMessage = new HttpRequestMessage(new HttpMethod("GET"),
             $"api/orgs/{orgId}/leaderboards/{leaderboardId}");
         var response = await client.SendAsync(getLeaderboardMessage);
-        var result = await response.Content.ReadAsStringAsync();
         output.WriteLine("WRITING RESPONSE CONTENT");
+        output.WriteLine(response.ToString());
+        var result = await response.Content.ReadAsStringAsync();
+        output.WriteLine("WRITING RESULT CONTENT");
         output.WriteLine(result);
         JsonSerializerOptions seroptions = new()
         {
