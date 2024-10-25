@@ -10,7 +10,7 @@ public class ApiTestWebApplicationFactory(DatabaseFixture fixture): WebApplicati
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        // builder.UseEnvironment("Test");
+        builder.UseEnvironment("Test");
         
         builder.ConfigureServices(services =>
         {
