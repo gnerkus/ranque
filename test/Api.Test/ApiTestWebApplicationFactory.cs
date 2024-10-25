@@ -42,12 +42,11 @@ public class ApiTestWebApplicationFactory: WebApplicationFactory<Program>, IAsyn
         var dbContextOptions = new DbContextOptionsBuilder<RepositoryContext>()
             .UseSqlServer(MsSqlConnectionString, b =>
             {
-                b.EnableRetryOnFailure();
                 b.MigrationsAssembly("Core");
             })
             .Options;
         _dbContext = new RepositoryContext(dbContextOptions);
-        // await _dbContext.Database.MigrateAsync();
+        await _dbContext.Database.MigrateAsync();
     }
 
     public new async Task DisposeAsync()

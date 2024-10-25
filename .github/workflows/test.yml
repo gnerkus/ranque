@@ -15,6 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
