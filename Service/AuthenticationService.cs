@@ -8,6 +8,7 @@ using Entities;
 using Entities.Exceptions;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Shared;
@@ -17,12 +18,12 @@ namespace Service
     internal sealed class AuthenticationService : IAuthenticationService
     {
         private readonly JwtConfiguration _jwtConfig;
-        private readonly ILoggerManager _logger;
+        private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private User? _user;
 
-        public AuthenticationService(ILoggerManager logger, IMapper mapper, UserManager<User>
+        public AuthenticationService(ILogger logger, IMapper mapper, UserManager<User>
             userManager, IOptions<JwtConfiguration> configuration)
         {
             _logger = logger;
@@ -50,7 +51,7 @@ namespace Service
             var result = _user != null && await _userManager.CheckPasswordAsync(_user,
                 userForAuth.Password ?? string.Empty);
             if (!result)
-                _logger.LogWarn(
+                _logger.LogWarning(
                     $"{nameof(ValidateUser)}: Authentication failed. Wrong username or password.");
             return result;
         }

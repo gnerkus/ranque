@@ -4,7 +4,6 @@ using Asp.Versioning;
 using Contracts;
 using Entities;
 using Entities.Models;
-using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
+using Serilog;
 using Service;
 
 namespace streak.Extensions
@@ -44,9 +44,15 @@ namespace streak.Extensions
             services.Configure<IISOptions>(options => { });
         }
 
-        public static void ConfigureLoggerService(this IServiceCollection services)
+        public static void ConfigureLoggerService(this IServiceCollection services, IConfiguration
+            config)
         {
-            services.AddSingleton<ILoggerManager, LoggerManager>();
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.Console()
+                .CreateBootstrapLogger();
+
+            services.AddSerilog(logger);
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection services)

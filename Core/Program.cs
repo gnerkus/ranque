@@ -14,14 +14,18 @@ using streak.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, loggerConfig) => 
-    loggerConfig.ReadFrom.Configuration(context.Configuration)
+    loggerConfig
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}"
+        )
+        .ReadFrom.Configuration(context.Configuration)
 );
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
-builder.Services.ConfigureLoggerService();
+builder.Services.ConfigureLoggerService(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
@@ -64,6 +68,7 @@ builder.Services.AddControllers(config =>
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(IAssemblyReference).Assembly);
+builder.Services.AddProblemDetails();
 
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();

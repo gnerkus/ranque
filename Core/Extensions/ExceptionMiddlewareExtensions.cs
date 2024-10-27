@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Contracts;
 using Entities;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -7,7 +6,7 @@ namespace streak.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager
+        public static void ConfigureExceptionHandler(this WebApplication app, ILogger
             logger)
         {
             app.UseExceptionHandler(

@@ -1,5 +1,4 @@
-﻿using Contracts;
-using Entities;
+﻿using Entities;
 using Entities.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -7,9 +6,9 @@ namespace streak
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {
-        private readonly ILoggerManager _logger;
+        private readonly ILogger _logger;
 
-        public GlobalExceptionHandler(ILoggerManager logger)
+        public GlobalExceptionHandler(ILogger logger)
         {
             _logger = logger;
         }

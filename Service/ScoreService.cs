@@ -3,6 +3,7 @@ using Contracts;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
@@ -13,7 +14,7 @@ namespace Service
         private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
 
-        public ScoreService(IRepositoryManager repository, ILoggerManager logger, IMapper
+        public ScoreService(IRepositoryManager repository, ILogger logger, IMapper
             mapper, IScoreLinks scoreLinks)
         {
             _repository = repository;

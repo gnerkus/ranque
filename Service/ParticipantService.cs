@@ -3,6 +3,7 @@ using Contracts;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
@@ -13,7 +14,7 @@ namespace Service
         private readonly IParticipantLinks _participantLinks;
         private readonly IRepositoryManager _repository;
 
-        public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
+        public ParticipantService(IRepositoryManager repository, ILogger logger, IMapper
             mapper, IParticipantLinks participantLinks)
         {
             _repository = repository;

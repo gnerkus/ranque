@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
@@ -12,7 +12,7 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        public OrganizationService(IRepositoryManager repository, ILoggerManager logger, IMapper
+        public OrganizationService(IRepositoryManager repository, ILogger logger, IMapper
             mapper)
         {
             _repository = repository;

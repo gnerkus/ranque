@@ -3,6 +3,7 @@ using Contracts;
 using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Service
@@ -15,22 +16,22 @@ namespace Service
         private readonly Lazy<IParticipantService> _participantService;
         private readonly Lazy<IScoreService> _scoreService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager
-                loggerManager, IMapper mapper, IParticipantLinks participantLinks,
+        public ServiceManager(IRepositoryManager repositoryManager, ILogger
+                logger, IMapper mapper, IParticipantLinks participantLinks,
             UserManager<User>
                 userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks,
             ILeaderboardLinks leaderboardLinks)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
-                (repositoryManager, loggerManager, mapper));
+                (repositoryManager, logger, mapper));
             _participantService = new Lazy<IParticipantService>(() => new ParticipantService
-                (repositoryManager, loggerManager, mapper, participantLinks));
+                (repositoryManager, logger, mapper, participantLinks));
             _leaderboardService = new Lazy<ILeaderboardService>(() => new LeaderboardService
-                (repositoryManager, loggerManager, mapper, leaderboardLinks));
+                (repositoryManager, logger, mapper, leaderboardLinks));
             _scoreService = new Lazy<IScoreService>(() => new ScoreService
-                (repositoryManager, loggerManager, mapper, scoreLinks));
+                (repositoryManager, logger, mapper, scoreLinks));
             _authenticationService = new Lazy<IAuthenticationService>(() => new
-                AuthenticationService(loggerManager, mapper, userManager, configuration));
+                AuthenticationService(logger, mapper, userManager, configuration));
         }
 
         public IOrganizationService OrganizationService => _orgService.Value;
