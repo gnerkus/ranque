@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using NLog;
 using Presentation;
 using Presentation.ActionFilters;
+using Serilog;
 using Service.DataShaping;
 using Shared;
 using streak;
@@ -13,10 +13,15 @@ using streak.Extensions;
 using streak.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, loggerConfig) => 
+    loggerConfig
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}"
+        )
+        .ReadFrom.Configuration(context.Configuration)
+);
 
-LogManager.Setup()
-    .LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-
+builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureCors();
@@ -52,7 +57,6 @@ builder.Services.AddControllers(config =>
         config.InputFormatters.Insert(
             0,
             new ServiceCollection()
-                .AddLogging()
                 .AddMvc()
                 .AddNewtonsoftJson()
                 .Services.BuildServiceProvider()
@@ -64,6 +68,7 @@ builder.Services.AddControllers(config =>
     .AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(IAssemblyReference).Assembly);
+builder.Services.AddProblemDetails();
 
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();
@@ -96,6 +101,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
 public partial class Program {}

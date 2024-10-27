@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
 {
-    internal sealed class OrganizationService : IOrganizationService
+    internal sealed class OrganizationService : IOrganizationService, IApiService
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        public OrganizationService(IRepositoryManager repository, ILoggerManager logger, IMapper
+        public OrganizationService(IRepositoryManager repository, ILogger<IApiService> logger, 
+            IMapper
             mapper)
         {
             _repository = repository;

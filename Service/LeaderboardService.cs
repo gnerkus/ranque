@@ -3,17 +3,18 @@ using Contracts;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
 {
-    internal sealed class LeaderboardService : ILeaderboardService
+    internal sealed class LeaderboardService : ILeaderboardService, IApiService
     {
         private readonly ILeaderboardLinks _leaderboardLinks;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        public LeaderboardService(IRepositoryManager repository, ILoggerManager logger,
+        public LeaderboardService(IRepositoryManager repository, ILogger<IApiService> logger,
             IMapper mapper, ILeaderboardLinks leaderboardLinks)
         {
             _repository = repository;

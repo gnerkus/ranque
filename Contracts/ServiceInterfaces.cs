@@ -5,6 +5,7 @@ using Shared;
 
 namespace Contracts
 {
+    public interface IApiService {}
     public interface IOrganizationService
     {
         Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(bool trackChanges);

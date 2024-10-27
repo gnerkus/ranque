@@ -3,17 +3,18 @@ using Contracts;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
 {
-    internal sealed class ParticipantService : IParticipantService
+    internal sealed class ParticipantService : IParticipantService, IApiService
     {
         private readonly IMapper _mapper;
         private readonly IParticipantLinks _participantLinks;
         private readonly IRepositoryManager _repository;
 
-        public ParticipantService(IRepositoryManager repository, ILoggerManager logger, IMapper
+        public ParticipantService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
             mapper, IParticipantLinks participantLinks)
         {
             _repository = repository;

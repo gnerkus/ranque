@@ -3,17 +3,18 @@ using Contracts;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Service
 {
-    public class ScoreService : IScoreService
+    public class ScoreService : IScoreService, IApiService
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
 
-        public ScoreService(IRepositoryManager repository, ILoggerManager logger, IMapper
+        public ScoreService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
             mapper, IScoreLinks scoreLinks)
         {
             _repository = repository;
