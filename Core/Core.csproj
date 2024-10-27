@@ -36,6 +36,9 @@
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+        <PackageReference Include="SerilogTracing" Version="2.2.0" />
+        <PackageReference Include="SerilogTracing.Expressions" Version="2.2.0" />
+        <PackageReference Include="SerilogTracing.Instrumentation.AspNetCore" Version="2.2.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 

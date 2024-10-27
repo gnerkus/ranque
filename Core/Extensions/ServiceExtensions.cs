@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Serilog;
+using SerilogTracing;
 using Service;
 
 namespace streak.Extensions
@@ -50,6 +51,10 @@ namespace streak.Extensions
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
                 .CreateBootstrapLogger();
+
+            using var listener = new ActivityListenerConfiguration()
+                .Instrument.AspNetCoreRequests()
+                .TraceToSharedLogger();
 
             services.AddSerilog(logger);
         }
