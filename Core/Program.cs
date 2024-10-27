@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using NLog;
 using Presentation;
 using Presentation.ActionFilters;
+using Serilog;
 using Service.DataShaping;
 using Shared;
 using streak;
@@ -13,9 +13,9 @@ using streak.Extensions;
 using streak.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
-
-LogManager.Setup()
-    .LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+builder.Host.UseSerilog((context, loggerConfig) => 
+    loggerConfig.ReadFrom.Configuration(context.Configuration)
+);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAutoMapper(typeof(Program));

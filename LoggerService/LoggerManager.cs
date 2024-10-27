@@ -1,20 +1,22 @@
 ﻿using Contracts;
-using NLog;
+using Serilog;
+using Serilog.Core;
 
 namespace LoggerService
 {
     public class LoggerManager : ILoggerManager
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger =
+            new LoggerConfiguration().WriteTo.Console().CreateLogger();
 
         public void LogInfo(string message)
         {
-            Logger.Info(message);
+            Logger.Information(message);
         }
 
         public void LogWarn(string message)
         {
-            Logger.Warn(message);
+            Logger.Warning(message);
         }
 
         public void LogDebug(string message)
