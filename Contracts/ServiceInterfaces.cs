@@ -5,7 +5,8 @@ using Shared;
 
 namespace Contracts
 {
-    public interface IOrganizationService
+    public interface IApiService {}
+    public interface IOrganizationService: IApiService
     {
         Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(bool trackChanges);
         Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges);
@@ -22,7 +23,7 @@ namespace Contracts
             (IEnumerable<OrgForCreationDto> orgCollection);
     }
 
-    public interface ILeaderboardService
+    public interface ILeaderboardService: IApiService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
         (Guid orgId,
@@ -53,7 +54,7 @@ namespace Contracts
             Leaderboard leaderboard);
     }
 
-    public interface IScoreService
+    public interface IScoreService: IApiService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync
         (ScoreLinkParams
@@ -83,7 +84,7 @@ namespace Contracts
             scoreForUpdateDto, bool trackChanges);
     }
 
-    public interface IParticipantService
+    public interface IParticipantService: IApiService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetParticipantsAsync
         (Guid orgId,
@@ -113,7 +114,7 @@ namespace Contracts
             Participant participant);
     }
 
-    public interface IAuthenticationService
+    public interface IAuthenticationService: IApiService
     {
         Task<IdentityResult> RegisterUser(UserForRegistrationDto userForRegistrationDto);
         Task<bool> ValidateUser(UserForAuthenticationDto userForAuth);

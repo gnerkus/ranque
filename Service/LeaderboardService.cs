@@ -14,7 +14,7 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        public LeaderboardService(IRepositoryManager repository, ILogger logger,
+        public LeaderboardService(IRepositoryManager repository, ILogger<IApiService> logger,
             IMapper mapper, ILeaderboardLinks leaderboardLinks)
         {
             _repository = repository;

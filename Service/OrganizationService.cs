@@ -12,7 +12,7 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
 
-        public OrganizationService(IRepositoryManager repository, ILogger logger, IMapper
+        public OrganizationService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
             mapper)
         {
             _repository = repository;

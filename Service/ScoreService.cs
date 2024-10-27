@@ -14,7 +14,7 @@ namespace Service
         private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
 
-        public ScoreService(IRepositoryManager repository, ILogger logger, IMapper
+        public ScoreService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
             mapper, IScoreLinks scoreLinks)
         {
             _repository = repository;

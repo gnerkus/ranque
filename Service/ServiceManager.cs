@@ -16,7 +16,7 @@ namespace Service
         private readonly Lazy<IParticipantService> _participantService;
         private readonly Lazy<IScoreService> _scoreService;
 
-        public ServiceManager(IRepositoryManager repositoryManager, ILogger
+        public ServiceManager(IRepositoryManager repositoryManager, ILogger<IApiService>
                 logger, IMapper mapper, IParticipantLinks participantLinks,
             UserManager<User>
                 userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks,

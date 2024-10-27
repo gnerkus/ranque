@@ -18,12 +18,12 @@ namespace Service
     internal sealed class AuthenticationService : IAuthenticationService
     {
         private readonly JwtConfiguration _jwtConfig;
-        private readonly ILogger _logger;
+        private readonly ILogger<IApiService> _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private User? _user;
 
-        public AuthenticationService(ILogger logger, IMapper mapper, UserManager<User>
+        public AuthenticationService(ILogger<IApiService> logger, IMapper mapper, UserManager<User>
             userManager, IOptions<JwtConfiguration> configuration)
         {
             _logger = logger;
@@ -51,8 +51,8 @@ namespace Service
             var result = _user != null && await _userManager.CheckPasswordAsync(_user,
                 userForAuth.Password ?? string.Empty);
             if (!result)
-                _logger.LogWarning(
-                    $"{nameof(ValidateUser)}: Authentication failed. Wrong username or password.");
+                _logger.LogWarning("'{MethodName}': Authentication failed. Wrong username or password.", nameof(ValidateUser));
+            
             return result;
         }
 

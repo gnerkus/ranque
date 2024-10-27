@@ -14,7 +14,7 @@ namespace Service
         private readonly IParticipantLinks _participantLinks;
         private readonly IRepositoryManager _repository;
 
-        public ParticipantService(IRepositoryManager repository, ILogger logger, IMapper
+        public ParticipantService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
             mapper, IParticipantLinks participantLinks)
         {
             _repository = repository;
