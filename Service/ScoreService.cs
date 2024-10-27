@@ -8,7 +8,7 @@ using Shared;
 
 namespace Service
 {
-    public class ScoreService : IScoreService
+    public class ScoreService : IScoreService, IApiService
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;

@@ -15,7 +15,7 @@ using Shared;
 
 namespace Service
 {
-    internal sealed class AuthenticationService : IAuthenticationService
+    internal sealed class AuthenticationService : IAuthenticationService, IApiService
     {
         private readonly JwtConfiguration _jwtConfig;
         private readonly ILogger<IApiService> _logger;

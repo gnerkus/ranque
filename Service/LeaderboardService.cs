@@ -8,7 +8,7 @@ using Shared;
 
 namespace Service
 {
-    internal sealed class LeaderboardService : ILeaderboardService
+    internal sealed class LeaderboardService : ILeaderboardService, IApiService
     {
         private readonly ILeaderboardLinks _leaderboardLinks;
         private readonly IMapper _mapper;

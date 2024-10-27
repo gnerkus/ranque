@@ -8,7 +8,7 @@ using Shared;
 
 namespace Service
 {
-    internal sealed class ParticipantService : IParticipantService
+    internal sealed class ParticipantService : IParticipantService, IApiService
     {
         private readonly IMapper _mapper;
         private readonly IParticipantLinks _participantLinks;
