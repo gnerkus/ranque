@@ -6,9 +6,9 @@ namespace streak
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<GlobalExceptionHandler> _logger;
 
-        public GlobalExceptionHandler(ILogger logger)
+        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
         {
             _logger = logger;
         }
@@ -27,8 +27,8 @@ namespace streak
                 BadRequestException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
-
-            _logger.LogError($"Something went wrong: {exceptionHandlerFeature.Error}");
+            
+            _logger.LogError("Something went wrong: {@Exception}", exceptionHandlerFeature.Error);
 
             await httpContext.Response.WriteAsync(new ErrorDetails
             {

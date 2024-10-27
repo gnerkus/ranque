@@ -21,11 +21,12 @@ builder.Host.UseSerilog((context, loggerConfig) =>
         .ReadFrom.Configuration(context.Configuration)
 );
 
+builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
-builder.Services.ConfigureLoggerService(builder.Configuration);
+builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
@@ -56,7 +57,6 @@ builder.Services.AddControllers(config =>
         config.InputFormatters.Insert(
             0,
             new ServiceCollection()
-                .AddLogging()
                 .AddMvc()
                 .AddNewtonsoftJson()
                 .Services.BuildServiceProvider()

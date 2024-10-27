@@ -44,11 +44,10 @@ namespace streak.Extensions
             services.Configure<IISOptions>(options => { });
         }
 
-        public static void ConfigureLoggerService(this IServiceCollection services, IConfiguration
-            config)
+        public static void ConfigureLoggerService(this IServiceCollection services)
         {
             var logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
+                .MinimumLevel.Debug()
                 .WriteTo.Console()
                 .CreateBootstrapLogger();
 
