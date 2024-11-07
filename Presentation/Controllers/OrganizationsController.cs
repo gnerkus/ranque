@@ -28,7 +28,7 @@ namespace Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet(Name = "GetOrganizations")]
+        [HttpGet("", Name = "GetOrganizations")]
         [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
@@ -92,15 +92,15 @@ namespace Presentation.Controllers
 
         //============== LEADERBOARDS =============================================
 
-        [HttpGet("{orgId:guid}/leaderboards")]
-        [HttpHead]
+        [HttpGet("{organizationId:guid}/leaderboards", Name = "GetLeaderboardsForOrg")]
+        [HttpHead("{organizationId:guid}/leaderboards")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
-        public async Task<IActionResult> GetLeaderboardsForOrganization(Guid orgId,
+        public async Task<IActionResult> GetLeaderboardsForOrganization(Guid organizationId,
             [FromQuery] LeaderboardParameters parameters)
         {
             var linkParams = new LeaderboardLinkParams(parameters, HttpContext);
 
-            var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(orgId,
+            var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(organizationId,
                 linkParams, false);
 
             Response.Headers.Append("X-Pagination",
@@ -184,8 +184,8 @@ namespace Presentation.Controllers
 
         // ================ PARTICIPANTS =====================================
 
-        [HttpGet("{orgId:guid}/participants")]
-        [HttpHead]
+        [HttpGet("{orgId:guid}/participants", Name = "GetParticipantsForOrg")]
+        [HttpHead("{orgId:guid}/participants")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetParticipantsForOrganization(Guid orgId,
             [FromQuery] ParticipantParameters parameters)
