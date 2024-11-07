@@ -86,6 +86,12 @@ app.UseExceptionHandler(opt => { });
 if (app.Environment.IsProduction())
     app.UseHsts();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
