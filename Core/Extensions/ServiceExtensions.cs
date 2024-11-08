@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Serilog;
@@ -179,7 +180,7 @@ namespace streak.Extensions
             });
         }
 
-        public static void ConfigureJWT(this IServiceCollection services,
+        public static void ConfigureJwt(this IServiceCollection services,
             IConfiguration configuration)
         {
             var jwtConfig = new JwtConfiguration();
@@ -211,6 +212,23 @@ namespace streak.Extensions
             config)
         {
             services.Configure<JwtConfiguration>(config.GetSection("JwtSettings"));
+        }
+
+        public static void ConfigureHealthChecks(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var connectionString =
+                Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+
+            if (string.IsNullOrWhiteSpace(connectionString) &&
+                Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+
+            services.AddHealthChecks()
+                .AddProcessAllocatedMemoryHealthCheck(512, name: "Memory", tags: ["memory", "ready"])
+                .AddSqlServer(connectionString, "select 1", name: "SQL Server", failureStatus:
+                    HealthStatus.Unhealthy, tags:
+                    ["database", "ready"]);
         }
     }
 }

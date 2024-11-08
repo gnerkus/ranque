@@ -1,10 +1,13 @@
 using Contracts;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using Presentation;
 using Presentation.ActionFilters;
+using Sentry.Extensibility;
 using Serilog;
 using Service.DataShaping;
 using Shared;
@@ -32,12 +35,24 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
-builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.WebHost.UseSentry(options =>
+{
+    options.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN");
+    options.TracesSampleRate = 1.0;
+    options.SendDefaultPii = true;
+    options.MinimumBreadcrumbLevel = LogLevel.Debug;
+    options.MinimumEventLevel = LogLevel.Warning;
+    options.Debug = true;
+    options.DiagnosticLevel = SentryLevel.Error;
+    options.MaxRequestBodySize = RequestSize.Always;
 });
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
@@ -78,18 +93,45 @@ builder.Services.ConfigureRateLimitingOptions();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.ConfigureHealthChecks(builder.Configuration);
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services
+        .AddHealthChecksUI(options =>
+        {
+            options.AddHealthCheckEndpoint("base", "http://localhost:5000/health");
+        })
+        .AddInMemoryStorage();
+}
 
 var app = builder.Build();
 
 app.UseExceptionHandler(opt => { });
-// Configure the HTTP request pipeline.
-if (app.Environment.IsProduction())
-    app.UseHsts();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapHealthChecks("/health",
+        new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+    app.UseRouting().UseEndpoints(config => config.MapHealthChecksUI());
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Configure the HTTP request pipeline.
+    app.UseHsts();
+    app.MapHealthChecks("/health", new HealthCheckOptions
+        {
+            Predicate = reg => reg.Tags.Contains("ready"),
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        })
+        .RequireAuthorization();
 }
 
 app.UseHttpsRedirection();
