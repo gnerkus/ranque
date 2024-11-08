@@ -98,7 +98,10 @@ builder.Services.ConfigureHealthChecks(builder.Configuration);
 if (builder.Environment.IsDevelopment())
 {
     builder.Services
-        .AddHealthChecksUI()
+        .AddHealthChecksUI(options =>
+        {
+            options.AddHealthCheckEndpoint("base", "http://localhost:5000/health");
+        })
         .AddInMemoryStorage();
 }
 
@@ -110,8 +113,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapHealthChecks("/ping", new HealthCheckOptions { Predicate = _ => false });
-    app.MapHealthChecks("/pong", new HealthCheckOptions { Predicate = _ => true });
+    app.MapHealthChecks("/health",
+        new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
     app.UseRouting().UseEndpoints(config => config.MapHealthChecksUI());
     app.UseDeveloperExceptionPage();
 }

@@ -225,9 +225,10 @@ namespace streak.Extensions
                 connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
 
             services.AddHealthChecks()
+                .AddProcessAllocatedMemoryHealthCheck(512, name: "Memory", tags: ["memory", "ready"])
                 .AddSqlServer(connectionString, "select 1", name: "SQL Server", failureStatus:
                     HealthStatus.Unhealthy, tags:
-                    ["Ranque", "Database", "ready"]);
+                    ["database", "ready"]);
         }
     }
 }
