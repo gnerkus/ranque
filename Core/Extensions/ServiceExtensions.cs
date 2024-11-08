@@ -227,7 +227,7 @@ namespace streak.Extensions
             services.AddHealthChecks()
                 .AddSqlServer(connectionString, "select 1", name: "SQL Server", failureStatus:
                     HealthStatus.Unhealthy, tags:
-                    ["Ranque", "Database"]);
+                    ["Ranque", "Database", "ready"]);
         }
     }
 }

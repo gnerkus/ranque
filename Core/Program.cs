@@ -95,22 +95,36 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureHealthChecks(builder.Configuration);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services
+        .AddHealthChecksUI()
+        .AddInMemoryStorage();
+}
+
 var app = builder.Build();
 
-app.MapHealthChecks("/health", new HealthCheckOptions
-{
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-
 app.UseExceptionHandler(opt => { });
-// Configure the HTTP request pipeline.
-if (app.Environment.IsProduction())
-    app.UseHsts();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapHealthChecks("/ping", new HealthCheckOptions { Predicate = _ => false });
+    app.MapHealthChecks("/pong", new HealthCheckOptions { Predicate = _ => true });
+    app.UseRouting().UseEndpoints(config => config.MapHealthChecksUI());
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Configure the HTTP request pipeline.
+    app.UseHsts();
+    app.MapHealthChecks("/health", new HealthCheckOptions
+        {
+            Predicate = reg => reg.Tags.Contains("ready"),
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        })
+        .RequireAuthorization();
 }
 
 app.UseHttpsRedirection();
