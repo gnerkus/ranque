@@ -1,4 +1,6 @@
 using Contracts;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -33,7 +35,7 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
-builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -91,11 +93,14 @@ builder.Services.ConfigureRateLimitingOptions();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHealthChecks();
+builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.UseExceptionHandler(opt => { });
 // Configure the HTTP request pipeline.
