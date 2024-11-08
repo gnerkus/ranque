@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using Presentation;
 using Presentation.ActionFilters;
+using Sentry.Extensibility;
 using Serilog;
 using Service.DataShaping;
 using Shared;
@@ -38,6 +39,18 @@ builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
+});
+
+builder.WebHost.UseSentry(options =>
+{
+    options.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN");
+    options.TracesSampleRate = 1.0;
+    options.SendDefaultPii = true;
+    options.MinimumBreadcrumbLevel = LogLevel.Debug;
+    options.MinimumEventLevel = LogLevel.Warning;
+    options.Debug = true;
+    options.DiagnosticLevel = SentryLevel.Error;
+    options.MaxRequestBodySize = RequestSize.Always;
 });
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
