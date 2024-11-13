@@ -95,16 +95,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureHealthChecks(builder.Configuration);
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services
-        .AddHealthChecksUI(options =>
-        {
-            options.AddHealthCheckEndpoint("base", "http://localhost:5000/health");
-        })
-        .AddInMemoryStorage();
-}
-
 var app = builder.Build();
 
 app.UseExceptionHandler(opt => { });
@@ -119,7 +109,7 @@ if (app.Environment.IsDevelopment())
             Predicate = _ => true,
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
         });
-    app.UseRouting().UseEndpoints(config => config.MapHealthChecksUI());
+    app.UseRouting();
     app.UseDeveloperExceptionPage();
 }
 else
@@ -142,10 +132,14 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 app.UseRateLimiter();
 app.UseCors("CorsPolicy");
+app.UseAuthorization();
+if (app.Environment.IsDevelopment())
+{
+    app.UseEndpoints(config => config.MapHealthChecksUI());
+}
 app.UseOutputCache();
 
 app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 
