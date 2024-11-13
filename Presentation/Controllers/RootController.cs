@@ -1,9 +1,11 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 namespace Presentation.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api")]
     [ApiController]
     public class RootController : ControllerBase

@@ -2,6 +2,7 @@
 using Contracts;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
@@ -9,6 +10,7 @@ using Shared;
 
 namespace Presentation.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api/leaderboards/{leaderboardId:guid}")]
     [Authorize(Roles = "Manager")]
     [ApiController]

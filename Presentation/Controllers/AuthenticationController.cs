@@ -1,10 +1,12 @@
 ﻿using Contracts;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
 using Shared;
 
 namespace Presentation.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [Route("api/auth")]
     [ApiController]
     public class AuthenticationController : ControllerBase

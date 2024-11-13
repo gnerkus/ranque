@@ -3,6 +3,7 @@ using Asp.Versioning;
 using Contracts;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Shared;
 
 namespace Presentation.Controllers
 {
+    [EnableCors("CorsPolicy")]
     [ApiVersion("1.0")]
     [Route("api/orgs")]
     [Authorize(Roles = "Manager")]
