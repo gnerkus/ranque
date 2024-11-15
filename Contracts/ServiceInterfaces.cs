@@ -31,7 +31,7 @@ namespace Contracts
                 parameters, bool
                 trackChanges);
 
-        Task<LeaderboardDto>
+        Task<RankedLeaderboardDto>
             GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
 
         Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid leaderboardId,

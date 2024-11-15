@@ -39,8 +39,8 @@ namespace Shared
     public record RankedLeaderboardDto
     {
         public Guid Id {get; init; }
-        public string Name { get; init; }
-        public List<RankedParticipantDto> Participants { get; set; }
+        public string? Name { get; init; }
+        public IEnumerable<RankedParticipantDto> Participants { get; set; }
     }
 
     public abstract record LeaderboardForManipulationDto
@@ -59,7 +59,7 @@ namespace Shared
     public record RankedParticipantDto
     {
         public Guid Id { get; init; }
-        public string Name { get; init; }
+        public string? Name { get; init; }
         public float Score { get; init; }
     }
 
