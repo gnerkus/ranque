@@ -21,6 +21,7 @@ namespace streak
 
             // leaderboard
             CreateMap<Leaderboard, LeaderboardDto>();
+            CreateMap<Leaderboard, RankedLeaderboardDto>();
 
             // score
             CreateMap<Score, ScoreDto>();
