@@ -38,7 +38,7 @@ namespace Service
             return (linkResponse: links, metaData: leaderboards.MetaData);
         }
 
-        public async Task<LeaderboardDto> GetLeaderboardAsync(Guid orgId, Guid leaderboardId,
+        public async Task<RankedLeaderboardDto> GetLeaderboardAsync(Guid orgId, Guid leaderboardId,
             bool trackChanges)
         {
             await IsOrgExist(orgId, trackChanges);
@@ -46,8 +46,40 @@ namespace Service
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, trackChanges);
 
-            var leaderboard = _mapper.Map<LeaderboardDto>(leaderboardDb);
-            return leaderboard;
+            var rankedParticipants = leaderboardDb.Scores
+                .GroupBy(
+                    score => score.Participant.Id,
+                    score => score,
+                    (participantId, scores) => new
+                    {
+                        Id = participantId,
+                        Scores = scores.ToList()
+                    })
+                .Select(group =>
+                {
+                    return new
+                    {
+                        group.Id,
+                        group.Scores[0].Participant.Name,
+                        Score = group.Scores.Select(score => score.Value).Sum()
+                    };
+                })
+                .OrderByDescending(score => score.Score);
+
+            var rankedParticipantsDto = rankedParticipants.Select
+                (participant => new RankedParticipantDto
+                {
+                    Id = participant.Id,
+                    Name = participant.Name,
+                    Score = participant.Score
+                }).ToList();
+
+            return new RankedLeaderboardDto
+            {
+                Id = leaderboardDb.Id,
+                Name = leaderboardDb.Name,
+                Participants = rankedParticipantsDto
+            };
         }
 
         public async Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid leaderboardId,

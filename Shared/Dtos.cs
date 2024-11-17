@@ -36,6 +36,13 @@ namespace Shared
 
     public record LeaderboardDto(Guid Id, string Name);
 
+    public record RankedLeaderboardDto
+    {
+        public Guid Id {get; init; }
+        public string? Name { get; init; }
+        public IEnumerable<RankedParticipantDto> Participants { get; set; }
+    }
+
     public abstract record LeaderboardForManipulationDto
     {
         [Required(ErrorMessage = "Leaderboard name is a required field")]
@@ -48,6 +55,13 @@ namespace Shared
     public record LeaderboardForUpdateDto : LeaderboardForManipulationDto;
 
     public record ParticipantDto(Guid Id, string Name, int Age, string Position);
+    
+    public record RankedParticipantDto
+    {
+        public Guid Id { get; init; }
+        public string? Name { get; init; }
+        public float Score { get; init; }
+    }
 
     public abstract record ParticipantForManipulationDto
     {
