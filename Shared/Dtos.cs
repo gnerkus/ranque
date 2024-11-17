@@ -15,7 +15,13 @@ namespace Shared
     public record OrgForUpdateDto(string Name, string Address, string Country,
         IEnumerable<ParticipantForCreationDto> Participants);
 
-    public record ScoreDto(Guid Id, string JsonValue);
+    public record ScoreDto
+    {
+        public Guid Id { get; init; }
+        public required string JsonValue { get; init; }
+        public required ParticipantDto Participant { get; init; }
+        public required LeaderboardDto Leaderboard { get; init; }
+    }
 
     public abstract record ScoreForManipulationDto
     {

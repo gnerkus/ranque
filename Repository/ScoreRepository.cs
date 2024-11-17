@@ -16,6 +16,8 @@ namespace Repository
             bool trackChanges)
         {
             var items = await FindAll(trackChanges)
+                .Include(s => s.Leaderboard)
+                .Include(s => s.Participant)
                 .FilterScores(parameters.LeaderboardId, parameters.ParticipantId)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
@@ -63,6 +65,8 @@ namespace Repository
             return await FindByCondition(
                     c => c.Id.Equals(scoreId),
                     trackChanges)
+                .Include(s => s.Leaderboard)
+                .Include(s => s.Participant)
                 .SingleOrDefaultAsync();
         }
 
