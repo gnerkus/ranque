@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
+using DynamicScores;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
@@ -46,6 +47,11 @@ namespace Service
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, trackChanges);
 
+            var jsonScoreProcessor = new JsonScoreProcessor();
+            
+            // strategy
+            // 
+
             var rankedParticipants = leaderboardDb.Scores
                 .GroupBy(
                     score => score.Participant.Id,
@@ -61,7 +67,8 @@ namespace Service
                     {
                         group.Id,
                         group.Scores[0].Participant.Name,
-                        Score = group.Scores.Select(score => score.JsonValue.Length).Sum()
+                        Score = group.Scores.Select(score => jsonScoreProcessor.GetScoreDouble(score.JsonValue,
+                            leaderboardDb.LuaScript)).Sum()
                     };
                 })
                 .OrderByDescending(score => score.Score);

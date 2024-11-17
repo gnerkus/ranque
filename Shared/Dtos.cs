@@ -60,7 +60,7 @@ namespace Shared
     {
         public Guid Id { get; init; }
         public string? Name { get; init; }
-        public float Score { get; init; }
+        public double Score { get; init; }
     }
 
     public abstract record ParticipantForManipulationDto
