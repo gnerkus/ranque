@@ -19,9 +19,9 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "value": 20,
+  "JsonValue": "{\"First\":100,\"Second\":50}",
   "leaderboardId": "a478da4c-a47b-4d95-896f-06368e844232",
-  "participantId": "42829fe2-fb6c-4d53-b3fe-08dcd3674a21"
+  "participantId": "42829FE2-FB6C-4D53-B3FE-08DCD3674A21"
 }
 
 ### Score | Update score | 204
@@ -31,7 +31,7 @@ Content-Type: application/json-patch+json
 Authorization: Bearer {{token}}
 
 {
-  "value": 50
+  "JsonValue": "{'First':2,'Second':4}"
 }
 
 ### Scores | Delete score | 204

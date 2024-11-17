@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,11 @@ using Repository;
 namespace streak.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    partial class RepositoryContextModelSnapshot : ModelSnapshot
+    [Migration("20241117135603_ChangeScoreValueToString")]
+    partial class ChangeScoreValueToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,11 +31,6 @@ namespace streak.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LeaderboardId");
-
-                    b.Property<string>("LuaScript")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -52,14 +50,12 @@ namespace streak.Migrations
                         new
                         {
                             Id = new Guid("902ed363-ae11-4b6f-ba59-9f8ba6d08e9b"),
-                            LuaScript = "return score.First + score.Second",
                             Name = "IT Service Sales",
                             OrganizationId = new Guid("c36f337b-2006-4b38-8883-f3c176d9ff80")
                         },
                         new
                         {
                             Id = new Guid("a478da4c-a47b-4d95-896f-06368e844232"),
-                            LuaScript = "return score.First + score.Second",
                             Name = "Product Sales",
                             OrganizationId = new Guid("7edac2a8-a73f-4926-8da3-fea7dbaf2ebd")
                         });

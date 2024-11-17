@@ -15,12 +15,19 @@ namespace Shared
     public record OrgForUpdateDto(string Name, string Address, string Country,
         IEnumerable<ParticipantForCreationDto> Participants);
 
-    public record ScoreDto(Guid Id, float Value);
+    public record ScoreDto
+    {
+        public Guid Id { get; init; }
+        public required string JsonValue { get; init; }
+        public required ParticipantDto Participant { get; init; }
+        public required LeaderboardDto Leaderboard { get; init; }
+    }
 
     public abstract record ScoreForManipulationDto
     {
-        [Range(1, 100, ErrorMessage = "Value is required and can't be lower than 1")]
-        public int Value { get; init; }
+        [Required(ErrorMessage = "Score must have a value")]
+        [MaxLength(1000, ErrorMessage = "Maximum length for the JSONValue is 30 characters")]
+        public required string JsonValue { get; init; }
     }
 
     public record ScoreForCreationDto : ScoreForManipulationDto
@@ -34,13 +41,15 @@ namespace Shared
 
     public record ScoreForUpdateDto : ScoreForManipulationDto;
 
-    public record LeaderboardDto(Guid Id, string Name);
+    public record LeaderboardDto(Guid Id, string Name, string LuaScript);
 
     public record RankedLeaderboardDto
     {
         public Guid Id {get; init; }
         public string? Name { get; init; }
-        public IEnumerable<RankedParticipantDto> Participants { get; set; }
+        
+        public required string LuaScript { get; init; }
+        public IEnumerable<RankedParticipantDto> Participants { get; init; }
     }
 
     public abstract record LeaderboardForManipulationDto
@@ -60,7 +69,7 @@ namespace Shared
     {
         public Guid Id { get; init; }
         public string? Name { get; init; }
-        public float Score { get; init; }
+        public double Score { get; init; }
     }
 
     public abstract record ParticipantForManipulationDto

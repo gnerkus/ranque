@@ -1,6 +1,4 @@
-﻿using System.Linq.Dynamic.Core;
-using Entities;
-using Entities.Models;
+﻿using Entities.Models;
 
 namespace Repository.Extensions
 {
@@ -18,19 +16,6 @@ namespace Repository.Extensions
                 result = result.Where(e => e.ParticipantId == participantId);
 
             return result;
-        }
-
-        public static IQueryable<Score> Sort(this IQueryable<Score> scores,
-            string? orderByQueryString)
-        {
-            if (string.IsNullOrWhiteSpace(orderByQueryString))
-                return scores.OrderBy(e => e.Value);
-
-            var orderQuery = OrderQueryBuilder.CreateOrderByQuery<Score>(orderByQueryString);
-
-            return string.IsNullOrWhiteSpace(orderQuery)
-                ? scores.OrderBy(e => e.Value)
-                : scores.OrderBy(orderQuery);
         }
     }
 }

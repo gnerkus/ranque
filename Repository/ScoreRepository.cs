@@ -1,5 +1,4 @@
 ﻿using Contracts;
-using Entities;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Extensions;
@@ -17,8 +16,9 @@ namespace Repository
             bool trackChanges)
         {
             var items = await FindAll(trackChanges)
+                .Include(s => s.Leaderboard)
+                .Include(s => s.Participant)
                 .FilterScores(parameters.LeaderboardId, parameters.ParticipantId)
-                .Sort(parameters.OrderBy)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .ToListAsync();
@@ -34,7 +34,6 @@ namespace Repository
             var items = await FindByCondition(c => c.ParticipantId.Equals(participantId),
                     trackChanges)
                 .FilterScores(Guid.Empty, parameters.ParticipantId)
-                .Sort(parameters.OrderBy)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .ToListAsync();
@@ -51,7 +50,6 @@ namespace Repository
             var items = await FindByCondition(c => c.LeaderboardId.Equals(leaderboardId),
                     trackChanges)
                 .FilterScores(parameters.LeaderboardId, Guid.Empty)
-                .Sort(parameters.OrderBy)
                 .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .ToListAsync();
@@ -67,6 +65,8 @@ namespace Repository
             return await FindByCondition(
                     c => c.Id.Equals(scoreId),
                     trackChanges)
+                .Include(s => s.Leaderboard)
+                .Include(s => s.Participant)
                 .SingleOrDefaultAsync();
         }
 
