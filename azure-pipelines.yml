@@ -9,7 +9,7 @@ pr: 'none'
 resources:
   pipelines:
     - pipeline: test-ci
-      source: Test
+      source: Ranque.Test
       trigger:
         branches:
           include:
