@@ -18,7 +18,7 @@ namespace Entities.Test
 
             const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
             const string participantId = "79e49410-c239-4443-bc96-30a515289c97";
-
+            
             var createScoreRequest = new HttpRequestMessage(new HttpMethod("POST"),
                 "api/scores");
             createScoreRequest.Content = JsonContent.Create(new

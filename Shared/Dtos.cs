@@ -35,13 +35,15 @@ namespace Shared
 
     public record ScoreForUpdateDto : ScoreForManipulationDto;
 
-    public record LeaderboardDto(Guid Id, string Name);
+    public record LeaderboardDto(Guid Id, string Name, string LuaScript);
 
     public record RankedLeaderboardDto
     {
         public Guid Id {get; init; }
         public string? Name { get; init; }
-        public IEnumerable<RankedParticipantDto> Participants { get; set; }
+        
+        public required string LuaScript { get; init; }
+        public IEnumerable<RankedParticipantDto> Participants { get; init; }
     }
 
     public abstract record LeaderboardForManipulationDto
