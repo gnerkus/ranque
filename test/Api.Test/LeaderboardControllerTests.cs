@@ -37,7 +37,7 @@ namespace Entities.Test
             var score = new ScoreDto()
             {
                 Id = new Guid(participantId),
-                JsonValue = "{\"First\":2,\"Second\"4}",
+                JsonValue = "{\"First\":2,\"Second\":4}",
                 Participant = null,
                 Leaderboard = null
             };
@@ -61,12 +61,7 @@ namespace Entities.Test
                 "api/scores");
             createScoreRequest.Content = JsonContent.Create(new
             {
-                value = """
-                        {
-                          "First": 2,
-                          "Second": 4
-                        }
-                        """,
+                value = "{\"First\":2,\"Second\":4}",
                 leaderboardId,
                 participantId
             });
