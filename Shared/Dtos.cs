@@ -15,12 +15,13 @@ namespace Shared
     public record OrgForUpdateDto(string Name, string Address, string Country,
         IEnumerable<ParticipantForCreationDto> Participants);
 
-    public record ScoreDto(Guid Id, float Value);
+    public record ScoreDto(Guid Id, string JsonValue);
 
     public abstract record ScoreForManipulationDto
     {
-        [Range(1, 100, ErrorMessage = "Value is required and can't be lower than 1")]
-        public int Value { get; init; }
+        [Required(ErrorMessage = "Score must have a value")]
+        [MaxLength(1000, ErrorMessage = "Maximum length for the JSONValue is 30 characters")]
+        public required string JsonValue { get; init; }
     }
 
     public record ScoreForCreationDto : ScoreForManipulationDto
