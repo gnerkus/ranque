@@ -23,12 +23,7 @@ namespace Entities.Test
                 "api/scores");
             createScoreRequest.Content = JsonContent.Create(new
             {
-                JsonValue = """
-                            {
-                              "First": 2,
-                              "Second": 4
-                            }
-                            """,
+                JsonValue ="{\"First\":2,\"Second\":4}",
                 leaderboardId,
                 participantId
             });
@@ -39,12 +34,13 @@ namespace Entities.Test
                 $"api/leaderboards/{leaderboardId}/scores");
 
             // Assert
-            var score = new ScoreDto(new Guid(participantId), """
-                                                              {
-                                                                "First": 2,
-                                                                "Second": 4
-                                                              }
-                                                              """);
+            var score = new ScoreDto()
+            {
+                Id = new Guid(participantId),
+                JsonValue = "{\"First\":100,\"Second\":50}",
+                Participant = null,
+                Leaderboard = null
+            };
             scoreDtos.Should().NotBeEmpty()
                 .And.ContainSingle()
                 .And.ContainEquivalentOf(score, options => options.Excluding(o => o.Id));

@@ -98,7 +98,7 @@ public class OrganizationControllerTests(
         
         // Assert
         output.WriteLine("LEADERBOARD");
-        output.WriteLine(JsonSerializer.Serialize(leaderboardDto.Participants.ToList()));
+        output.WriteLine(JsonSerializer.Serialize(leaderboardDto));
         var leaderboard = new LeaderboardDto(new Guid(leaderboardId), "Product Sales", "return score.First + score.Second");
         leaderboardDto.Should().NotBeNull()
             .And.BeEquivalentTo(leaderboard, options => options.Excluding(o => o.Id));

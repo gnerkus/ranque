@@ -36,6 +36,8 @@ namespace Repository
             return await FindByCondition(c => c.OrganizationId.Equals(orgId) && c.Id.Equals
                         (leaderboardId),
                     trackChanges)
+                .Include(l => l.Scores)
+                .ThenInclude(s => s.Participant)
                 .SingleOrDefaultAsync();
         }
 
