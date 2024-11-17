@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-using System.Text.Json;
 using FluentAssertions;
 using Shared;
 using Xunit.Abstractions;
@@ -52,12 +51,7 @@ public class OrganizationControllerTests(
             "api/scores");
         createScore1Request.Content = JsonContent.Create(new
         {
-            JsonValue = """
-                        {
-                          "First": 2,
-                          "Second": 4
-                        }
-                        """,
+            JsonValue = "{\"First\":2,\"Second\"4}",
             leaderboardId,
             participantId = participant1Id
         });
@@ -67,12 +61,7 @@ public class OrganizationControllerTests(
             "api/scores");
         createScore2Request.Content = JsonContent.Create(new
         {
-            JsonValue = """
-                        {
-                          "First": 2,
-                          "Second": 4
-                        }
-                        """,
+            JsonValue = "{\"First\":2,\"Second\"4}",
             leaderboardId,
             participantId = participant1Id
         });
@@ -82,12 +71,7 @@ public class OrganizationControllerTests(
             "api/scores");
         createScore3Request.Content = JsonContent.Create(new
         {
-            JsonValue = """
-                        {
-                          "First": 6,
-                          "Second": 12
-                        }
-                        """,
+            JsonValue = "{\"First\":6,\"Second\"12}",
             leaderboardId,
             participantId = participant2Id
         });
@@ -97,10 +81,13 @@ public class OrganizationControllerTests(
             ($"api/orgs/{orgId}/leaderboards/{leaderboardId}");
         
         // Assert
-        output.WriteLine("LEADERBOARD");
-        output.WriteLine(JsonSerializer.Serialize(leaderboardDto));
-        var leaderboard = new LeaderboardDto(new Guid(leaderboardId), "Product Sales", "return score.First + score.Second");
-        leaderboardDto.Should().NotBeNull()
-            .And.BeEquivalentTo(leaderboard, options => options.Excluding(o => o.Id));
+        var firstParticipant = leaderboardDto.Participants.ToList().First();
+        var participantDto = new RankedParticipantDto()
+        {
+            Id = new Guid(participant2Id),
+            Name = "John Smith",
+            Score = 18
+        };
+        participantDto.Should().BeEquivalentTo(firstParticipant);
     }
 }

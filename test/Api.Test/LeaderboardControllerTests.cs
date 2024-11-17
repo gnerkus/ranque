@@ -37,7 +37,7 @@ namespace Entities.Test
             var score = new ScoreDto()
             {
                 Id = new Guid(participantId),
-                JsonValue = "{\"First\":100,\"Second\":50}",
+                JsonValue = "{\"First\":2,\"Second\"4}",
                 Participant = null,
                 Leaderboard = null
             };
