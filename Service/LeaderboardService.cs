@@ -61,7 +61,7 @@ namespace Service
                     {
                         group.Id,
                         group.Scores[0].Participant.Name,
-                        Score = group.Scores.Select(score => score.Value).Sum()
+                        Score = group.Scores.Select(score => score.JsonValue.Length).Sum()
                     };
                 })
                 .OrderByDescending(score => score.Score);

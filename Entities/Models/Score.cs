@@ -5,13 +5,14 @@ namespace Entities.Models
 {
     public class Score
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
 
+        // TODO: add custom validation for JSONValue to ensure string is valid JSON 
         [Required(ErrorMessage = "Score must have a value")]
-        [Range(1, 100, ErrorMessage = "Value for {0} must be between {1} and {2}")]
-        public float Value { get; set; }
+        [MaxLength(1000, ErrorMessage = "Maximum length for the JSONValue is 30 characters")]
+        public required string JsonValue { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; init; }
         public DateTime? UpdatedAt { get; set; }
 
         [ForeignKey(nameof(Participant))] public Guid ParticipantId { get; set; }
