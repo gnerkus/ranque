@@ -72,7 +72,7 @@ namespace streak.Migrations
                 column: "OrganizationId",
                 principalTable: "Organizations",
                 principalColumn: "OrganizationId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         /// <inheritdoc />
