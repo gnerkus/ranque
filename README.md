@@ -1,4 +1,4 @@
-﻿![github_logo](https://github.com/user-attachments/assets/f0c2c81d-0ef3-48b3-9a51-c405b2664b09)
+![github_logo](https://github.com/user-attachments/assets/2c3f7a5d-056b-4838-b90c-826a08542cbd)
 
 [![Build Status](https://dev.azure.com/nanotome/streak/_apis/build/status%2FRanque.Build?branchName=master)](https://dev.azure.com/nanotome/streak/_build/latest?definitionId=6&branchName=master)
 
