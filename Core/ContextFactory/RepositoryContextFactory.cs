@@ -16,7 +16,7 @@ namespace streak.ContextFactory
                 .AddJsonFile($"appsettings.{environment}.json")
                 .Build();
             
-            if(string.IsNullOrWhiteSpace(connectionString) && environment == "Development") 
+            if(string.IsNullOrWhiteSpace(connectionString)) 
                 connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
 
             var builder = new DbContextOptionsBuilder<RepositoryContext>()
