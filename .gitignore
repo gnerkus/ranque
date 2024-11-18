@@ -483,3 +483,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Dev query files
+*.http
+Core/http-client.env.json
