@@ -108,7 +108,7 @@ namespace Shared
 
         public string? Email { get; init; }
         public string? PhoneNumber { get; init; }
-        public IEnumerable<string> Roles { get; } = new List<string>();
+        public ICollection<string>? Roles { get; init; }
     }
 
     public record UserForAuthenticationDto
