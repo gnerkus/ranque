@@ -30,6 +30,7 @@ Authorization: Bearer {{token}}
 
 POST {{host}}/api/orgs
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "name": "Nanotome GmbH",

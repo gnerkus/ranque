@@ -11,7 +11,7 @@ namespace Entities.Models
         [MaxLength(50, ErrorMessage = "Maximum length for the Name is 50 characters")]
         public string? Name { get; set; }
 
-        [MaxLength(1000, ErrorMessage = "Maximum length for the Lua script is 50 characters")]
+        [MaxLength(1000, ErrorMessage = "Maximum length for the Lua script is 1000 characters")]
         public required string LuaScript { get; set; }
         [ForeignKey(nameof(Organization))] public Guid OrganizationId { get; set; }
 

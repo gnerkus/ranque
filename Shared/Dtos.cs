@@ -57,6 +57,9 @@ namespace Shared
         [Required(ErrorMessage = "Leaderboard name is a required field")]
         [MaxLength(30, ErrorMessage = "Maximum length for the Name is 30 characters.")]
         public string? Name { get; init; }
+        
+        [MaxLength(1000, ErrorMessage = "Maximum length for the Lua script is 1000 characters")]
+        public required string LuaScript { get; set; }
     }
 
     public record LeaderboardForCreationDto : LeaderboardForManipulationDto;
