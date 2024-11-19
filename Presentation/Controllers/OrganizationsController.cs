@@ -1,10 +1,13 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
 using Asp.Versioning;
 using Contracts;
 using Entities;
+using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -34,6 +37,8 @@ namespace Presentation.Controllers
         [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var orgs = await _service.OrganizationService.GetAllOrganizationsAsync(false);
             return Ok(orgs);
         }
