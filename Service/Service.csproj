@@ -8,11 +8,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Contracts\Contracts.csproj"/>
-        <ProjectReference Include="..\DynamicScores\DynamicScores.csproj" />
+        <ProjectReference Include="..\DynamicScores\DynamicScores.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.System" Version="8.0.1" />
+        <PackageReference Include="AspNetCore.HealthChecks.System" Version="8.0.1"/>
         <PackageReference Include="AutoMapper" Version="13.0.1"/>
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2"/>
     </ItemGroup>

@@ -51,8 +51,10 @@ namespace Service
             var result = _user != null && await _userManager.CheckPasswordAsync(_user,
                 userForAuth.Password ?? string.Empty);
             if (!result)
-                _logger.LogWarning("'{MethodName}': Authentication failed. Wrong username or password.", nameof(ValidateUser));
-            
+                _logger.LogWarning(
+                    "'{MethodName}': Authentication failed. Wrong username or password.",
+                    nameof(ValidateUser));
+
             return result;
         }
 
@@ -105,7 +107,7 @@ namespace Service
             {
                 new(ClaimTypes.Name, _user?.UserName!),
                 new(ClaimTypes.NameIdentifier, _user?.Id!),
-                new (ClaimTypes.Email, _user?.Email!)
+                new(ClaimTypes.Email, _user?.Email!)
             };
             var roles = await _userManager.GetRolesAsync(_user!);
             foreach (var role in roles) claims.Add(new Claim(ClaimTypes.Role, role));

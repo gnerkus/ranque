@@ -1,5 +1,4 @@
 ﻿using System.Linq.Dynamic.Core;
-using Entities;
 using Entities.Models;
 
 namespace Repository.Extensions

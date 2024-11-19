@@ -5,49 +5,60 @@ using Shared;
 
 namespace Contracts
 {
-    public interface IApiService {}
+    public interface IApiService
+    {
+    }
+
     public interface IOrganizationService
     {
-        Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(bool trackChanges);
-        Task<OrganizationDto> GetOrganizationAsync(Guid orgId, bool trackChanges);
-        Task<OrganizationDto> CreateOrganizationAsync(OrgForCreationDto orgDto);
+        Task<IEnumerable<OrganizationDto>> GetAllOrganizationsAsync(string ownerId,
+            bool trackChanges);
 
-        Task UpdateOrganizationAsync(Guid orgId, OrgForUpdateDto orgForUpdateDto, bool
-            trackChanges);
+        Task<OrganizationDto> GetOrganizationAsync(string ownerId, Guid orgId, bool trackChanges);
+        Task<OrganizationDto> CreateOrganizationAsync(string ownerId, OrgForCreationDto orgDto);
 
-        Task DeleteOrganizationAsync(Guid orgId, bool trackChanges);
+        Task UpdateOrganizationAsync(string ownerId, Guid orgId, OrgForUpdateDto orgForUpdateDto,
+            bool
+                trackChanges);
 
-        Task<IEnumerable<OrganizationDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
+        Task DeleteOrganizationAsync(string ownerId, Guid orgId, bool trackChanges);
+
+        Task<IEnumerable<OrganizationDto>> GetByIdsAsync(string ownerId, IEnumerable<Guid> ids,
+            bool trackChanges);
 
         Task<(IEnumerable<OrganizationDto> orgs, string ids)> CreateOrgCollectionAsync
-            (IEnumerable<OrgForCreationDto> orgCollection);
+            (string ownerId, IEnumerable<OrgForCreationDto> orgCollection);
     }
 
     public interface ILeaderboardService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
-        (Guid orgId,
+        (string userId, Guid orgId,
             LeaderboardLinkParams
                 parameters, bool
                 trackChanges);
 
         Task<RankedLeaderboardDto>
-            GetLeaderboardAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+            GetLeaderboardAsync(string userId, Guid orgId, Guid leaderboardId, bool trackChanges);
 
         Task<IEnumerable<ParticipantDto>> GetParticipantsAsync(Guid leaderboardId,
             bool trackChanges);
 
-        Task<LeaderboardDto> CreateLeaderboardForOrgAsync(Guid orgId, LeaderboardForCreationDto
-            leaderboardForCreationDto, bool trackChanges);
+        Task<LeaderboardDto> CreateLeaderboardForOrgAsync(string userId, Guid orgId,
+            LeaderboardForCreationDto
+                leaderboardForCreationDto, bool trackChanges);
 
-        Task DeleteLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, bool trackChanges);
+        Task DeleteLeaderboardForOrgAsync(string userId, Guid orgId, Guid leaderboardId,
+            bool trackChanges);
 
-        Task UpdateLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId, LeaderboardForUpdateDto
-            leaderboardForUpdateDto, bool orgTrackChanges, bool leaderboardTrackChanges);
+        Task UpdateLeaderboardForOrgAsync(string userId, Guid orgId, Guid leaderboardId,
+            LeaderboardForUpdateDto
+                leaderboardForUpdateDto, bool orgTrackChanges, bool leaderboardTrackChanges);
 
         Task<(LeaderboardForUpdateDto leaderboardToPatch, Leaderboard leaderboard)>
             GetLeaderboardForPatchAsync(
-                Guid orgId, Guid leaderboardId, bool orgTrackChanges, bool leaderboardTrackChanges
+                string userId, Guid orgId, Guid leaderboardId, bool orgTrackChanges,
+                bool leaderboardTrackChanges
             );
 
         Task SaveChangesForPatchAsync(LeaderboardForUpdateDto leaderboardToPatch,
@@ -87,27 +98,32 @@ namespace Contracts
     public interface IParticipantService
     {
         Task<(LinkResponse linkResponse, MetaData metaData)> GetParticipantsAsync
-        (Guid orgId,
+        (string userId, Guid orgId,
             LinkParameters
                 parameters, bool
                 trackChanges);
 
-        Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool trackChanges);
+        Task<ParticipantDto> GetParticipantAsync(string userId, Guid orgId, Guid pcptId, bool
+            trackChanges);
 
         Task<IEnumerable<LeaderboardDto>> GetLeaderboardsAsync(Guid participantId,
             bool trackChanges);
 
-        Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId, ParticipantForCreationDto
-            participantForCreationDto, bool trackChanges);
+        Task<ParticipantDto> CreateParticipantForOrgAsync(string userId, Guid orgId,
+            ParticipantForCreationDto
+                participantForCreationDto, bool trackChanges);
 
-        Task DeleteParticipantForOrgAsync(Guid orgId, Guid participantId, bool trackChanges);
+        Task DeleteParticipantForOrgAsync(string userId, Guid orgId, Guid participantId, bool
+            trackChanges);
 
-        Task UpdateParticipantForOrgAsync(Guid orgId, Guid participantId, ParticipantForUpdateDto
-            participantForUpdateDto, bool orgTrackChanges, bool pcptTrackChanges);
+        Task UpdateParticipantForOrgAsync(string userId, Guid orgId, Guid participantId,
+            ParticipantForUpdateDto
+                participantForUpdateDto, bool orgTrackChanges, bool pcptTrackChanges);
 
         Task<(ParticipantForUpdateDto participantToPatch, Participant participant)>
             GetParticipantForPatchAsync(
-                Guid orgId, Guid participantId, bool orgTrackChanges, bool participantTrackChanges
+                string userId, Guid orgId, Guid participantId, bool orgTrackChanges, bool
+                    participantTrackChanges
             );
 
         Task SaveChangesForPatchAsync(ParticipantForUpdateDto participantToPatch,

@@ -14,8 +14,9 @@ namespace Service
         private readonly IParticipantLinks _participantLinks;
         private readonly IRepositoryManager _repository;
 
-        public ParticipantService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
-            mapper, IParticipantLinks participantLinks)
+        public ParticipantService(IRepositoryManager repository, ILogger<IApiService> logger,
+            IMapper
+                mapper, IParticipantLinks participantLinks)
         {
             _repository = repository;
             _mapper = mapper;
@@ -23,14 +24,14 @@ namespace Service
         }
 
         public async Task<(LinkResponse linkResponse, MetaData metaData)>
-            GetParticipantsAsync(Guid orgId,
+            GetParticipantsAsync(string userId, Guid orgId,
                 LinkParameters parameters, bool trackChanges)
         {
             if (!parameters.ParticipantParameters.ValidAgeRange)
                 throw new
                     MaxAgeBadRequestException();
 
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var participants =
                 await _repository.Participant.GetParticipantsAsync(orgId,
@@ -43,10 +44,11 @@ namespace Service
             return (linkResponse: links, metaData: participants.MetaData);
         }
 
-        public async Task<ParticipantDto> GetParticipantAsync(Guid orgId, Guid pcptId, bool
+        public async Task<ParticipantDto> GetParticipantAsync(string userId, Guid orgId, Guid
+            pcptId, bool
             trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
             var participantDb = await IsParticipantExist(orgId, pcptId, trackChanges);
 
             var participant = _mapper.Map<ParticipantDto>(participantDb);
@@ -62,10 +64,10 @@ namespace Service
             return _mapper.Map<IEnumerable<LeaderboardDto>>(leaderboards);
         }
 
-        public async Task<ParticipantDto> CreateParticipantForOrgAsync(Guid orgId,
+        public async Task<ParticipantDto> CreateParticipantForOrgAsync(string userId, Guid orgId,
             ParticipantForCreationDto participantForCreationDto, bool trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var participant = _mapper.Map<Participant>(participantForCreationDto);
 
@@ -75,10 +77,11 @@ namespace Service
             return _mapper.Map<ParticipantDto>(participant);
         }
 
-        public async Task DeleteParticipantForOrgAsync(Guid orgId, Guid participantId, bool
-            trackChanges)
+        public async Task DeleteParticipantForOrgAsync(string userId, Guid orgId,
+            Guid participantId, bool
+                trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var participantDb = await IsParticipantExist(orgId, participantId, trackChanges);
 
@@ -86,11 +89,12 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task UpdateParticipantForOrgAsync(Guid orgId, Guid participantId,
+        public async Task UpdateParticipantForOrgAsync(string userId, Guid orgId,
+            Guid participantId,
             ParticipantForUpdateDto participantForUpdateDto, bool orgTrackChanges,
             bool pcptTrackChanges)
         {
-            await IsOrgExist(orgId, orgTrackChanges);
+            await IsOrgExist(userId, orgId, orgTrackChanges);
 
             var participantDb = await IsParticipantExist(orgId, participantId, pcptTrackChanges);
 
@@ -100,9 +104,10 @@ namespace Service
 
         public async Task<(ParticipantForUpdateDto participantToPatch, Participant participant)>
             GetParticipantForPatchAsync(
-                Guid orgId, Guid participantId, bool orgTrackChanges, bool participantTrackChanges)
+                string userId, Guid orgId, Guid participantId, bool orgTrackChanges, bool
+                    participantTrackChanges)
         {
-            await IsOrgExist(orgId, orgTrackChanges);
+            await IsOrgExist(userId, orgId, orgTrackChanges);
 
             var participantDb =
                 await IsParticipantExist(orgId, participantId, participantTrackChanges);
@@ -118,9 +123,10 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        private async Task IsOrgExist(Guid orgId, bool trackChanges)
+        private async Task IsOrgExist(string userId, Guid orgId, bool trackChanges)
         {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
+            var org = await _repository.Organization.GetOrganizationAsync(userId, orgId,
+                trackChanges);
             if (org is null) throw new OrgNotFoundException(orgId);
         }
 

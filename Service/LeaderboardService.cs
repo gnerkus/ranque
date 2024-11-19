@@ -24,9 +24,9 @@ namespace Service
         }
 
         public async Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
-            (Guid orgId, LeaderboardLinkParams parameters, bool trackChanges)
+            (string userId, Guid orgId, LeaderboardLinkParams parameters, bool trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var leaderboards =
                 await _repository.Leaderboard.GetAllLeaderboardsAsync(orgId,
@@ -39,10 +39,11 @@ namespace Service
             return (linkResponse: links, metaData: leaderboards.MetaData);
         }
 
-        public async Task<RankedLeaderboardDto> GetLeaderboardAsync(Guid orgId, Guid leaderboardId,
+        public async Task<RankedLeaderboardDto> GetLeaderboardAsync(string userId, Guid orgId, Guid
+                leaderboardId,
             bool trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, trackChanges);
@@ -98,11 +99,11 @@ namespace Service
             return _mapper.Map<IEnumerable<ParticipantDto>>(participants);
         }
 
-        public async Task<LeaderboardDto> CreateLeaderboardForOrgAsync(Guid orgId,
+        public async Task<LeaderboardDto> CreateLeaderboardForOrgAsync(string userId, Guid orgId,
             LeaderboardForCreationDto leaderboardForCreationDto,
             bool trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var leaderboard = _mapper.Map<Leaderboard>(leaderboardForCreationDto);
             _repository.Leaderboard.CreateLeaderboard(orgId, leaderboard);
@@ -111,21 +112,23 @@ namespace Service
             return _mapper.Map<LeaderboardDto>(leaderboard);
         }
 
-        public async Task DeleteLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId,
+        public async Task DeleteLeaderboardForOrgAsync(string userId, Guid orgId,
+            Guid leaderboardId,
             bool trackChanges)
         {
-            await IsOrgExist(orgId, trackChanges);
+            await IsOrgExist(userId, orgId, trackChanges);
 
             var leaderboardDb = await IsLeaderboardExist(orgId, leaderboardId, trackChanges);
             _repository.Leaderboard.DeleteLeaderboard(leaderboardDb);
             await _repository.SaveAsync();
         }
 
-        public async Task UpdateLeaderboardForOrgAsync(Guid orgId, Guid leaderboardId,
+        public async Task UpdateLeaderboardForOrgAsync(string userId, Guid orgId,
+            Guid leaderboardId,
             LeaderboardForUpdateDto leaderboardForUpdateDto, bool orgTrackChanges,
             bool leaderboardTrackChanges)
         {
-            await IsOrgExist(orgId, orgTrackChanges);
+            await IsOrgExist(userId, orgId, orgTrackChanges);
 
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, leaderboardTrackChanges);
@@ -135,10 +138,11 @@ namespace Service
         }
 
         public async Task<(LeaderboardForUpdateDto leaderboardToPatch, Leaderboard leaderboard)>
-            GetLeaderboardForPatchAsync(Guid orgId, Guid leaderboardId, bool orgTrackChanges,
+            GetLeaderboardForPatchAsync(string userId, Guid orgId, Guid leaderboardId, bool
+                    orgTrackChanges,
                 bool leaderboardTrackChanges)
         {
-            await IsOrgExist(orgId, orgTrackChanges);
+            await IsOrgExist(userId, orgId, orgTrackChanges);
 
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, leaderboardTrackChanges);
@@ -155,9 +159,10 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        private async Task IsOrgExist(Guid orgId, bool trackChanges)
+        private async Task IsOrgExist(string userId, Guid orgId, bool trackChanges)
         {
-            var org = await _repository.Organization.GetOrganizationAsync(orgId, trackChanges);
+            var org = await _repository.Organization.GetOrganizationAsync(userId, orgId,
+                trackChanges);
             if (org is null) throw new OrgNotFoundException(orgId);
         }
 

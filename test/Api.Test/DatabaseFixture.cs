@@ -5,21 +5,18 @@ using Testcontainers.MsSql;
 
 namespace Entities.Test
 {
-    public class DatabaseFixture: IAsyncLifetime
+    public class DatabaseFixture : IAsyncLifetime
     {
+        private readonly MsSqlContainer _dbContainer = new MsSqlBuilder().Build();
         private RepositoryContext _dbContext = default!;
         public string MsSqlConnectionString => _dbContainer.GetConnectionString();
-        private readonly MsSqlContainer _dbContainer = new MsSqlBuilder().Build();
-        
+
         public async Task InitializeAsync()
         {
             await _dbContainer.StartAsync();
 
             var dbContextOptions = new DbContextOptionsBuilder<RepositoryContext>()
-                .UseSqlServer(MsSqlConnectionString, b =>
-                {
-                    b.MigrationsAssembly("Core");
-                })
+                .UseSqlServer(MsSqlConnectionString, b => { b.MigrationsAssembly("Core"); })
                 .Options;
             _dbContext = new RepositoryContext(dbContextOptions);
             await _dbContext.Database.MigrateAsync();
@@ -27,10 +24,7 @@ namespace Entities.Test
 
         public async Task DisposeAsync()
         {
-            if (_dbContext is not null)
-            {
-                await _dbContext.DisposeAsync();
-            }
+            if (_dbContext is not null) await _dbContext.DisposeAsync();
 
             if (_dbContainer is not null)
             {

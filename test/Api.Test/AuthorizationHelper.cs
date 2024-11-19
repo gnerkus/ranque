@@ -16,29 +16,31 @@ namespace Entities.Test
             };
         }
     }
+
     internal class AutoAuthorizeMiddleware
     {
         private readonly RequestDelegate _rd;
+
         public AutoAuthorizeMiddleware(RequestDelegate rd)
         {
             _rd = rd;
         }
-        
+
         public async Task Invoke(HttpContext httpContext)
         {
             var identity = new ClaimsIdentity("Bearer");
 
             identity.AddClaim(new Claim("sub", "1234567"));
             identity.AddClaim(new Claim(ClaimTypes.Name, "test-name"));
-            
+
             identity.AddClaims(GetClaimsBasedOnHttpHeaders(httpContext));
 
             httpContext.User.AddIdentity(identity);
             await _rd.Invoke(httpContext);
         }
-        
+
         /// <summary>
-        /// add claims to the identity based on the headers in the request
+        ///     add claims to the identity based on the headers in the request
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -54,9 +56,8 @@ namespace Entities.Test
                 var value = context.Request.Headers[header];
                 var claimType = header[headerPrefix.Length..];
                 if (!string.IsNullOrEmpty(value))
-                {
-                    claims.Add(new Claim(claimType == "role" ? ClaimTypes.Role : claimType, value!));
-                }
+                    claims.Add(
+                        new Claim(claimType == "role" ? ClaimTypes.Role : claimType, value!));
             }
 
             return claims;

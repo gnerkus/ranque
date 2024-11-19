@@ -27,7 +27,7 @@ namespace streak
                 BadRequestException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
-            
+
             _logger.LogError("Something went wrong: {@Exception}", exceptionHandlerFeature.Error);
 
             await httpContext.Response.WriteAsync(new ErrorDetails

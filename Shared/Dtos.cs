@@ -9,10 +9,16 @@ namespace Shared
         public string? FullAddress { get; init; }
     }
 
-    public record OrgForCreationDto(string Name, string Address, string Country,
+    public record OrgForCreationDto(
+        string Name,
+        string Address,
+        string Country,
         IEnumerable<ParticipantForCreationDto> Participants);
 
-    public record OrgForUpdateDto(string Name, string Address, string Country,
+    public record OrgForUpdateDto(
+        string Name,
+        string Address,
+        string Country,
         IEnumerable<ParticipantForCreationDto> Participants);
 
     public record ScoreDto
@@ -45,9 +51,9 @@ namespace Shared
 
     public record RankedLeaderboardDto
     {
-        public Guid Id {get; init; }
+        public Guid Id { get; init; }
         public string? Name { get; init; }
-        
+
         public required string LuaScript { get; init; }
         public IEnumerable<RankedParticipantDto> Participants { get; init; }
     }
@@ -57,7 +63,7 @@ namespace Shared
         [Required(ErrorMessage = "Leaderboard name is a required field")]
         [MaxLength(30, ErrorMessage = "Maximum length for the Name is 30 characters.")]
         public string? Name { get; init; }
-        
+
         [MaxLength(1000, ErrorMessage = "Maximum length for the Lua script is 1000 characters")]
         public required string LuaScript { get; set; }
     }
@@ -67,7 +73,7 @@ namespace Shared
     public record LeaderboardForUpdateDto : LeaderboardForManipulationDto;
 
     public record ParticipantDto(Guid Id, string Name, int Age, string Position);
-    
+
     public record RankedParticipantDto
     {
         public Guid Id { get; init; }

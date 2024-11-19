@@ -18,12 +18,12 @@ namespace Entities.Test
 
             const string leaderboardId = "a478da4c-a47b-4d95-896f-06368e844232";
             const string participantId = "79e49410-c239-4443-bc96-30a515289c97";
-            
+
             var createScoreRequest = new HttpRequestMessage(new HttpMethod("POST"),
                 "api/scores");
             createScoreRequest.Content = JsonContent.Create(new
             {
-                JsonValue ="{\"First\":2,\"Second\":4}",
+                JsonValue = "{\"First\":2,\"Second\":4}",
                 leaderboardId,
                 participantId
             });
@@ -34,7 +34,7 @@ namespace Entities.Test
                 $"api/leaderboards/{leaderboardId}/scores");
 
             // Assert
-            var score = new ScoreDto()
+            var score = new ScoreDto
             {
                 Id = new Guid(participantId),
                 JsonValue = "{\"First\":2,\"Second\":4}",

@@ -16,7 +16,7 @@ namespace Entities.Models
         public string? Address { get; set; }
 
         public string? Country { get; set; }
-        
+
         [ForeignKey(nameof(User))] public required string OwnerId { get; set; }
         public User? Owner { get; set; }
 

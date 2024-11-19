@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Serilog;
@@ -225,7 +224,7 @@ namespace streak.Extensions
                 connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
 
             services.AddHealthChecks()
-                .AddProcessAllocatedMemoryHealthCheck(512, name: "Memory",
+                .AddProcessAllocatedMemoryHealthCheck(512, "Memory",
                     tags: ["memory", "ready"]);
         }
     }
