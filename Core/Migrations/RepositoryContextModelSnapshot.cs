@@ -86,6 +86,7 @@ namespace streak.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("OwnerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -100,14 +101,16 @@ namespace streak.Migrations
                             Id = new Guid("c36f337b-2006-4b38-8883-f3c176d9ff80"),
                             Address = "1 Dev Street",
                             Country = "GER",
-                            Name = "IT_Solutions Ltd"
+                            Name = "IT_Solutions Ltd",
+                            OwnerId = "0b50c4c1-d720-4431-b880-e82603bcbac2"
                         },
                         new
                         {
                             Id = new Guid("7edac2a8-a73f-4926-8da3-fea7dbaf2ebd"),
                             Address = "2 Dev Street",
                             Country = "GER",
-                            Name = "Admin_Solutions Ltd"
+                            Name = "Admin_Solutions Ltd",
+                            OwnerId = "0b50c4c1-d720-4431-b880-e82603bcbac2"
                         });
                 });
 
@@ -440,7 +443,9 @@ namespace streak.Migrations
                 {
                     b.HasOne("Entities.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Owner");
                 });

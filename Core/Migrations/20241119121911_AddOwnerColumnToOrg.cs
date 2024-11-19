@@ -17,21 +17,22 @@ namespace streak.Migrations
                 name: "OwnerId",
                 table: "Organizations",
                 type: "nvarchar(450)",
-                nullable: true);
-
+                nullable: false,
+                defaultValue: "0b50c4c1-d720-4431-b880-e82603bcbac2");
+            
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "OrganizationId",
                 keyValue: new Guid("7edac2a8-a73f-4926-8da3-fea7dbaf2ebd"),
                 column: "OwnerId",
-                value: null);
+                value: "0b50c4c1-d720-4431-b880-e82603bcbac2");
 
             migrationBuilder.UpdateData(
                 table: "Organizations",
                 keyColumn: "OrganizationId",
                 keyValue: new Guid("c36f337b-2006-4b38-8883-f3c176d9ff80"),
                 column: "OwnerId",
-                value: null);
+                value: "0b50c4c1-d720-4431-b880-e82603bcbac2");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Organizations_OwnerId",
@@ -43,7 +44,8 @@ namespace streak.Migrations
                 table: "Organizations",
                 column: "OwnerId",
                 principalTable: "AspNetUsers",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.NoAction);
         }
 
         /// <inheritdoc />

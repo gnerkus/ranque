@@ -15,7 +15,7 @@ namespace Repository.Configuration
                     Name = "IT_Solutions Ltd",
                     Address = "1 Dev Street",
                     Country = "GER",
-                    Owner = null
+                    OwnerId = "0b50c4c1-d720-4431-b880-e82603bcbac2",
                 },
                 new Organization
                 {
@@ -23,7 +23,7 @@ namespace Repository.Configuration
                     Name = "Admin_Solutions Ltd",
                     Address = "2 Dev Street",
                     Country = "GER",
-                    Owner = null
+                    OwnerId = "0b50c4c1-d720-4431-b880-e82603bcbac2",
                 }
             );
         }
