@@ -16,6 +16,8 @@ namespace Entities.Models
         public string? Address { get; set; }
 
         public string? Country { get; set; }
+        
+        public required User Owner { get; set; }
 
         public List<Leaderboard> Leaderboards { get; set; } = new();
         public List<Participant> Participants { get; set; } = new();
