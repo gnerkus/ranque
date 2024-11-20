@@ -16,10 +16,11 @@ using streak.Extensions;
 using streak.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog((context, loggerConfig) => 
+builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig
         .WriteTo.Console(
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}"
+            outputTemplate:
+            "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}"
         )
         .ReadFrom.Configuration(context.Configuration)
 );
@@ -137,13 +138,12 @@ app.UseOutputCache();
 
 app.UseAuthentication();
 app.UseAuthorization();
-if (app.Environment.IsDevelopment())
-{
-    app.UseEndpoints(config => config.MapHealthChecksUI());
-}
+if (app.Environment.IsDevelopment()) app.UseEndpoints(config => config.MapHealthChecksUI());
 
 app.MapControllers();
 
 await app.RunAsync();
 
-public partial class Program {}
+public partial class Program
+{
+}

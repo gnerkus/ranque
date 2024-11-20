@@ -22,7 +22,7 @@ namespace Entities.Models
 
         public Organization? Organization { get; set; }
 
-        public List<Score> Scores { get; set; } = new();
-        public List<Leaderboard> Leaderboards { get; set; } = new();
+        public List<Score> Scores { get; set; } = [];
+        public List<Leaderboard> Leaderboards { get; set; } = [];
     }
 }

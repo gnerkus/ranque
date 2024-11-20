@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text.Json;
 using Asp.Versioning;
 using Contracts;
 using Entities;
@@ -34,15 +35,20 @@ namespace Presentation.Controllers
         [EnableRateLimiting("SpecificPolicy")]
         public async Task<IActionResult> GetOrganizations()
         {
-            var orgs = await _service.OrganizationService.GetAllOrganizationsAsync(false);
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
+
+            var orgs = await _service.OrganizationService.GetAllOrganizationsAsync(ownerId, false);
             return Ok(orgs);
         }
 
         [HttpGet("{id:guid}", Name = "OrgById")]
         public async Task<IActionResult> GetOrganization(Guid id)
         {
-            var org = await _service.OrganizationService.GetOrganizationAsync(id, false);
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
 
+            var org = await _service.OrganizationService.GetOrganizationAsync(ownerId, id, false);
             return Ok(org);
         }
 
@@ -52,7 +58,10 @@ namespace Presentation.Controllers
             ]
             IEnumerable<Guid> ids)
         {
-            var orgs = await _service.OrganizationService.GetByIdsAsync(ids, false);
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
+
+            var orgs = await _service.OrganizationService.GetByIdsAsync(ownerId, ids, false);
             return Ok(orgs);
         }
 
@@ -60,7 +69,10 @@ namespace Presentation.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateOrganization([FromBody] OrgForCreationDto orgDto)
         {
-            var org = await _service.OrganizationService.CreateOrganizationAsync(orgDto);
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
+
+            var org = await _service.OrganizationService.CreateOrganizationAsync(ownerId, orgDto);
             return CreatedAtRoute("OrgById", new { id = org.Id }, org);
         }
 
@@ -69,8 +81,12 @@ namespace Presentation.Controllers
             IEnumerable<OrgForCreationDto>
                 orgCollection)
         {
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
+
             var result =
-                await _service.OrganizationService.CreateOrgCollectionAsync(orgCollection);
+                await _service.OrganizationService.CreateOrgCollectionAsync(ownerId,
+                    orgCollection);
 
             return CreatedAtRoute("OrgCollection", new { result.ids }, result.orgs);
         }
@@ -80,7 +96,11 @@ namespace Presentation.Controllers
         public async Task<IActionResult> UpdateOrganization(Guid orgId, [FromBody] OrgForUpdateDto
             orgDto)
         {
-            await _service.OrganizationService.UpdateOrganizationAsync(orgId, orgDto, true);
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
+
+            await _service.OrganizationService.UpdateOrganizationAsync(ownerId, orgId, orgDto,
+                true);
 
             return NoContent();
         }
@@ -88,7 +108,10 @@ namespace Presentation.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteOrg(Guid id)
         {
-            await _service.OrganizationService.DeleteOrganizationAsync(id, false);
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(ownerId)) return Unauthorized("User is missing");
+
+            await _service.OrganizationService.DeleteOrganizationAsync(ownerId, id, false);
             return NoContent();
         }
 
@@ -100,9 +123,13 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetLeaderboardsForOrganization(Guid organizationId,
             [FromQuery] LeaderboardParameters parameters)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
             var linkParams = new LeaderboardLinkParams(parameters, HttpContext);
 
-            var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(organizationId,
+            var pagedResult = await _service.LeaderboardService.GetLeaderboardsAsync(userId,
+                organizationId,
                 linkParams, false);
 
             Response.Headers.Append("X-Pagination",
@@ -118,7 +145,10 @@ namespace Presentation.Controllers
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetLeaderboardForOrganization(Guid orgId, Guid id)
         {
-            var leaderboard = await _service.LeaderboardService.GetLeaderboardAsync(orgId,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var leaderboard = await _service.LeaderboardService.GetLeaderboardAsync(userId, orgId,
                 id, false);
 
             return Ok(leaderboard);
@@ -134,7 +164,12 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            var leaderboard = await _service.LeaderboardService.CreateLeaderboardForOrgAsync(orgId,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var leaderboard = await _service.LeaderboardService.CreateLeaderboardForOrgAsync(
+                userId,
+                orgId,
                 leaderboardForCreationDto, false);
 
             return CreatedAtRoute("GetLeaderboardForOrg", new { orgId, id = leaderboard.Id },
@@ -150,7 +185,11 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            await _service.LeaderboardService.UpdateLeaderboardForOrgAsync(orgId, leaderboardId,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            await _service.LeaderboardService.UpdateLeaderboardForOrgAsync(userId, orgId,
+                leaderboardId,
                 leaderboardForUpdateDto, false, true);
 
             return NoContent();
@@ -162,7 +201,12 @@ namespace Presentation.Controllers
         {
             if (patchDoc is null)
                 return BadRequest("patchDoc object sent from client is null.");
-            var result = await _service.LeaderboardService.GetLeaderboardForPatchAsync(orgId, id,
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var result = await _service.LeaderboardService.GetLeaderboardForPatchAsync(userId,
+                orgId, id,
                 false,
                 true);
             patchDoc.ApplyTo(result.leaderboardToPatch, ModelState);
@@ -180,7 +224,11 @@ namespace Presentation.Controllers
         [HttpDelete("{orgId:guid}/leaderboards/{id:guid}")]
         public async Task<IActionResult> DeleteLeaderboardForOrg(Guid orgId, Guid id)
         {
-            await _service.LeaderboardService.DeleteLeaderboardForOrgAsync(orgId, id, false);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            await _service.LeaderboardService.DeleteLeaderboardForOrgAsync(userId, orgId, id,
+                false);
             return NoContent();
         }
 
@@ -194,7 +242,10 @@ namespace Presentation.Controllers
         {
             var linkParams = new LinkParameters(parameters, HttpContext);
 
-            var pagedResult = await _service.ParticipantService.GetParticipantsAsync(orgId,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var pagedResult = await _service.ParticipantService.GetParticipantsAsync(userId, orgId,
                 linkParams,
                 false);
 
@@ -210,7 +261,11 @@ namespace Presentation.Controllers
         [HttpGet("{orgId:guid}/participants/{id:guid}", Name = "GetParticipantForOrg")]
         public async Task<IActionResult> GetParticipantForOrganization(Guid orgId, Guid id)
         {
-            var participant = await _service.ParticipantService.GetParticipantAsync(orgId, id,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var participant = await _service.ParticipantService.GetParticipantAsync(userId, orgId,
+                id,
                 false);
             return Ok(participant);
         }
@@ -224,7 +279,12 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            var participant = await _service.ParticipantService.CreateParticipantForOrgAsync(orgId,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var participant = await _service.ParticipantService.CreateParticipantForOrgAsync
+            (userId,
+                orgId,
                 pcptDto, false);
 
             return CreatedAtRoute("GetParticipantForOrg", new { orgId, id = participant.Id },
@@ -240,7 +300,11 @@ namespace Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            await _service.ParticipantService.UpdateParticipantForOrgAsync(orgId, participantId,
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            await _service.ParticipantService.UpdateParticipantForOrgAsync(userId, orgId,
+                participantId,
                 participantForUpdateDto, false, true);
 
             return NoContent();
@@ -252,7 +316,13 @@ namespace Presentation.Controllers
         {
             if (patchDoc is null)
                 return BadRequest("patchDoc object sent from client is null.");
-            var result = await _service.ParticipantService.GetParticipantForPatchAsync(orgId, id,
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            var result = await _service.ParticipantService.GetParticipantForPatchAsync(userId,
+                orgId,
+                id,
                 false,
                 true);
             patchDoc.ApplyTo(result.participantToPatch, ModelState);
@@ -271,7 +341,11 @@ namespace Presentation.Controllers
         [HttpDelete("{orgId:guid}/participants/{id:guid}")]
         public async Task<IActionResult> DeleteParticipantForOrg(Guid orgId, Guid id)
         {
-            await _service.ParticipantService.DeleteParticipantForOrgAsync(orgId, id, false);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User is missing");
+
+            await _service.ParticipantService.DeleteParticipantForOrgAsync(userId, orgId, id,
+                false);
             return NoContent();
         }
 

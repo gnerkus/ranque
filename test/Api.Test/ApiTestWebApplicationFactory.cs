@@ -4,33 +4,33 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Repository;
 
-namespace Entities.Test;
-    
-public class ApiTestWebApplicationFactory(DatabaseFixture fixture): WebApplicationFactory<Program>
+namespace Entities.Test
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    public class ApiTestWebApplicationFactory(DatabaseFixture fixture)
+        : WebApplicationFactory<Program>
     {
-        builder.UseEnvironment("Test");
-        
-        builder.ConfigureServices(services =>
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            // Find the existing db context and remove it
-            var dbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof
-                (DbContextOptions<RepositoryContext>));
+            builder.UseEnvironment("Test");
 
-            if (dbContextDescriptor is not null)
+            builder.ConfigureServices(services =>
             {
-                services.Remove(dbContextDescriptor);
-            }
-            
-            var ctx = services.SingleOrDefault(d => d.ServiceType == typeof(RepositoryContext));
-            services.Remove(ctx!);
+                // Find the existing db context and remove it
+                var dbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof
+                    (DbContextOptions<RepositoryContext>));
 
-            services.AddDbContext<RepositoryContext>((container, options) =>
-                {
-                    options.UseSqlServer(fixture.MsSqlConnectionString);
-                })
-                .AddSingleton<IStartupFilter>(new AutoAuthorizeStartupFilter());
-        });
+                if (dbContextDescriptor is not null) services.Remove(dbContextDescriptor);
+
+                var ctx = services.SingleOrDefault(d =>
+                    d.ServiceType == typeof(RepositoryContext));
+                services.Remove(ctx!);
+
+                services.AddDbContext<RepositoryContext>((container, options) =>
+                    {
+                        options.UseSqlServer(fixture.MsSqlConnectionString);
+                    })
+                    .AddSingleton<IStartupFilter>(new AutoAuthorizeStartupFilter());
+            });
+        }
     }
 }

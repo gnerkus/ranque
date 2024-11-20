@@ -1,5 +1,4 @@
 ﻿using Contracts;
-using Entities;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,21 +11,25 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<Organization>> GetAllOrganizationsAsync(bool trackChanges)
+        public async Task<IEnumerable<Organization>> GetAllOrganizationsAsync(string ownerId, bool
+            trackChanges)
         {
-            return await FindAll(trackChanges)
+            return await FindByCondition(o => o.OwnerId.Equals(ownerId), trackChanges)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
         }
 
-        public async Task<Organization?> GetOrganizationAsync(Guid orgId, bool trackChanges)
+        public async Task<Organization?> GetOrganizationAsync(string ownerId, Guid orgId,
+            bool trackChanges)
         {
-            return await FindByCondition(c => c.Id.Equals(orgId), trackChanges)
+            return await FindByCondition(c => c.Id.Equals(orgId) && c.OwnerId.Equals(ownerId),
+                    trackChanges)
                 .SingleOrDefaultAsync();
         }
 
-        public void CreateOrganization(Organization org)
+        public void CreateOrganization(string ownerId, Organization org)
         {
+            org.OwnerId = ownerId;
             Create(org);
         }
 
@@ -35,10 +38,13 @@ namespace Repository
             Delete(org);
         }
 
-        public async Task<IEnumerable<Organization>> GetByIdsAsync(IEnumerable<Guid> ids, bool
-            trackChanges)
+        public async Task<IEnumerable<Organization>> GetByIdsAsync(string ownerId,
+            IEnumerable<Guid> ids,
+            bool
+                trackChanges)
         {
-            return await FindByCondition(x => ids.Contains(x.Id), trackChanges)
+            return await FindByCondition(x => ids.Contains(x.Id) && x.OwnerId.Equals(ownerId),
+                    trackChanges)
                 .ToListAsync();
         }
     }

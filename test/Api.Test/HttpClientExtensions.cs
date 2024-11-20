@@ -4,13 +4,14 @@ namespace Entities.Test
 {
     public static class HttpClientExtensions
     {
-        private static readonly JsonSerializerOptions Options = new ()
+        private static readonly JsonSerializerOptions Options = new()
         {
-            IncludeFields = true,
+            IncludeFields = true
         };
-        public static async Task<T> GetAndDeserialize<T>(this HttpClient client, 
-        HttpRequestMessage 
-        message)
+
+        public static async Task<T> GetAndDeserialize<T>(this HttpClient client,
+            HttpRequestMessage
+                message)
         {
             var response = await client.SendAsync(message);
             var result = await response.Content.ReadAsStringAsync();

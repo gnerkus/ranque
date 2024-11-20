@@ -1,18 +1,20 @@
-﻿using Entities;
-using Entities.Models;
+﻿using Entities.Models;
 using Shared;
 
 namespace Contracts
 {
     public interface IOrganizationRepository
     {
-        Task<IEnumerable<Organization>> GetAllOrganizationsAsync(bool trackChanges);
-        Task<Organization?> GetOrganizationAsync(Guid orgId, bool trackChanges);
-        void CreateOrganization(Organization org);
+        Task<IEnumerable<Organization>>
+            GetAllOrganizationsAsync(string ownerId, bool trackChanges);
+
+        Task<Organization?> GetOrganizationAsync(string ownerId, Guid orgId, bool trackChanges);
+        void CreateOrganization(string ownerId, Organization org);
 
         void DeleteOrganization(Organization org);
 
-        Task<IEnumerable<Organization>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
+        Task<IEnumerable<Organization>> GetByIdsAsync(string ownerId, IEnumerable<Guid> ids, bool
+            trackChanges);
     }
 
     public interface ILeaderboardRepository

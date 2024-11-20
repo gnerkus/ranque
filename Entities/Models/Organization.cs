@@ -17,6 +17,9 @@ namespace Entities.Models
 
         public string? Country { get; set; }
 
+        [ForeignKey(nameof(User))] public required string OwnerId { get; set; }
+        public User? Owner { get; set; }
+
         public List<Leaderboard> Leaderboards { get; set; } = new();
         public List<Participant> Participants { get; set; } = new();
     }
