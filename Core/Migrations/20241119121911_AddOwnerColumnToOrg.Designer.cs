@@ -105,7 +105,7 @@ namespace streak.Migrations
                             Address = "1 Dev Street",
                             Country = "GER",
                             Name = "IT_Solutions Ltd",
-                            OwnerId = "0b50c4c1-d720-4431-b880-e82603bcbac2"
+                            OwnerId = "6804c055-4dbc-4c32-b7c2-6fb243806912"
                         },
                         new
                         {
@@ -113,7 +113,7 @@ namespace streak.Migrations
                             Address = "2 Dev Street",
                             Country = "GER",
                             Name = "Admin_Solutions Ltd",
-                            OwnerId = "0b50c4c1-d720-4431-b880-e82603bcbac2"
+                            OwnerId = "6804c055-4dbc-4c32-b7c2-6fb243806912"
                         });
                 });
 
