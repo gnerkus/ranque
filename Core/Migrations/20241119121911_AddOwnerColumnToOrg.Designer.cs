@@ -89,7 +89,6 @@ namespace streak.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("OwnerId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -104,16 +103,14 @@ namespace streak.Migrations
                             Id = new Guid("c36f337b-2006-4b38-8883-f3c176d9ff80"),
                             Address = "1 Dev Street",
                             Country = "GER",
-                            Name = "IT_Solutions Ltd",
-                            OwnerId = "6804c055-4dbc-4c32-b7c2-6fb243806912"
+                            Name = "IT_Solutions Ltd"
                         },
                         new
                         {
                             Id = new Guid("7edac2a8-a73f-4926-8da3-fea7dbaf2ebd"),
                             Address = "2 Dev Street",
                             Country = "GER",
-                            Name = "Admin_Solutions Ltd",
-                            OwnerId = "6804c055-4dbc-4c32-b7c2-6fb243806912"
+                            Name = "Admin_Solutions Ltd"
                         });
                 });
 
