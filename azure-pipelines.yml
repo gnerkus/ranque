@@ -77,4 +77,4 @@ steps:
       inlineScript: |
         az --version
         az account show
-        dotnet ef database update --project Core/Core.csproj
+        dotnet ef database update --project src/Core/Core.csproj

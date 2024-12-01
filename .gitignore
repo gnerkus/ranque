@@ -486,4 +486,4 @@ $RECYCLE.BIN/
 
 # Dev query files
 *.http
-Core/http-client.env.json
+src/Core/http-client.env.json

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using Presentation;
 using Presentation.ActionFilters;
+using Sentry;
 using Sentry.Extensibility;
 using Serilog;
 using Service.DataShaping;
