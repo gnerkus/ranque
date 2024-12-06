@@ -1,4 +1,7 @@
-﻿using StackExchange.Redis;
+﻿using System.Text.Json;
+using Entities.Models;
+using Shared;
+using StackExchange.Redis;
 
 namespace Api.Cache;
 
@@ -13,13 +16,25 @@ public class RedisService: IRedisService
         _db = redis.GetDatabase();
     }
 
-    public void UpdateScore(Guid leaderboardId, Guid participantId, int increment)
+    public void UpdateScore(Guid leaderboardId, Participant participant, double increment)
     {
-        _db.SortedSetIncrement(leaderboardId.ToString(), participantId.ToString(), increment);
+        var participantKey = JsonSerializer.Serialize(participant);
+        _db.SortedSetIncrement(leaderboardId.ToString(), participantKey, increment);
     }
 
-    public IEnumerable<SortedSetEntry> GetLeaderboard(Guid leaderboardId)
+    public IEnumerable<RankedParticipantDto> GetLeaderboard(Guid leaderboardId)
     {
-        return _db.SortedSetScan(leaderboardId.ToString());
+        var leaderboard = _db.SortedSetScan(leaderboardId.ToString());
+
+        return leaderboard.Select(sortedSetEntry =>
+        {
+            var participant = JsonSerializer.Deserialize<Participant>(sortedSetEntry.Element!);
+            return new RankedParticipantDto
+            {
+                Id = participant.Id,
+                Name = participant.Name,
+                Score = sortedSetEntry.Score
+            };
+        });
     }
 }
