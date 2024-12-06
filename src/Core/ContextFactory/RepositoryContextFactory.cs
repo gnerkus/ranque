@@ -8,7 +8,8 @@ namespace streak.ContextFactory
     {
         public RepositoryContext CreateDbContext(string[] args)
         {
-            var connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_AZURE_SQL_CONNECTIONSTRING");
+            var connectionString =
+                Environment.GetEnvironmentVariable("ASPNETCORE_AZURE_SQL_CONNECTIONSTRING");
 
             var builder = new DbContextOptionsBuilder<RepositoryContext>()
                 .UseSqlServer(

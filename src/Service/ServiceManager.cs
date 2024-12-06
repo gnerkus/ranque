@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Api.Cache;
+using AutoMapper;
 using Contracts;
 using Entities;
 using Entities.Models;
@@ -20,16 +21,16 @@ namespace Service
                 logger, IMapper mapper, IParticipantLinks participantLinks,
             UserManager<User>
                 userManager, IOptions<JwtConfiguration> configuration, IScoreLinks scoreLinks,
-            ILeaderboardLinks leaderboardLinks)
+            ILeaderboardLinks leaderboardLinks, IRedisService redisService)
         {
             _orgService = new Lazy<IOrganizationService>(() => new OrganizationService
                 (repositoryManager, logger, mapper));
             _participantService = new Lazy<IParticipantService>(() => new ParticipantService
                 (repositoryManager, logger, mapper, participantLinks));
             _leaderboardService = new Lazy<ILeaderboardService>(() => new LeaderboardService
-                (repositoryManager, logger, mapper, leaderboardLinks));
+                (repositoryManager, logger, mapper, leaderboardLinks, redisService));
             _scoreService = new Lazy<IScoreService>(() => new ScoreService
-                (repositoryManager, logger, mapper, scoreLinks));
+                (repositoryManager, logger, mapper, scoreLinks, redisService));
             _authenticationService = new Lazy<IAuthenticationService>(() => new
                 AuthenticationService(logger, mapper, userManager, configuration));
         }

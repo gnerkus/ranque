@@ -213,16 +213,8 @@ namespace streak.Extensions
             services.Configure<JwtConfiguration>(config.GetSection("JwtSettings"));
         }
 
-        public static void ConfigureHealthChecks(this IServiceCollection services,
-            IConfiguration configuration)
+        public static void ConfigureHealthChecks(this IServiceCollection services)
         {
-            var connectionString =
-                Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
-
-            if (string.IsNullOrWhiteSpace(connectionString) &&
-                Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-                connectionString = configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
-
             services.AddHealthChecks()
                 .AddProcessAllocatedMemoryHealthCheck(512, "Memory",
                     tags: ["memory", "ready"]);

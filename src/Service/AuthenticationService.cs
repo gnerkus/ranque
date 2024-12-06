@@ -47,7 +47,6 @@ namespace Service
         public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
         {
             _user = await _userManager.FindByEmailAsync(userForAuth.UserName!);
-
             var result = _user != null && await _userManager.CheckPasswordAsync(_user,
                 userForAuth.Password ?? string.Empty);
             if (!result)
@@ -138,7 +137,8 @@ namespace Service
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("ASPNETCORE_RANQUE_SECRET")!)),
+                    Encoding.UTF8.GetBytes(
+                        Environment.GetEnvironmentVariable("ASPNETCORE_RANQUE_SECRET")!)),
                 ValidateLifetime = true,
                 ValidIssuer = _jwtConfig.ValidIssuer,
                 ValidAudience = _jwtConfig.ValidAudience

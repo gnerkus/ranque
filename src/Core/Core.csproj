@@ -43,6 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Api.Cache\Api.Cache.csproj"/>
         <ProjectReference Include="..\Presentation\Presentation.csproj"/>
         <ProjectReference Include="..\Repository\Repository.csproj"/>
         <ProjectReference Include="..\Service\Service.csproj"/>

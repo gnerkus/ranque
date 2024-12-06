@@ -32,7 +32,8 @@ namespace Entities.Test
 
             identity.AddClaim(new Claim("sub", "1234567"));
             identity.AddClaim(new Claim(ClaimTypes.Name, "test-name"));
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, "18e62a3b-f503-4d2f-9b22-9f7a6f0ede10"));
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier,
+                "18e62a3b-f503-4d2f-9b22-9f7a6f0ede10"));
 
             identity.AddClaims(GetClaimsBasedOnHttpHeaders(httpContext));
 

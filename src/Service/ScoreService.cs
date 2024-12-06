@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using Api.Cache;
+using AutoMapper;
 using Contracts;
+using DynamicScores;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
@@ -11,15 +13,17 @@ namespace Service
     public class ScoreService : IScoreService, IApiService
     {
         private readonly IMapper _mapper;
+        private readonly IRedisService _redis;
         private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
 
         public ScoreService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
-            mapper, IScoreLinks scoreLinks)
+            mapper, IScoreLinks scoreLinks, IRedisService redisService)
         {
             _repository = repository;
             _mapper = mapper;
             _scoreLinks = scoreLinks;
+            _redis = redisService;
         }
 
         public async Task<(LinkResponse linkResponse, MetaData metaData)> GetAllScoresAsync(
@@ -82,7 +86,15 @@ namespace Service
         public async Task<ScoreDto> CreateScoreAsync(Guid leaderboardId, Guid participantId,
             ScoreForCreationDto scoreForCreationDto, bool trackChanges)
         {
+            var participant = await IsParticipantExist(participantId, trackChanges);
+            var leaderboard = await IsLeaderboardExist(leaderboardId, trackChanges);
+            var jsonScoreProcessor = new JsonScoreProcessor();
             var score = _mapper.Map<Score>(scoreForCreationDto);
+
+            var scoreDouble =
+                jsonScoreProcessor.GetScoreDouble(score.JsonValue, leaderboard.LuaScript);
+            _redis.UpdateScore(leaderboardId, participant, scoreDouble);
+
             _repository.Score.CreateScore(leaderboardId, participantId, score);
             await _repository.SaveAsync();
 
