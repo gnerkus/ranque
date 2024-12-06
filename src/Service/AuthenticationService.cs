@@ -56,6 +56,18 @@ namespace Service
 
             return result;
         }
+        
+        public async Task<User> GetAuthenticatedUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            return user;
+        }
 
         public async Task<TokenDto> CreateToken(bool populateExp)
         {
