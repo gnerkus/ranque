@@ -12,6 +12,7 @@ using Serilog;
 using Service.DataShaping;
 using Shared;
 using Api.Cache;
+using StackExchange.Redis;
 using streak;
 using streak.Extensions;
 using streak.Utility;
@@ -58,16 +59,7 @@ builder.WebHost.UseSentry((webHostBuilderContext, options) =>
     options.MaxRequestBodySize = RequestSize.Always;
 });
 
-builder.Services.AddStackExchangeRedisCache((options) =>
-{
-    options.Configuration = builder.Configuration["REDIS_HOST"];
-    options.InstanceName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
-    {
-        AbortOnConnectFail = true,
-        EndPoints = { options.Configuration }
-    };
-});
+builder.Services.AddSingleton<IRedisService>(new RedisService());
 
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
@@ -77,7 +69,7 @@ builder.Services.AddScoped<IDataShaper<LeaderboardDto>, DataShaper<LeaderboardDt
 builder.Services.AddScoped<IParticipantLinks, ParticipantLinks>();
 builder.Services.AddScoped<IScoreLinks, ScoreLinks>();
 builder.Services.AddScoped<ILeaderboardLinks, LeaderboardLinks>();
-builder.Services.AddScoped<IRedisService, RedisCacheService>();
+builder.Services.AddScoped<IRedisService, RedisService>();
 
 // Add services to the container.
 builder.Services.AddControllers(config =>
