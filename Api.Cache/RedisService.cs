@@ -11,8 +11,40 @@ public class RedisService: IRedisService
 
     public RedisService()
     {
-        var connectionString = Environment.GetEnvironmentVariable("ASPNETCORE_REDIS_HOST");
-        var redis = ConnectionMultiplexer.Connect(connectionString);
+        ConfigurationOptions ctx;
+
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+        if (env == "Development")
+        {
+            ctx = new ConfigurationOptions
+            {
+                EndPoints =
+                {
+                    { "localhost", 6379 }
+                }
+            };
+        }
+        else
+        {
+            ctx = new ConfigurationOptions
+            {
+                EndPoints =
+                {
+                    {
+                        Environment.GetEnvironmentVariable("ASPNETCORE_REDIS_HOST"), int
+                            .Parse(Environment
+                                .GetEnvironmentVariable("ASPNETCORE_REDIS_PORT"))
+                    }
+                },
+                AbortOnConnectFail = false,
+                ConnectTimeout = 10000,
+                Ssl = true,
+                Password = Environment.GetEnvironmentVariable("ASPNETCORE_REDIS_PASSWORD")
+            };
+        }
+        
+        var redis = ConnectionMultiplexer.Connect(ctx);
         _db = redis.GetDatabase();
     }
 
