@@ -13,6 +13,7 @@ namespace streak.ContextFactory
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json")
+                .AddEnvironmentVariables()
                 .Build();
             var connectionString = configuration["AZURE_SQL_CONNECTIONSTRING"];
 
