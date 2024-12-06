@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using Presentation;
 using Presentation.ActionFilters;
-using Sentry;
 using Sentry.Extensibility;
 using Serilog;
 using Service.DataShaping;
 using Shared;
+using Api.Cache;
 using streak;
 using streak.Extensions;
 using streak.Utility;
@@ -58,6 +58,17 @@ builder.WebHost.UseSentry((webHostBuilderContext, options) =>
     options.MaxRequestBodySize = RequestSize.Always;
 });
 
+builder.Services.AddStackExchangeRedisCache((options) =>
+{
+    options.Configuration = builder.Configuration["REDIS_HOST"];
+    options.InstanceName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
+    {
+        AbortOnConnectFail = true,
+        EndPoints = { options.Configuration }
+    };
+});
+
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 builder.Services.AddScoped<IDataShaper<ParticipantDto>, DataShaper<ParticipantDto>>();
@@ -66,6 +77,7 @@ builder.Services.AddScoped<IDataShaper<LeaderboardDto>, DataShaper<LeaderboardDt
 builder.Services.AddScoped<IParticipantLinks, ParticipantLinks>();
 builder.Services.AddScoped<IScoreLinks, ScoreLinks>();
 builder.Services.AddScoped<ILeaderboardLinks, LeaderboardLinks>();
+builder.Services.AddScoped<IRedisService, RedisCacheService>();
 
 // Add services to the container.
 builder.Services.AddControllers(config =>
@@ -96,7 +108,7 @@ builder.Services.ConfigureRateLimitingOptions();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.ConfigureHealthChecks(builder.Configuration);
+builder.Services.ConfigureHealthChecks();
 
 var app = builder.Build();
 

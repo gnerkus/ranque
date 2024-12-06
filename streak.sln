@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "src\Service\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\Shared\Shared.csproj", "{3900BAE1-1FA0-449D-990E-E1825C76202B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Cache", "Api.Cache\Api.Cache.csproj", "{8EA8CB2B-BF34-402D-A785-F454C2D01761}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{3900BAE1-1FA0-449D-990E-E1825C76202B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3900BAE1-1FA0-449D-990E-E1825C76202B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3900BAE1-1FA0-449D-990E-E1825C76202B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EA8CB2B-BF34-402D-A785-F454C2D01761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EA8CB2B-BF34-402D-A785-F454C2D01761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EA8CB2B-BF34-402D-A785-F454C2D01761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EA8CB2B-BF34-402D-A785-F454C2D01761}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
