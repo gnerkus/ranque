@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using Api.Cache;
+using AutoMapper;
 using Contracts;
-using DynamicScores;
 using Entities;
 using Entities.Exceptions;
 using Entities.Models;
@@ -14,13 +14,15 @@ namespace Service
         private readonly ILeaderboardLinks _leaderboardLinks;
         private readonly IMapper _mapper;
         private readonly IRepositoryManager _repository;
+        private readonly IRedisService _redis;
 
         public LeaderboardService(IRepositoryManager repository, ILogger<IApiService> logger,
-            IMapper mapper, ILeaderboardLinks leaderboardLinks)
+            IMapper mapper, ILeaderboardLinks leaderboardLinks, IRedisService redisService)
         {
             _repository = repository;
             _mapper = mapper;
             _leaderboardLinks = leaderboardLinks;
+            _redis = redisService;
         }
 
         public async Task<(LinkResponse linkResponse, MetaData metaData)> GetLeaderboardsAsync
@@ -47,39 +49,8 @@ namespace Service
 
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, trackChanges);
-
-            var jsonScoreProcessor = new JsonScoreProcessor();
-
-            var rankedParticipants = leaderboardDb.Scores
-                .GroupBy(
-                    score => score.Participant.Id,
-                    score => score,
-                    (participantId, scores) => new
-                    {
-                        Id = participantId,
-                        Scores = scores.ToList()
-                    })
-                .Select(group =>
-                {
-                    return new
-                    {
-                        group.Id,
-                        group.Scores[0].Participant.Name,
-                        Score = group.Scores.Select(score => jsonScoreProcessor.GetScoreDouble(
-                            score.JsonValue,
-                            leaderboardDb.LuaScript)).Sum()
-                    };
-                });
-
-            var rankedParticipantsDto = rankedParticipants.Select
-                (participant => new RankedParticipantDto
-                {
-                    Id = participant.Id,
-                    Name = participant.Name,
-                    Score = participant.Score
-                })
-                .OrderByDescending(participant => participant.Score)
-                .ToList();
+            
+            var rankedParticipantsDto = _redis.GetLeaderboard(leaderboardId);
 
             return new RankedLeaderboardDto
             {
