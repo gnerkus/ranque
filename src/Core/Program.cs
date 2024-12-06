@@ -1,3 +1,4 @@
+using Api.Cache;
 using Contracts;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -11,8 +12,6 @@ using Sentry.Extensibility;
 using Serilog;
 using Service.DataShaping;
 using Shared;
-using Api.Cache;
-using StackExchange.Redis;
 using streak;
 using streak.Extensions;
 using streak.Utility;

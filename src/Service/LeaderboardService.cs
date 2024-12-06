@@ -13,8 +13,8 @@ namespace Service
     {
         private readonly ILeaderboardLinks _leaderboardLinks;
         private readonly IMapper _mapper;
-        private readonly IRepositoryManager _repository;
         private readonly IRedisService _redis;
+        private readonly IRepositoryManager _repository;
 
         public LeaderboardService(IRepositoryManager repository, ILogger<IApiService> logger,
             IMapper mapper, ILeaderboardLinks leaderboardLinks, IRedisService redisService)
@@ -49,7 +49,7 @@ namespace Service
 
             var leaderboardDb =
                 await IsLeaderboardExist(orgId, leaderboardId, trackChanges);
-            
+
             var rankedParticipantsDto = _redis.GetLeaderboard(leaderboardId);
 
             return new RankedLeaderboardDto

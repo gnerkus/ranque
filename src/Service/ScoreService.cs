@@ -13,9 +13,9 @@ namespace Service
     public class ScoreService : IScoreService, IApiService
     {
         private readonly IMapper _mapper;
+        private readonly IRedisService _redis;
         private readonly IRepositoryManager _repository;
         private readonly IScoreLinks _scoreLinks;
-        private readonly IRedisService _redis;
 
         public ScoreService(IRepositoryManager repository, ILogger<IApiService> logger, IMapper
             mapper, IScoreLinks scoreLinks, IRedisService redisService)
@@ -94,7 +94,7 @@ namespace Service
             var scoreDouble =
                 jsonScoreProcessor.GetScoreDouble(score.JsonValue, leaderboard.LuaScript);
             _redis.UpdateScore(leaderboardId, participant, scoreDouble);
-            
+
             _repository.Score.CreateScore(leaderboardId, participantId, score);
             await _repository.SaveAsync();
 

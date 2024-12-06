@@ -137,7 +137,8 @@ namespace Service
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("ASPNETCORE_RANQUE_SECRET")!)),
+                    Encoding.UTF8.GetBytes(
+                        Environment.GetEnvironmentVariable("ASPNETCORE_RANQUE_SECRET")!)),
                 ValidateLifetime = true,
                 ValidIssuer = _jwtConfig.ValidIssuer,
                 ValidAudience = _jwtConfig.ValidAudience
