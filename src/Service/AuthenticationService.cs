@@ -116,7 +116,8 @@ namespace Service
 
         private static SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET")!);
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable
+                ("ASPNETCORE_RANQUE_SECRET")!);
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
@@ -137,7 +138,7 @@ namespace Service
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("RANQUE_SECRET")!)),
+                    Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("ASPNETCORE_RANQUE_SECRET")!)),
                 ValidateLifetime = true,
                 ValidIssuer = _jwtConfig.ValidIssuer,
                 ValidAudience = _jwtConfig.ValidAudience

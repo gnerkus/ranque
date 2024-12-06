@@ -185,7 +185,7 @@ namespace streak.Extensions
             var jwtConfig = new JwtConfiguration();
             configuration.Bind(jwtConfig.Section, jwtConfig);
 
-            var secretKey = Environment.GetEnvironmentVariable("RANQUE_SECRET");
+            var secretKey = configuration["RANQUE_SECRET"];
             services.AddAuthentication(opt =>
                 {
                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

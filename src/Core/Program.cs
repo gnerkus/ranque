@@ -17,6 +17,7 @@ using streak.Extensions;
 using streak.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig
         .WriteTo.Console(
@@ -45,9 +46,9 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
-builder.WebHost.UseSentry(options =>
+builder.WebHost.UseSentry((webHostBuilderContext, options) =>
 {
-    options.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN");
+    options.Dsn = webHostBuilderContext.Configuration["SENTRY_DSN"];
     options.TracesSampleRate = 1.0;
     options.SendDefaultPii = true;
     options.MinimumBreadcrumbLevel = LogLevel.Debug;
