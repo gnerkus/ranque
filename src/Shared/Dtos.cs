@@ -126,5 +126,5 @@ namespace Shared
         public string? Password { get; init; }
     }
 
-    public record TokenDto(string AccessToken, string RefreshToken);
+    public record TokenDto(string AccessToken, string RefreshToken, string? Username);
 }
