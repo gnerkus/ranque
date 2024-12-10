@@ -76,14 +76,14 @@ namespace Service
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
 
             if (_user == null) throw new UserNotFoundException();
-
+            
             var refreshToken = GenerateRefreshToken();
             _user.RefreshToken = refreshToken;
             if (populateExp)
                 _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
             await _userManager.UpdateAsync(_user);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return new TokenDto(accessToken, refreshToken);
+            return new TokenDto(accessToken, refreshToken, _user.UserName);
         }
 
         public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
